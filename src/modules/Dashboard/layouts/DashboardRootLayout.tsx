@@ -14,7 +14,18 @@ import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { IoIosRocket } from "react-icons/io";
 // import DynamicType from "../modules/DynamicType/DynamicType";
 
-//TODO: Remove flaticons and use react-icons or vice-versa
+
+interface CrateType {
+    navigate: (channelId: string) => void;
+    toggle: (open?: boolean) => void
+}
+
+
+declare global {
+    interface Window {
+        crate?: CrateType;
+    }
+}
 const DashboardRootLayout = (props: { component?: any }) => {
     const [connected, setConnected] = useState(false);
 
@@ -27,6 +38,32 @@ const DashboardRootLayout = (props: { component?: any }) => {
             setConnected(existInGuild);
         }
     }, []);
+
+    // useEffect(() => {
+    //     const isLandingPage = location.pathname === "/";
+
+    //     if (!isLandingPage) {
+    //         const script = document.createElement("script");
+    //         script.src = "https://cdn.jsdelivr.net/npm/@widgetbot/crate@3";
+    //         script.async = true;
+    //         script.defer = true;
+    //         script.onload = () => {
+                
+    //             const crate = new (window as any).Crate({
+    //                 server: "1084781047784407080",
+    //                 channel: "1137000994727805009",
+    //             });
+    //             window.crate = crate; 
+    //         };
+
+    //         document.body.appendChild(script);
+    //         return () => {
+    //             if (document.body.contains(script)) {
+    //                 document.body.removeChild(script);
+    //             }
+    //         };
+    //     }
+    // }, [location.pathname]);
 
     const buttons = [
         {

@@ -1,108 +1,264 @@
-import type React from "react";
-import { useState } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import styles from "./SearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
 import userImage2 from "../assets/ProfileImages/11475206.jpg";
 import UserCard from "../components/UserCard";
+import dpm from "../../Profile/assets/images/dpm.webp";
+import debounce from "lodash/debounce";
+import { getUsers } from "../services/api";
+import AsideDetails from "../../../components/AsideDetails";
+import Karma from "../../ProfileV2/assets/svg/Karma";
+import AvgKarma from "../../ProfileV2/assets/svg/AvgKarma";
+import Rank from "../../ProfileV2/assets/svg/Rank";
+import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 
-// Mock user data
-const mockUsers: User[] = [
-    {
-        id: 1,
-        name: "AwinDas R",
-        muid: "awindasr@mulearn",
-        college: "SJC",
-        interests: ["Web Dev", "AI", "Cyber Security"],
-        karma: 15000,
-        image: profileImage
-    },
-    {
-        id: 2,
-        name: "Bob Smith",
-        muid: "bobsmith@mulearn",
-        college: "MBCET",
-        interests: ["AI", "Machine Learning"],
-        karma: 22000,
-        image: userImage2
-    },
-    {
-        id: 3,
-        name: "Charlie Brown",
-        muid: "charliebrown@mulearn",
-        college: "VIT",
-        interests: ["Web Dev", "UI/UX"],
-        karma: 18000,
-        image: profileImage
-    },
-    {
-        id: 4,
-        name: "Diana Prince",
-        muid: "dianaprince@mulearn",
-        college: "CUSAT",
-        interests: ["Cyber Security", "Blockchain"],
-        karma: 25000,
-        image: profileImage
+interface User {
+  full_name: string;
+  muid: string;
+  interest_groups: { id: string; name: string }[];
+  organizations: { id: string; title: string; code: string; org_type: string }[];
+  profile_pic: string | null;
+  karma: string;
+}
 
-    },
-    {
-        id: 5,
-        name: "Ethan Hunt",
-        muid: "ethanhunt@mulearn",
-        college: "NITC",
-        interests: ["AI", "Robotics"],
-        karma: 30000,
-        image: userImage2
+interface UserResource {
+  read: () => { data: User[]; pagination: { totalPages: number } };
+}
 
+const createResource = (promise: Promise<any>): UserResource => {
+  let status: "pending" | "success" | "error" = "pending";
+  let result: any;
+
+  const suspender = promise.then(
+    (data) => {
+      status = "success";
+      result = data;
+    },
+    (error) => {
+      status = "error";
+      result = error;
     }
-];
+  );
+
+  return {
+    read: () => {
+      if (status === "pending") throw suspender;
+      if (status === "error") throw result;
+      return result;
+    },
+  };
+};
+
+const UserList: React.FC<{
+  search: string;
+  page: number;
+  onSelect: (user: User) => void;
+}> = ({ search, page, onSelect }) => {
+  const [resource, setResource] = useState<UserResource | null>(null);
+
+  const debouncedFetchUsers = useCallback(
+    debounce((searchTerm: string, currentPage: number) => {
+      setResource(
+        createResource(
+          getUsers({ search: searchTerm, page: currentPage })
+        )
+      );
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedFetchUsers(search, page);
+    return () => debouncedFetchUsers.cancel();
+  }, [search, page, debouncedFetchUsers]);
+
+  if (!resource) return null;
+
+  const { data: users, pagination } = resource.read();
+
+  return (
+    <>
+      <div className={styles.userGrid}>
+        {users.length > 0 ? (
+          users.map((user, index) => (
+            <UserCard
+              key={user.muid}
+              user={{
+                full_name: user.full_name.trim() || "Unknown User",
+                muid: user.muid,
+                interest_groups: user.interest_groups,
+                karma: user.karma,
+                organizations: user.organizations,
+                profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+              }}
+              onSelect={onSelect}
+            />
+          ))
+        ) : (
+          <p className={styles.noResultsText}>
+            No users found. Try a different search.
+          </p>
+        )}
+      </div>
+      {pagination.totalPages > 1 && (
+        <div className={styles.paginationContainer}>
+          <button
+            onClick={() => {/* Handled in parent */}}
+            disabled={page === 1}
+            className={styles.paginationButton}
+          >
+            Previous
+          </button>
+          <span className={styles.paginationInfo}>
+            Page {page} of {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => {/* Handled in parent */}}
+            disabled={page === pagination.totalPages}
+            className={styles.paginationButton}
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </>
+  );
+};
 
 const SearchPage: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isAsideOpen, setIsAsideOpen] = useState<boolean>(false);
 
-    const filteredUsers = mockUsers.filter(
-        user =>
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.college.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.interests.some(interest =>
-                interest.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-    );
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    setIsAsideOpen(true);
+  };
 
-    return (
-        <div className={styles.pageContainer}>
-              <div className={styles.Banner}>
-                <div className={styles.BannerContent}>
-                    <h1 className={styles.BannerTitle}>Find & Connect</h1>
-                    <p className={styles.BannerSubtitle}>
-                    Explore a curated network of individuals based on interest groups, names, or colleges. Navigate technology, management, and creativity with clarity and purpose. 
-                    </p>
-                </div>
-            </div>
-            <div className={styles.searchContainer}>
-                <FiSearch className={styles.searchIcon} />
-                <input
-                    type="text"
-                    placeholder="Search for users"
-                    className={styles.searchInput}
-                    value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
-                />
-            </div>
+  const handleAsideClose = () => {
+    setIsAsideOpen(false);
+    setSelectedUser(null);
+  };
 
-            <div className={styles.userGrid}>
-                {filteredUsers.length > 0 ? (
-                    filteredUsers.map(user => (
-                        <UserCard key={user.id} user={user} />
-                    ))
-                ) : (
-                    <p className={styles.noResultsText}>
-                        No users found. Try a different search.
-                    </p>
-                )}
-            </div>
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(prev => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) setPage(prev => prev - 1);
+  };
+
+ 
+
+  return (
+    <div className={styles.pageContainer}>
+      <div className={styles.Banner}>
+        <div className={styles.BannerContent}>
+          <h1 className={styles.BannerTitle}>Find & Connect</h1>
+          <p className={styles.BannerSubtitle}>
+            Explore a curated network of individuals based on interest groups, names, or colleges.
+            Navigate technology, management, and creativity with clarity and purpose.
+          </p>
         </div>
-    );
+      </div>
+
+      <div className={styles.searchContainer}>
+        <FiSearch className={styles.searchIcon} />
+        <input
+          type="text"
+          placeholder="Search for users by name, college, or interests"
+          className={styles.searchInput}
+          value={searchTerm}
+          onChange={e => {
+            setSearchTerm(e.target.value);
+            setPage(1);
+          }}
+        />
+      </div>
+
+      {error && <p className={styles.errorText}>{error}</p>}
+
+      <Suspense fallback={<MuLoader />}>
+        <UserList search={searchTerm} page={page} onSelect={handleUserSelect} />
+      </Suspense>
+
+      {totalPages > 1 && (
+        <div className={styles.paginationContainer}>
+          <button
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            className={styles.paginationButton}
+          >
+            Previous
+          </button>
+          <span className={styles.paginationInfo}>
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+            className={styles.paginationButton}
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      <AsideDetails isOpen={isAsideOpen} handleClose={handleAsideClose}>
+        {selectedUser && (
+          <div className={styles.profileContainer}>
+            <div className={styles.profileHeader}>
+              <div className={styles.profileImageContainer}>
+                <img
+                  src={selectedUser.profile_pic || dpm}
+                  alt={selectedUser.full_name}
+                  className={styles.profileImage}
+                />
+              </div>
+              <div className={styles.memberSince}>Member since 2023</div>
+              <button className={styles.connectBtn}>Connect</button>
+            </div>
+
+            <div className={styles.profileInfo}>
+              <h2 className={styles.profileName}>{selectedUser.full_name}</h2>
+              <p className={styles.profileUsername}>{selectedUser.muid}</p>
+              <p className={styles.profileCollegeName}>
+                {selectedUser.organizations.find(org => org.org_type === "College")?.title}
+              </p>
+              <p className={styles.profileLevel}>LEVEL 5</p>
+            </div>
+
+            <div className={styles.statsGrid}>
+              <div className={styles.statsCard}>
+                <Karma />
+                <p className={styles.statsLabel}>Karma</p>
+                <p className={styles.statsValue}>{selectedUser.karma}</p>
+              </div>
+              <div className={styles.statsCard}>
+                <AvgKarma />
+                <p className={styles.statsLabel}>Avg.Karma/Month</p>
+                <p className={styles.statsValue}>1.156K</p>
+              </div>
+              <div className={styles.statsCard}>
+                <Rank />
+                <p className={styles.statsLabel}>Rank</p>
+                <p className={styles.statsValue}>1</p>
+              </div>
+              <div className={styles.statsCard}>
+                <Rank />
+                <p className={styles.statsLabel}>Percentile</p>
+                <p className={styles.statsValue}>0.29</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </AsideDetails>
+    </div>
+  );
 };
 
 export default SearchPage;

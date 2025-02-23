@@ -27,7 +27,7 @@
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
-    background-color: blue;
+    background-color: rgb(255, 255, 255);
 }
 
 .userDetails {
@@ -50,6 +50,7 @@
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 5px;
+    color: black;
 }
 .userCollege{
     font-size: 14px;
@@ -58,9 +59,16 @@
     margin-top: -.5rem;
 }
 
+
 .userMUID{
     font-size: 14px;
-    color: #666;
+    color: #3c3c3c;
+    margin-bottom: 5px;
+    margin-top: -.5rem;
+}
+.userCollege{
+    font-size: 14px;
+    color: #5c5c5c;
     margin-bottom: 5px;
     margin-top: -.5rem;
 }
