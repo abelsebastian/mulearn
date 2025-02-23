@@ -579,7 +579,7 @@ const MuLearnLanding = () => {
 
       {/* Community Section */}
       <motion.section
-        className={styles.leftRightGrid}
+        className={`${styles.leftRightGrid} ${styles.leftRightGridCustom}`}
         variants={fadeInUp}
         initial="hidden"
         whileInView="visible"
@@ -592,7 +592,7 @@ const MuLearnLanding = () => {
           </h6>
           <button><a href="https://discord.com/invite/gtech-mulearn-771670169691881483" target="_blank">Join The Community</a></button>
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} className={styles.joinCommunity}>
           <img src="https://mulearn.org/assets/home/join.webp" alt="Join community" width="400px" />
         </motion.div>
       </motion.section>
