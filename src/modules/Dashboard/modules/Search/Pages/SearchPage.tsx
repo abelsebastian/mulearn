@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense } from "react";
+import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import styles from "./SearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
@@ -22,8 +22,13 @@ interface User {
   karma: string;
 }
 
+interface Pagination {
+  totalPages: number;
+  isNext: boolean;
+}
+
 interface UserResource {
-  read: () => { data: User[]; pagination: { totalPages: number } };
+  read: () => { data: User[]; pagination: Pagination };
 }
 
 const createResource = (promise: Promise<any>): UserResource => {
@@ -108,20 +113,20 @@ const UserList: React.FC<{
   );
 
   const debouncedFetchUsers = useCallback(
-    debounce((searchTerm: string, currentPage: number) => {
-      setResource(
-        createResource(
-          getUsers({ search: searchTerm, page: currentPage })
-        )
-      );
+    debounce((searchTerm: string, pageNum: number) => {
+      fetchUsers(searchTerm, pageNum);
     }, 300),
-    []
+    [fetchUsers]
   );
 
+  // Reset and fetch initial page when search or searchType changes
   useEffect(() => {
-    debouncedFetchUsers(search, page);
+    setAllUsers([]);
+    setFilteredUsers([]);
+    setPage(1);
+    debouncedFetchUsers(search, 1);
     return () => debouncedFetchUsers.cancel();
-  }, [search, page, debouncedFetchUsers]);
+  }, [search, searchType, debouncedFetchUsers]);
 
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
@@ -152,10 +157,10 @@ const UserList: React.FC<{
     searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
-    <>
+    <div>
       <div className={styles.userGrid}>
-        {users.length > 0 ? (
-          users.map((user, index) => (
+        {displayUsers.length > 0 ? (
+          displayUsers.map((user, index) => (
             <UserCard
               key={`${user.muid}-${index}`}
               data={{
@@ -166,13 +171,15 @@ const UserList: React.FC<{
                 profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
                 karma: user.karma,
               }}
-              onSelect={onSelect}
+              onSelect={() => onSelect(user)}
             />
           ))
         ) : (
-          <p className={styles.noResultsText}>
-            No users found. Try a different search.
-          </p>
+          !isFetching && (
+            <p className={styles.noResultsText}>
+              The universe says... no results. Try again?
+            </p>
+          )
         )}
       </div>
       <div className={styles.loadingContainer}>
@@ -200,16 +207,6 @@ const SearchPage: React.FC = () => {
     setSelectedUser(null);
   };
 
-  const handleNextPage = () => {
-    if (page < totalPages) setPage(prev => prev + 1);
-  };
-
-  const handlePrevPage = () => {
-    if (page > 1) setPage(prev => prev - 1);
-  };
-
- 
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.Banner}>
@@ -223,10 +220,11 @@ const SearchPage: React.FC = () => {
       </div>
 
       <div className={styles.searchContainer}>
-        <FiSearch className={styles.searchIcon} />
+        
+        
         <input
           type="text"
-          placeholder="Search for users by name, college, or interests"
+          placeholder={`Search by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -256,30 +254,8 @@ const SearchPage: React.FC = () => {
       {error && <p className={styles.errorText}>{error}</p>}
 
       <Suspense fallback={<MuLoader />}>
-        <UserList search={searchTerm} page={page} onSelect={handleUserSelect} />
+        <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
-
-      {totalPages > 1 && (
-        <div className={styles.paginationContainer}>
-          <button
-            onClick={handlePrevPage}
-            disabled={page === 1}
-            className={styles.paginationButton}
-          >
-            Previous
-          </button>
-          <span className={styles.paginationInfo}>
-            Page {page} of {totalPages}
-          </span>
-          <button
-            onClick={handleNextPage}
-            disabled={page === totalPages}
-            className={styles.paginationButton}
-          >
-            Next
-          </button>
-        </div>
-      )}
 
       <AsideDetails isOpen={isAsideOpen} handleClose={handleAsideClose}>
         {selectedUser && (
@@ -300,7 +276,7 @@ const SearchPage: React.FC = () => {
               <h2 className={styles.profileName}>{selectedUser.full_name}</h2>
               <p className={styles.profileUsername}>{selectedUser.muid}</p>
               <p className={styles.profileCollegeName}>
-                {selectedUser.organizations.find(org => org.org_type === "College")?.title}
+                {selectedUser.organizations.find((org) => org.org_type === "College")?.title}
               </p>
               <p className={styles.profileLevel}>LEVEL 5</p>
             </div>

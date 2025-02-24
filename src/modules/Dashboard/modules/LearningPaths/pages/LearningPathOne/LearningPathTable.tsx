@@ -40,12 +40,12 @@ const LearningPathTable: React.FC<LearningPathDataProps> = ({ learningPathData }
                         >
                             <h2 className={styles.contentTitle}>{topic.title}</h2>
                             <div className={styles.contentClose}>
-                            <div className={styles.progressContainer}>
+                            {/* <div className={styles.progressContainer}>
                                 <span>0/{topic.content.length}</span>
                                 <div className={styles.progressBar}>
                                     <div className={styles.progressFill} />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Expand/Collapse Icon Button */}
                             <button
@@ -60,7 +60,7 @@ const LearningPathTable: React.FC<LearningPathDataProps> = ({ learningPathData }
                             <>
                                 <div className={styles.tableHeader}>
                                     <div>Topics</div>
-                                    <div>Done</div>
+                                    {/* <div>Done</div> */}
                                     {/* <div>Proof Of Work</div>
                                     <div>Notes</div>
                                     <div>Status</div> */}

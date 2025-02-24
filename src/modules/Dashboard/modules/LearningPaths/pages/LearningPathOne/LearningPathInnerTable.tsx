@@ -60,9 +60,9 @@ const LearningPathInnerTable = ({ content, expanded }: LearningPathInnerTablePar
                                     {lesson.title}
                                 </a>
                             </div>
-                            <div>
+                            {/* <div>
                                 <input type="checkbox" className={styles.checkbox} onChange={() => {}} />
-                            </div>
+                            </div> */}
                             {/* <div>
                                 <button 
                                     className={`${styles.iconButton} ${styles.bookmark}`}
