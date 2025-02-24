@@ -221,7 +221,7 @@ const SearchPage: React.FC = () => {
 
       <div className={styles.searchContainer}>
         
-        
+        <FiSearch className={styles.searchIcon} />
         <input
           type="text"
           placeholder={`Search by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
@@ -229,6 +229,7 @@ const SearchPage: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
       </div>
       <div className={styles.searchTypeButtons}>
         <button
