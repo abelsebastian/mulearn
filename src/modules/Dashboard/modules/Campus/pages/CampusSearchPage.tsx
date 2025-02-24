@@ -4,9 +4,12 @@ import { FiSearch } from "react-icons/fi";
 import debounce from "lodash/debounce";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import CampusCard from "../components/CampusCard"// Adjust path as needed
+import { useNavigate } from "react-router-dom";
 
 // Define Campus type based on your API structure
 interface Campus {
+    id: string;
+
     college_name: string;
     campus_code: string;
     campus_zone: string;
@@ -21,17 +24,188 @@ interface Pagination {
 }
 
 // Mock API with 20 colleges
-const mockCampusData: Campus[] = Array.from({ length: 40 }, (_, i) => ({
-    college_name: `Campus ${i + 1}`,
-    campus_code: `C${String(i + 1).padStart(3, "0")}`,
-    campus_zone: ["North", "South", "East", "West"][i % 4],
-    total_karma: String((i + 1) * 1000),
-    grade: ["A", "B", "C", "N/A"][i % 4] as 'A' | 'B' | 'C' | 'N/A',
-    lead: {
-        campus_lead: `Lead ${i + 1}`,
-        enabler: i % 2 === 0 ? `Enabler ${i + 1}` : "", 
+const mockCampusData: Campus[] = [
+    {
+        id: "CAMP001",
+        college_name: "St. Xavier's College",
+        campus_code: "C001",
+        campus_zone: "North",
+        total_karma: "12000",
+        grade: "A",
+        lead: { campus_lead: "Alice Johnson", enabler: "Bob Smith" },
     },
-}));
+    {
+        id: "CAMP002",
+        college_name: "Greenwood Institute",
+        campus_code: "C002",
+        campus_zone: "South",
+        total_karma: "8500",
+        grade: "B",
+        lead: { campus_lead: "Charlie Brown", enabler: "" },
+    },
+    {
+        id: "CAMP003",
+        college_name: "Riverdale University",
+        campus_code: "C003",
+        campus_zone: "East",
+        total_karma: "6000",
+        grade: "C",
+        lead: { campus_lead: "Diana Prince", enabler: "Eve Carter" },
+    },
+    {
+        id: "CAMP004",
+        college_name: "Brighton Academy",
+        campus_code: "C004",
+        campus_zone: "West",
+        total_karma: "9500",
+        grade: "N/A",
+        lead: { campus_lead: "Frank Miller", enabler: "" },
+    },
+    {
+        id: "CAMP005",
+        college_name: "Maple Grove College",
+        campus_code: "C005",
+        campus_zone: "North",
+        total_karma: "15000",
+        grade: "A",
+        lead: { campus_lead: "Grace Lee", enabler: "Henry Davis" },
+    },
+    {
+        id: "CAMP006",
+        college_name: "Sunnydale Tech",
+        campus_code: "C006",
+        campus_zone: "South",
+        total_karma: "7200",
+        grade: "B",
+        lead: { campus_lead: "Irene Taylor", enabler: "" },
+    },
+    {
+        id: "CAMP007",
+        college_name: "Oakwood University",
+        campus_code: "C007",
+        campus_zone: "East",
+        total_karma: "4800",
+        grade: "C",
+        lead: { campus_lead: "James Wilson", enabler: "Kelly Adams" },
+    },
+    {
+        id: "CAMP008",
+        college_name: "Lakeside Institute",
+        campus_code: "C008",
+        campus_zone: "West",
+        total_karma: "11000",
+        grade: "N/A",
+        lead: { campus_lead: "Laura White", enabler: "" },
+    },
+    {
+        id: "CAMP009",
+        college_name: "Pine Hill College",
+        campus_code: "C009",
+        campus_zone: "North",
+        total_karma: "13500",
+        grade: "A",
+        lead: { campus_lead: "Michael Green", enabler: "Nancy Brown" },
+    },
+    {
+        id: "CAMP010",
+        college_name: "Willow Creek Academy",
+        campus_code: "C010",
+        campus_zone: "South",
+        total_karma: "9200",
+        grade: "B",
+        lead: { campus_lead: "Oliver Clark", enabler: "" },
+    },
+    {
+        id: "CAMP011",
+        college_name: "Cedar Valley University",
+        campus_code: "C011",
+        campus_zone: "East",
+        total_karma: "6500",
+        grade: "C",
+        lead: { campus_lead: "Patricia Moore", enabler: "Quincy Evans" },
+    },
+    {
+        id: "CAMP012",
+        college_name: "Hillside College",
+        campus_code: "C012",
+        campus_zone: "West",
+        total_karma: "8800",
+        grade: "N/A",
+        lead: { campus_lead: "Rachel King", enabler: "" },
+    },
+    {
+        id: "CAMP013",
+        college_name: "Blue Ridge Institute",
+        campus_code: "C013",
+        campus_zone: "North",
+        total_karma: "14200",
+        grade: "A",
+        lead: { campus_lead: "Samuel Hill", enabler: "Tara Scott" },
+    },
+    {
+        id: "CAMP014",
+        college_name: "Golden Plains Tech",
+        campus_code: "C014",
+        campus_zone: "South",
+        total_karma: "7900",
+        grade: "B",
+        lead: { campus_lead: "Uma Patel", enabler: "" },
+    },
+    {
+        id: "CAMP015",
+        college_name: "Silver Lake University",
+        campus_code: "C015",
+        campus_zone: "East",
+        total_karma: "5100",
+        grade: "C",
+        lead: { campus_lead: "Victor Nguyen", enabler: "Wendy Foster" },
+    },
+    {
+        id: "CAMP016",
+        college_name: "Redwood Academy",
+        campus_code: "C016",
+        campus_zone: "West",
+        total_karma: "9700",
+        grade: "N/A",
+        lead: { campus_lead: "Xavier Brooks", enabler: "" },
+    },
+    {
+        id: "CAMP017",
+        college_name: "Evergreen College",
+        campus_code: "C017",
+        campus_zone: "North",
+        total_karma: "12800",
+        grade: "A",
+        lead: { campus_lead: "Yvonne Carter", enabler: "Zachary Reed" },
+    },
+    {
+        id: "CAMP018",
+        college_name: "Stonebridge Institute",
+        campus_code: "C018",
+        campus_zone: "South",
+        total_karma: "8300",
+        grade: "B",
+        lead: { campus_lead: "Amelia Stone", enabler: "" },
+    },
+    {
+        id: "CAMP019",
+        college_name: "Crystal Heights University",
+        campus_code: "C019",
+        campus_zone: "East",
+        total_karma: "6900",
+        grade: "C",
+        lead: { campus_lead: "Benjamin Fox", enabler: "Clara Hayes" },
+    },
+    {
+        id: "CAMP020",
+        college_name: "Twilight Academy",
+        campus_code: "C020",
+        campus_zone: "West",
+        total_karma: "10500",
+        grade: "N/A",
+        lead: { campus_lead: "Dylan Gray", enabler: "" },
+    },
+];
 
 const mockFetchCampuses = async (params: { search?: string; pageIndex: number; perPage: number }) => {
     const { search = "", pageIndex, perPage } = params;
@@ -185,12 +359,18 @@ const CampusList: React.FC<{
 };
 
 const CampusSearchPage: React.FC = () => {
+    const navigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [searchType, setSearchType] = useState<"name" | "code" | "zone">("name");
     const [error, setError] = useState<string | null>(null);
+    const [selectedCampus, setSelectedCampus] = useState<Campus | null>(null);
+
 
     const handleCampusSelect = (campus: Campus) => {
-        console.log("Selected campus:", campus); // Placeholder for future functionality
+        setSelectedCampus(campus);
+        navigate(`/dashboard/campus/${campus.id}`);
+
+        console.log("Selected campus:", campus); 
     };
 
     return (
