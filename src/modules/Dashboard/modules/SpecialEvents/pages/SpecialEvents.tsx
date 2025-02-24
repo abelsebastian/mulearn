@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./SpecialEvents.module.css";
-import SpecialEventCard from "../Components/SpecialEventCard";
 import top100coders from ".././assets/top-100.webp";
 import launchpad from "../assets/launchpad.webp";
 import trivialideas from "../assets/trivialideas.webp";
+import SpecialEventCardLanding from "../../landing/components/SpecialEventCardLanding/SpecialEventCardLanding";
 
 const SpecialEventsList: SpecialEvent[] = [
     {
@@ -58,7 +58,7 @@ const SpecialEvents = () => {
             </div>
             <div className={styles.eventsGrid}>
                 {SpecialEventsList.map(specialevent => (
-                    <SpecialEventCard
+                    <SpecialEventCardLanding
                         key={specialevent.id}
                         specialevent={specialevent}
                     />

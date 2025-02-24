@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
-import styles from "./SearchPage.module.css";
+import styles from "./MuLearnersSearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
 import userImage2 from "../assets/ProfileImages/11475206.jpg";
@@ -190,7 +190,7 @@ const UserList: React.FC<{
   );
 };
 
-const SearchPage: React.FC = () => {
+const MuLearnersSearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
@@ -311,4 +311,4 @@ const SearchPage: React.FC = () => {
   );
 };
 
-export default SearchPage;
+export default MuLearnersSearchPage;

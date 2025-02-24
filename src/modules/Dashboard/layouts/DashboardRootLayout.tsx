@@ -78,11 +78,34 @@ const DashboardRootLayout = (props: { component?: any }) => {
         //     hasView: !connected,
         //     icon: <i className="fi fi-sr-data-transfer"></i>
         // },
+        // {
+        //     url: "/dashboard/search",
+        //     title: "Search",
+        //     hasView: true,
+        //     icon: <FaMagnifyingGlass/>
+        // },
         {
-            url: "/dashboard/search",
+            url: "", 
             title: "Search",
             hasView: true,
-            icon: <FaMagnifyingGlass/>
+            icon: <FaMagnifyingGlass />,
+            children: [
+                {
+                    url: "/dashboard/mentors",
+                    title: "Mentor",
+                    hasView: true,
+                },
+                {
+                    url: "/dashboard/campus",
+                    title: "Campus",
+                    hasView: true,
+                },
+                {
+                    url: "/dashboard/mulearners",
+                    title: "µLearners",
+                    hasView: true,
+                },
+            ],
         },
         {
             url: "/dashboard/learning-paths",
@@ -96,12 +119,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <FaUserFriends/>
         },
-        {
-            url: "/dashboard/mentors",
-            title: "Mentors",
-            hasView: true,
-            icon: <FaWandMagicSparkles/>
-        },
+        // {
+        //     url: "/dashboard/mentors",
+        //     title: "Mentors",
+        //     hasView: true,
+        //     icon: <FaWandMagicSparkles/>
+        // },
         {
             url: "/dashboard/special-events",
             title: "Special Events",
