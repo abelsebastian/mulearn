@@ -3,7 +3,6 @@ import styles from "./SearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
 import userImage2 from "../assets/ProfileImages/11475206.jpg";
-import UserCard from "../components/UserCard";
 import dpm from "../../Profile/assets/images/dpm.webp";
 import debounce from "lodash/debounce";
 import { getUsers } from "../services/api";
@@ -12,6 +11,7 @@ import Karma from "../../ProfileV2/assets/svg/Karma";
 import AvgKarma from "../../ProfileV2/assets/svg/AvgKarma";
 import Rank from "../../ProfileV2/assets/svg/Rank";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
+import UserCard from "../../../components/UserCard";
 
 interface User {
   full_name: string;
@@ -52,10 +52,60 @@ const createResource = (promise: Promise<any>): UserResource => {
 
 const UserList: React.FC<{
   search: string;
-  page: number;
+  searchType: "name" | "college" | "interest";
   onSelect: (user: User) => void;
-}> = ({ search, page, onSelect }) => {
-  const [resource, setResource] = useState<UserResource | null>(null);
+}> = ({ search, searchType, onSelect }) => {
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const fetchUsers = useCallback(
+    async (searchTerm: string, pageNum: number) => {
+      setIsFetching(true);
+      try {
+        const response = await getUsers({
+          search: searchType === "name" ? searchTerm : "",
+          pageIndex: pageNum,
+          perPage: 9,
+        });
+        const newUsers = response.data;
+
+        let filtered: User[] = newUsers;
+        if (searchType === "college" && searchTerm) {
+          filtered = newUsers.filter((user) =>
+            user.organizations.some(
+              (org) =>
+                org.org_type === "College" &&
+                org.title.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          );
+        } else if (searchType === "interest" && searchTerm) {
+          filtered = newUsers.filter((user) =>
+            user.interest_groups.some((ig) =>
+              ig.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          );
+        }
+
+        setAllUsers((prevUsers) =>
+          pageNum === 1 ? newUsers : [...prevUsers, ...newUsers]
+        );
+        setFilteredUsers((prevFiltered) =>
+          pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
+        );
+        setTotalPages(response.pagination.totalPages);
+        setIsFetching(false);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+        setIsFetching(false);
+      }
+    },
+    [searchType]
+  );
 
   const debouncedFetchUsers = useCallback(
     debounce((searchTerm: string, currentPage: number) => {
@@ -73,9 +123,33 @@ const UserList: React.FC<{
     return () => debouncedFetchUsers.cancel();
   }, [search, page, debouncedFetchUsers]);
 
-  if (!resource) return null;
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
 
-  const { data: users, pagination } = resource.read();
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetching && page < totalPages) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) observerRef.current.observe(loadMoreRef.current);
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [isFetching, page, totalPages]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchUsers(search, page);
+    }
+  }, [page, search, fetchUsers]);
+
+  const displayUsers =
+    searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
     <>
@@ -83,14 +157,14 @@ const UserList: React.FC<{
         {users.length > 0 ? (
           users.map((user, index) => (
             <UserCard
-              key={user.muid}
-              user={{
-                full_name: user.full_name.trim() || "Unknown User",
+              key={`${user.muid}-${index}`}
+              data={{
+                name: user.full_name.trim() || "Unknown User",
                 muid: user.muid,
                 interest_groups: user.interest_groups,
-                karma: user.karma,
                 organizations: user.organizations,
                 profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                karma: user.karma,
               }}
               onSelect={onSelect}
             />
@@ -101,35 +175,17 @@ const UserList: React.FC<{
           </p>
         )}
       </div>
-      {pagination.totalPages > 1 && (
-        <div className={styles.paginationContainer}>
-          <button
-            onClick={() => {/* Handled in parent */}}
-            disabled={page === 1}
-            className={styles.paginationButton}
-          >
-            Previous
-          </button>
-          <span className={styles.paginationInfo}>
-            Page {page} of {pagination.totalPages}
-          </span>
-          <button
-            onClick={() => {/* Handled in parent */}}
-            disabled={page === pagination.totalPages}
-            className={styles.paginationButton}
-          >
-            Next
-          </button>
-        </div>
-      )}
-    </>
+      <div className={styles.loadingContainer}>
+        {isFetching && <MuLoader />}
+        <div ref={loadMoreRef} style={{ height: "20px" }} />
+      </div>
+    </div>
   );
 };
 
 const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAsideOpen, setIsAsideOpen] = useState<boolean>(false);
@@ -173,11 +229,28 @@ const SearchPage: React.FC = () => {
           placeholder="Search for users by name, college, or interests"
           className={styles.searchInput}
           value={searchTerm}
-          onChange={e => {
-            setSearchTerm(e.target.value);
-            setPage(1);
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+      <div className={styles.searchTypeButtons}>
+        <button
+          className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""}`}
+          onClick={() => setSearchType("name")}
+        >
+          Name
+        </button>
+        <button
+          className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""}`}
+          onClick={() => setSearchType("college")}
+        >
+          College
+        </button>
+        <button
+          className={`${styles.searchTypeButton} ${searchType === "interest" ? styles.active : ""}`}
+          onClick={() => setSearchType("interest")}
+        >
+          Interest Group
+        </button>
       </div>
 
       {error && <p className={styles.errorText}>{error}</p>}
