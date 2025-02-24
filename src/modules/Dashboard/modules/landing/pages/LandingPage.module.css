@@ -180,6 +180,10 @@
   /* align-items: center; */
 }
 
+.leftRightGridCustom {
+  grid-template-columns: 60% 40%;
+}
+
 .iframeContainer iframe {
   width: 100%;
   height: 100%;
@@ -326,7 +330,7 @@
 
 .specialEventsSection .specialEvents h1 {
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .specialEventsSection .specialEvents h6 {
@@ -361,7 +365,7 @@
 
 .camparison h1 {
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 800;
   margin-bottom: 4rem;
 }
 
@@ -443,7 +447,7 @@
 
 .oppurtunitiesTitle h1 {
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .oppurtunitiesTitle h6 {
@@ -485,14 +489,14 @@
   font-size: 3.5rem;
   font-weight: 700;
   text-align: left;
-  max-width: 40rem;
+  max-width: 45rem;
   margin-bottom: 22px;
   line-height: normal;
 }
 
 .community h6 {
   font-size: 1rem;
-  max-width: 30rem;
+  max-width: 40rem;
   text-align: left;
 }
 
@@ -1058,7 +1062,11 @@
 
   .heroLeft h1 {
     margin: 5vh 0px;
-    font-size: 5.9vw;
+    font-size: 8vw;
+  }
+
+  .heroLeft p {
+    font-size: 5vw;
   }
 
   .highlightPoints li {
@@ -1068,6 +1076,14 @@
 
   .ctaButtons {
     margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ctaButtons button {
+    width: 100%;
   }
 
   .topBottomGrid {
@@ -1093,6 +1109,7 @@
 
   .leftRightGrid .storyTitle h1 {
     font-size: 6vw;
+    text-align: center;
   }
 
   .iframeContainer iframe {
@@ -1102,7 +1119,7 @@
   .topBottomGrid .camparison h1, .specialEventsSection .specialEvents h1  {
     font-size: 6vw;
     max-width: 370px;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 
   .topBottomGrid .camparison .comparisonTable tr th {
@@ -1194,4 +1211,11 @@
   .dataGrid {
     grid-template-columns: repeat(2, minmax(auto, 2fr));
   }
+}
+
+.joinCommunity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
