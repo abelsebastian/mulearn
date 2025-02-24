@@ -20,7 +20,7 @@
   .BannerSubtitle {
     font-size: 0.95rem;
   }
-
+  
   .loadingContainer {
     display: flex;
     justify-content: center;
@@ -35,7 +35,7 @@
     gap: 0.625rem;
     align-items: center;
     width: 100%;
-    margin: 0.625rem 0 0.5rem auto; 
+    margin: 0.625rem auto 0.5rem auto;
     padding: 0;
     box-sizing: border-box;
   }
@@ -94,7 +94,7 @@
     background-color: #e5e7eb;
   }
   
-  .mentorGrid {
+  .userGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1rem;
@@ -290,7 +290,7 @@
       left: 0.375rem;
     }
   
-    .mentorGrid {
+    .userGrid {
       grid-template-columns: 1fr;
     }
   

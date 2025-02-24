@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
-import styles from "./MentorPage.module.css";
+import styles from "./MuLearnersSearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
 import userImage2 from "../assets/ProfileImages/11475206.jpg";
-
 import dpm from "../../Profile/assets/images/dpm.webp";
 import debounce from "lodash/debounce";
+import { getUsers } from "../services/api";
+import AsideDetails from "../../../components/AsideDetails";
 import Karma from "../../ProfileV2/assets/svg/Karma";
 import AvgKarma from "../../ProfileV2/assets/svg/AvgKarma";
 import Rank from "../../ProfileV2/assets/svg/Rank";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
-import { getUsers } from "../../Search/services/api";
-import AsideDetails from "../../../components/AsideDetails";
 import UserCard from "../../../components/UserCard";
 
 interface User {
@@ -56,9 +55,9 @@ const createResource = (promise: Promise<any>): UserResource => {
   };
 };
 
-const MentorList: React.FC<{
+const UserList: React.FC<{
   search: string;
-  searchType: "name" | "college" | "expertise" | "enabler" | "mentor";
+  searchType: "name" | "college" | "interest";
   onSelect: (user: User) => void;
 }> = ({ search, searchType, onSelect }) => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -73,14 +72,8 @@ const MentorList: React.FC<{
     async (searchTerm: string, pageNum: number) => {
       setIsFetching(true);
       try {
-        const role =
-          searchType === "enabler" ? "enabler" :
-          searchType === "mentor" ? "mentor" :
-          "mentor";
-
         const response = await getUsers({
           search: searchType === "name" ? searchTerm : "",
-          role,
           pageIndex: pageNum,
           perPage: 9,
         });
@@ -95,26 +88,10 @@ const MentorList: React.FC<{
                 org.title.toLowerCase().includes(searchTerm.toLowerCase())
             )
           );
-        } else if (searchType === "expertise" && searchTerm) {
+        } else if (searchType === "interest" && searchTerm) {
           filtered = newUsers.filter((user) =>
             user.interest_groups.some((ig) =>
               ig.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-          );
-        } else if (searchType === "enabler" && searchTerm) {
-          filtered = newUsers.filter((user) =>
-            user.organizations.some(
-              (org) =>
-                org.org_type === "College" &&
-                org.title.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-          );
-        } else if (searchType === "mentor" && searchTerm) {
-          filtered = newUsers.filter((user) =>
-            user.organizations.some(
-              (org) =>
-                org.org_type === "Company" &&
-                org.title.toLowerCase().includes(searchTerm.toLowerCase())
             )
           );
         }
@@ -126,9 +103,9 @@ const MentorList: React.FC<{
           pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
         );
         setTotalPages(response.pagination.totalPages);
+        setIsFetching(false);
       } catch (error) {
-        console.error("Failed to fetch mentors:", error);
-      } finally {
+        console.error("Failed to fetch users:", error);
         setIsFetching(false);
       }
     },
@@ -142,6 +119,7 @@ const MentorList: React.FC<{
     [fetchUsers]
   );
 
+  // Reset and fetch initial page when search or searchType changes
   useEffect(() => {
     setAllUsers([]);
     setFilteredUsers([]);
@@ -151,6 +129,8 @@ const MentorList: React.FC<{
   }, [search, searchType, debouncedFetchUsers]);
 
   useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !isFetching && page < totalPages) {
@@ -163,9 +143,7 @@ const MentorList: React.FC<{
     if (loadMoreRef.current) observerRef.current.observe(loadMoreRef.current);
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      if (observerRef.current) observerRef.current.disconnect();
     };
   }, [isFetching, page, totalPages]);
 
@@ -175,23 +153,23 @@ const MentorList: React.FC<{
     }
   }, [page, search, fetchUsers]);
 
-  const displayUsers = searchType === "name" || !search ? allUsers : filteredUsers;
+  const displayUsers =
+    searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
     <div>
-      <div className={styles.mentorGrid}>
+      <div className={styles.userGrid}>
         {displayUsers.length > 0 ? (
           displayUsers.map((user, index) => (
-            <UserCard 
+            <UserCard
               key={`${user.muid}-${index}`}
               data={{
-                id: index + 1,
-                name: user.full_name,
-                role: user.organizations
-                  .map((org) => `${org.title} (${org.org_type})`)
-                  .join(", ") || "Unknown Role",
-                expertise: user.interest_groups.map((ig) => ig.name),
-                image: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                name: user.full_name.trim() || "Unknown User",
+                muid: user.muid,
+                interest_groups: user.interest_groups,
+                organizations: user.organizations,
+                profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                karma: user.karma,
               }}
               onSelect={() => onSelect(user)}
             />
@@ -212,52 +190,46 @@ const MentorList: React.FC<{
   );
 };
 
-const MentorSearchPage: React.FC = () => {
+const MuLearnersSearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchType, setSearchType] = useState<"name" | "college" | "expertise" | "enabler" | "mentor">("name");
+  const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
-  const [selectedMentor, setSelectedMentor] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAsideOpen, setIsAsideOpen] = useState<boolean>(false);
 
-  const handleMentorSelect = (mentor: User) => {
-    setSelectedMentor(mentor);
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
     setIsAsideOpen(true);
   };
 
   const handleAsideClose = () => {
     setIsAsideOpen(false);
-    setSelectedMentor(null);
-  };
-
-  const getDisplayOrganization = (user: User) => {
-    const hasCompany = user.organizations.some(org => org.org_type === "Company");
-    if (hasCompany) {
-      const firstCompany = user.organizations.find(org => org.org_type === "Company");
-      return firstCompany ? firstCompany.title : "N/A";
-    }
-    const firstCollege = user.organizations.find(org => org.org_type === "College");
-    return firstCollege ? firstCollege.title : "N/A";
+    setSelectedUser(null);
   };
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.Banner}>
         <div className={styles.BannerContent}>
-          <h1 className={styles.BannerTitle}>Find a Mentor</h1>
+          <h1 className={styles.BannerTitle}>Find & Connect</h1>
           <p className={styles.BannerSubtitle}>
-            Search for experienced mentors by expertise, name, or institution. Connect with the right guidance to navigate technology, management, and creativity with confidence.
+            Explore a curated network of individuals based on interest groups, names, or colleges.
+            Navigate technology, management, and creativity with clarity and purpose.
           </p>
         </div>
       </div>
+
       <div className={styles.searchContainer}>
+        
         <FiSearch className={styles.searchIcon} />
         <input
           type="text"
-          placeholder={`Search by ${searchType === "name" ? "name" : searchType === "college" ? "college" : searchType === "expertise" ? "expertise" : searchType === "enabler" ? "enabler" : "mentor"}`}
+          placeholder={`Search by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+
       </div>
       <div className={styles.searchTypeButtons}>
         <button
@@ -273,55 +245,48 @@ const MentorSearchPage: React.FC = () => {
           College
         </button>
         <button
-          className={`${styles.searchTypeButton} ${searchType === "expertise" ? styles.active : ""}`}
-          onClick={() => setSearchType("expertise")}
+          className={`${styles.searchTypeButton} ${searchType === "interest" ? styles.active : ""}`}
+          onClick={() => setSearchType("interest")}
         >
-          Expertise
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "enabler" ? styles.active : ""}`}
-          onClick={() => setSearchType("enabler")}
-        >
-          Role Enabler
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "mentor" ? styles.active : ""}`}
-          onClick={() => setSearchType("mentor")}
-        >
-          Role Mentor
+          Interest Group
         </button>
       </div>
+
       {error && <p className={styles.errorText}>{error}</p>}
+
       <Suspense fallback={<MuLoader />}>
-        <MentorList search={searchTerm} searchType={searchType} onSelect={handleMentorSelect} />
+        <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
+
       <AsideDetails isOpen={isAsideOpen} handleClose={handleAsideClose}>
-        {selectedMentor && (
+        {selectedUser && (
           <div className={styles.profileContainer}>
             <div className={styles.profileHeader}>
               <div className={styles.profileImageContainer}>
                 <img
-                  src={selectedMentor.profile_pic || dpm}
-                  alt={selectedMentor.full_name}
+                  src={selectedUser.profile_pic || dpm}
+                  alt={selectedUser.full_name}
                   className={styles.profileImage}
                 />
               </div>
               <div className={styles.memberSince}>Member since 2023</div>
               <button className={styles.connectBtn}>Connect</button>
             </div>
+
             <div className={styles.profileInfo}>
-              <h2 className={styles.profileName}>{selectedMentor.full_name}</h2>
-              <p className={styles.profileUsername}>{selectedMentor.muid}</p>
+              <h2 className={styles.profileName}>{selectedUser.full_name}</h2>
+              <p className={styles.profileUsername}>{selectedUser.muid}</p>
               <p className={styles.profileCollegeName}>
-                {getDisplayOrganization(selectedMentor)}
+                {selectedUser.organizations.find((org) => org.org_type === "College")?.title}
               </p>
               <p className={styles.profileLevel}>LEVEL 5</p>
             </div>
+
             <div className={styles.statsGrid}>
               <div className={styles.statsCard}>
                 <Karma />
                 <p className={styles.statsLabel}>Karma</p>
-                <p className={styles.statsValue}>{selectedMentor.karma}</p>
+                <p className={styles.statsValue}>{selectedUser.karma}</p>
               </div>
               <div className={styles.statsCard}>
                 <AvgKarma />
@@ -346,4 +311,4 @@ const MentorSearchPage: React.FC = () => {
   );
 };
 
-export default MentorSearchPage;
+export default MuLearnersSearchPage;

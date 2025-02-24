@@ -27,13 +27,12 @@ type UserInfo = {
 };
 
 type User ={
-    id: number;
+    full_name: string;
     muid: string;
-    name: string;
-    college: string;
-    interests: string[];
-    karma: number;
-    image: string;
+    interest_groups: { id: string; name: string }[];
+    organizations: { id: string; title: string; code: string; org_type: string }[];
+    profile_pic: string | null;
+    karma: string;
 }
 
 type Mentor = {

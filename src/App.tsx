@@ -64,14 +64,17 @@ import ComingSoonPage from "./modules/Common/Authentication/pages/ComingSoon";
 import MuLearnLanding from "./modules/Dashboard/modules/landing/pages/LandingPage";
 import CoursesMainPage from "./modules/Dashboard/modules/Courses/Pages/CoursesMainPage";
 import ManagementPage from "./modules/Dashboard/modules/Management/Pages/ManagementPage";
-import SearchPage from "./modules/Dashboard/modules/Search/Pages/SearchPage";
 import MentorSearchPage from "./modules/Dashboard/modules/Mentors/Pages/MentorPage";
 import InterestGroupsPage from "./modules/Dashboard/modules/InterestGroups/pages/InterestGroupsPage";
 import InterestGroupOne from "./modules/Dashboard/modules/InterestGroups/pages/One/InterestGroupOne";
 import SpecialEvents from "./modules/Dashboard/modules/SpecialEvents/pages/SpecialEvents";
 import Leaderboard from "./modules/Dashboard/modules/LeaderBoard/components/Leaderboard";
-import CampusPage from "./modules/Dashboard/modules/Campus/pages/CampusPage";
+import CampusPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
 import MuLeaderboardPage from "./modules/Dashboard/modules/LeaderBoard/pages/MuLeaderboardPage";
+import CampusSearchPage from "./modules/Dashboard/modules/Campus/pages/CampusSearchPage";
+import MuLearnersSearchPage from "./modules/Dashboard/modules/Search/Pages/MulearnersSearchPage";
+import CampusForumPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumPage";
+import CampusForumLandingPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumLanding";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -383,8 +386,10 @@ function App() {
                     path: "learningcircle",
                     element: <LearningCircleLanding />
                 },
-                { path: "search", element: <SearchPage/>},
+                { path: "mulearners", element: <MuLearnersSearchPage/>},
                 { path: "mentors", element: <MentorSearchPage/> },
+                {path: "campus", element: <CampusSearchPage/>},
+                {path: "campus/:id", element: <CampusForumLandingPage/>},
                 { path: "interestgroups", element: <InterestGroupsPage /> },
                 { path: "interestgroups/:id", element: <InterestGroupOne /> },
                 { path: "special-events", element: <SpecialEvents /> },
@@ -392,7 +397,7 @@ function App() {
                 { path: "bootcamps", element: <ComingSoonPage /> },
                 { path: "learningCircles", element: <ComingSoonPage /> },
                 { path: "courses", element: <CoursesMainPage /> },
-                {path: "campus", element: <CampusPage/>}
+
             ]
         },
         {

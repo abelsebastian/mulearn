@@ -14,7 +14,18 @@ import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { IoIosRocket } from "react-icons/io";
 // import DynamicType from "../modules/DynamicType/DynamicType";
 
-//TODO: Remove flaticons and use react-icons or vice-versa
+
+interface CrateType {
+    navigate: (channelId: string) => void;
+    toggle: (open?: boolean) => void
+}
+
+
+declare global {
+    interface Window {
+        crate?: CrateType;
+    }
+}
 const DashboardRootLayout = (props: { component?: any }) => {
     const [connected, setConnected] = useState(false);
 
@@ -27,6 +38,32 @@ const DashboardRootLayout = (props: { component?: any }) => {
             setConnected(existInGuild);
         }
     }, []);
+
+    // useEffect(() => {
+    //     const isLandingPage = location.pathname === "/";
+
+    //     if (!isLandingPage) {
+    //         const script = document.createElement("script");
+    //         script.src = "https://cdn.jsdelivr.net/npm/@widgetbot/crate@3";
+    //         script.async = true;
+    //         script.defer = true;
+    //         script.onload = () => {
+                
+    //             const crate = new (window as any).Crate({
+    //                 server: "1084781047784407080",
+    //                 channel: "1137000994727805009",
+    //             });
+    //             window.crate = crate; 
+    //         };
+
+    //         document.body.appendChild(script);
+    //         return () => {
+    //             if (document.body.contains(script)) {
+    //                 document.body.removeChild(script);
+    //             }
+    //         };
+    //     }
+    // }, [location.pathname]);
 
     const buttons = [
         {
@@ -41,11 +78,34 @@ const DashboardRootLayout = (props: { component?: any }) => {
         //     hasView: !connected,
         //     icon: <i className="fi fi-sr-data-transfer"></i>
         // },
+        // {
+        //     url: "/dashboard/search",
+        //     title: "Search",
+        //     hasView: true,
+        //     icon: <FaMagnifyingGlass/>
+        // },
         {
-            url: "/dashboard/search",
+            url: "", 
             title: "Search",
             hasView: true,
-            icon: <FaMagnifyingGlass/>
+            icon: <FaMagnifyingGlass />,
+            children: [
+                {
+                    url: "/dashboard/mentors",
+                    title: "Mentor",
+                    hasView: true,
+                },
+                {
+                    url: "/dashboard/campus",
+                    title: "Campus",
+                    hasView: true,
+                },
+                {
+                    url: "/dashboard/mulearners",
+                    title: "µLearners",
+                    hasView: true,
+                },
+            ],
         },
         {
             url: "/dashboard/learning-paths",
@@ -59,12 +119,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <FaUserFriends/>
         },
-        {
-            url: "/dashboard/mentors",
-            title: "Mentors",
-            hasView: true,
-            icon: <FaWandMagicSparkles/>
-        },
+        // {
+        //     url: "/dashboard/mentors",
+        //     title: "Mentors",
+        //     hasView: true,
+        //     icon: <FaWandMagicSparkles/>
+        // },
         {
             url: "/dashboard/special-events",
             title: "Special Events",
