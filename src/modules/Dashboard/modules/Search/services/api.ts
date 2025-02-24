@@ -48,21 +48,24 @@ interface ApiResponse {
 interface GetUsersParams {
   search?: string;
   role?: string;
-  page?: number;
+  pageIndex?: number;
+  perPage?: number;
 }
 
 
 export const getUsers = async ({
   search = '',
   role = '',
-  page = 1,
+  pageIndex = 1,
+  perPage,
 }: GetUsersParams): Promise<ApiResponseData> => {
   try {
     const response = await publicGateway.get<ApiResponse>(dashboardRoutes.getUserList, {
       params: {
         search: search.trim(),
         role,
-        page,
+        pageIndex: pageIndex,
+        perPage: perPage || 9,
       },
     });
 
@@ -88,7 +91,7 @@ export const getUsers = async ({
       message: error instanceof Error ? error.message : 'Unknown error',
       status: axiosError?.response?.status,
       responseData: axiosError?.response?.data,
-      params: { search, role, page },
+      params: { search, role, pageIndex, perPage },
     });
 
     if (axiosError.response) {
@@ -115,20 +118,3 @@ export const getUsers = async ({
   }
 };
 
-// Example usage:
-/*
-async function fetchUserList() {
-  try {
-    const { data: users, pagination } = await getUsers({ 
-      search: 'Muhammed', 
-      role: 'member',
-      page: 1 
-    });
-    console.log(`Found ${users.length} users`, pagination);
-    return users;
-  } catch (error) {
-    console.error(error.message);
-    throw error;
-  }
-}
-*/
