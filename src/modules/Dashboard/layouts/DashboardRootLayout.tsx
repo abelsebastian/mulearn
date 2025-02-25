@@ -85,27 +85,10 @@ const DashboardRootLayout = (props: { component?: any }) => {
         //     icon: <FaMagnifyingGlass/>
         // },
         {
-            url: "", 
+            url: "/dashboard/search", 
             title: "Search",
             hasView: true,
             icon: <FaMagnifyingGlass />,
-            children: [
-                {
-                    url: "/dashboard/mentors",
-                    title: "Mentor",
-                    hasView: true,
-                },
-                {
-                    url: "/dashboard/campus",
-                    title: "Campus",
-                    hasView: true,
-                },
-                {
-                    url: "/dashboard/mulearners",
-                    title: "µLearners",
-                    hasView: true,
-                },
-            ],
         },
         {
             url: "/dashboard/learning-paths",
