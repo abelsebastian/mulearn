@@ -15,6 +15,7 @@ import MuModal from "@/MuLearnComponents/MuModal/MuModal";
 import { EventCard } from "../../../LearningPaths/pages/LearningPathOne/LearningCircleCard";
 import LearningCircleCreateForm from "../../../LearningPaths/pages/LearningPathOne/LearningCircleCreateForm";
 import { CircleMeetupInfo } from "../../services/LearningCircleInterface";
+import EventDetailsModal from "../../components/EventDetailsModal/EventDetailsModal";
 
 interface Option {
     value: string;
@@ -85,51 +86,11 @@ const LearningCircleLanding = () => {
 
     return (
         <>
-            <MuModal
-                type="success"
-                onDone={() => {
-                    setIsModalOpen(false);
-                }}
-                onClose={() => {
-                    setIsModalOpen(false);
-                }}
-                title="Event Details"
+            <EventDetailsModal
                 isOpen={isModalOpen}
-            >
-                <div className={styles.eventDetails}>
-                    <h3>{selectedMeetup?.title}</h3>
-                    <p><strong>Location:</strong> {selectedMeetup?.meet_place}</p>
-                    {selectedMeetup?.meet_time && <p><strong>Date:</strong> {new Date(selectedMeetup?.meet_time).toLocaleDateString()}</p>}
-                    {selectedMeetup?.meet_time && <p><strong>Time:</strong> {new Date(selectedMeetup?.meet_time).toLocaleTimeString()}</p>}
-                    {selectedMeetup?.attendee && <p><strong>Attendees:</strong> {Number(selectedMeetup?.attendee) || 10}</p>}
-                    {/* Display joining URL (if it's an online event) */}
-                    {selectedMeetup?.meet_place === "Google Meet" && selectedMeetup?.meet_link && (
-                        <div className={styles.joiningUrlSection}>
-                            <p><strong>Joining URL:</strong></p>
-                            <div className={styles.urlContainer}>
-                                <a
-                                    href={selectedMeetup.meet_link || ""}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={styles.copyButton}
-                                >
-                                    Open URL
-                                </a>
-                                <button
-                                    className={styles.copyButton}
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(selectedMeetup.meet_link || "");
-                                        alert("URL copied to clipboard!");
-                                    }}
-                                >
-                                    Copy URL
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                </div>
-            </MuModal>
+                onClose={() => setIsModalOpen(false)}
+                meetup={selectedMeetup}
+            />
             <MuModal
                 type="success"
                 onClose={() => setIsCreateModalOpen(false)}
@@ -137,7 +98,7 @@ const LearningCircleLanding = () => {
                 isOpen={isCreateModalOpen}
                 showButton={false}
             >
-                <LearningCircleCreateForm setIsCreateModalOpen={setIsCreateModalOpen} onSuccess={handleUpdateLC}/>
+                <LearningCircleCreateForm setIsCreateModalOpen={setIsCreateModalOpen} onSuccess={handleUpdateLC} />
             </MuModal>
             {isLoading ? (
                 <div className={styles.loader_container}>

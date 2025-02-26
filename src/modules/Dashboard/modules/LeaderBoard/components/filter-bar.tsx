@@ -6,6 +6,7 @@ interface FilterBarProps {
   activeCategory: string;
   setActiveCategory: (category: string) => void;
   filterOptions: ("monthly" | "yearly" | "overall")[];
+  programOptions: { label: string; value: string }[];
   categoryOptions: { label: string; value: string }[];
 }
 
@@ -14,6 +15,7 @@ export function FilterBar({
   setActiveFilter,
   activeCategory,
   setActiveCategory,
+  programOptions,
   filterOptions,
   categoryOptions,
 }: FilterBarProps) {
@@ -33,6 +35,17 @@ export function FilterBar({
       </div>
 
       <div className={styles.filterActions}>
+        <select
+          className={styles.select}
+          value={activeCategory}
+          onChange={(e) => setActiveCategory(e.target.value)}
+        >
+          {programOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         <select
           className={styles.select}
           value={activeCategory}

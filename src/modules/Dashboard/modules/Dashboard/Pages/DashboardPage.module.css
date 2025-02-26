@@ -1,0 +1,160 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.welcomeSection {
+    background-color: #456ff6;
+    color: white;
+    padding: 12px 20px;
+    height: min-content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+    width: 100%;
+}
+
+.welcomeText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 16px;
+}
+
+.welcomeTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.sidebarSection {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .slider{
+    margin-left: 2rem;
+    width: 25%;
+  }
+
+  .happeningTitle{
+    color: black;
+    margin-bottom: 1rem !important;
+    font-weight: 600;
+  }
+
+  .buttons{
+    display: flex;
+    font-size: 0.8rem;
+    margin-top: 12px;
+  }
+
+  .button{
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border-radius: 12px;
+    margin-right: 0.5rem;
+  }
+
+  .button2{
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .happeningCardsContainer{
+    margin-top: 1remFv;
+  }
+  
+  .sidebarTitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6B7280;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .sidebarList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .sidebarItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebarItemLeft {
+    display: flex;
+    align-items: center;
+    font-size: 0.5rem;
+    gap: 12px;
+  }
+  
+  .sidebarItemText {
+    font-size: 0.8rem;
+    color: #374151;
+  }
+
+  .rightWrapper{
+    display: flex;
+    width: 30%;
+    flex-direction: column;
+  }
+  
+
+
+@media (min-width: 768px) {
+    .welcomeTitle {
+        font-size: 2.5rem;
+    }
+}
+
+.welcomeMessage {
+    /* max-width: 400px; */
+    text-align: left;
+}
+
+.dashboardImage {
+    height: fit-content;
+    padding: 20px 0;
+    margin: 10px 0;
+}
+
+@media (min-width: 768px) {
+    .dashboardImage {
+        width: 256px;
+    }
+}
+
+.interestGroups {
+    margin: 0 20px;
+    width: 40%;
+    background-color: white;
+    color: black;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.interestTitle {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.interestItem {
+    padding: 10px 0;
+}

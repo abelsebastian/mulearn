@@ -85,13 +85,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
         //     icon: <FaMagnifyingGlass/>
         // },
         {
-            url: "/dashboard/search", 
-            title: "Search",
-            hasView: true,
-            icon: <FaMagnifyingGlass />,
-        },
-        {
-            url: "/dashboard/learning-paths",
+            url: "/dashboard/learn",
             title: "Learning Paths",
             hasView: true,
             icon: <FaMapLocationDot/>
@@ -108,17 +102,24 @@ const DashboardRootLayout = (props: { component?: any }) => {
         //     hasView: true,
         //     icon: <FaWandMagicSparkles/>
         // },
-        {
-            url: "/dashboard/special-events",
-            title: "Special Events",
-            hasView: true,
-            icon: <IoGlobeOutline />
-        },
+   
         {
             url: "/dashboard/learningcircle",
             title: "Learning Circle",
             hasView: true,
             icon: <i className="fi fi-sr-books"></i>
+        },
+        {
+            url: "/dashboard/search", 
+            title: "Search",
+            hasView: true,
+            icon: <FaMagnifyingGlass />,
+        },
+        {
+            url: "/dashboard/special-events",
+            title: "Special Events",
+            hasView: true,
+            icon: <IoGlobeOutline />
         },
         {
             url: "/dashboard/courses",

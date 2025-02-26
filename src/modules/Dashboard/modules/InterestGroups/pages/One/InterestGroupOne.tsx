@@ -1,12 +1,12 @@
 import React from 'react';
-import { 
-  Bell, 
-  MoreHorizontal, 
-  Image, 
-  Film, 
-  PieChart, 
-  Smile, 
-  MessageCircle 
+import {
+  Bell,
+  MoreHorizontal,
+  Image,
+  Film,
+  PieChart,
+  Smile,
+  MessageCircle
 } from 'lucide-react';
 import { FaCode } from 'react-icons/fa';
 import { IoSchool } from 'react-icons/io5';
@@ -16,6 +16,7 @@ import { RiFlutterFill } from 'react-icons/ri';
 import styles from './InterestGroupOne.module.css';
 import SidebarBannerSlider from '../../components/SideBannerSlider/SideBannerSlider';
 import CommunityForumPage from '../../components/CommunityForum/CommunityForumPage';
+import IGActionSection from '../../components/ActionSection/IGActionSection';
 
 const CommunityForum = () => {
   const memberAvatars = [
@@ -97,8 +98,8 @@ const CommunityForum = () => {
           <div className={styles.forumCard}>
             {/* Header Banner */}
             <div className={styles.bannerWrapper}>
-              <img 
-                src="https://images.unsplash.com/photo-1495539406979-bf61750d38ad?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+              <img
+                src="https://images.unsplash.com/photo-1495539406979-bf61750d38ad?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="UI/UX Banner"
                 className={styles.bannerImage}
               />
@@ -113,7 +114,7 @@ const CommunityForum = () => {
 
             {/* Community Info */}
             <div className={styles.communityInfo}>
-              <h1 className={styles.forumTitle}>UI/UX Community Forum</h1>
+              <h1 className={styles.forumTitle}>UI/UX Interest Group</h1>
               <div className={styles.forumSubInfo}>
                 <span>Public Community</span>
                 <span>•</span>
@@ -142,7 +143,7 @@ const CommunityForum = () => {
                 <MoreHorizontal className={styles.moreIcon} />
               </button>
             </div>
-            <CommunityForumPage/>
+            <IGActionSection />
           </div>
         </div>
 
@@ -152,7 +153,19 @@ const CommunityForum = () => {
           <div className={styles.sidebarSection}>
             <h2 className={styles.sidebarTitle}>Happening Now</h2>
             <div className={styles.sidebarBanner}>
-            <SidebarBannerSlider/>
+              <SidebarBannerSlider />
+            </div>
+          </div>
+          <div className={styles.officeHoursCard}>
+            <h3>Office Hours Timings</h3>
+            <div className={styles.officeHoursCardTiming}>
+              <p>Every Thursday 8:30 - 9:30</p>
+              <button
+                className={styles.officeHoursButton}
+                onClick={() => window.location.href = "https://discord.gg/yourchannel"}
+              >
+                Join
+              </button>
             </div>
           </div>
           <div className={styles.sidebarSection}>
@@ -193,41 +206,6 @@ const CommunityForum = () => {
               ))}
             </div>
           </div>
-
-          {/* Friends */}
-          {/* <div className={styles.sidebarSection}>
-            <h2 className={styles.sidebarTitle}>Friends (354 Online)</h2>
-            <div className={styles.friendsList}>
-              {friends.map((friend, index) => (
-                <div key={index} className={styles.friendItem}>
-                  <div className={styles.friendItemLeft}>
-                    <div className={styles.friendAvatarContainer}>
-                      <img
-                        src={friend.avatar}
-                        alt={friend.name}
-                        className={styles.friendAvatar}
-                      />
-                      <div className={styles.friendOnlineIndicator}></div>
-                    </div>
-                    <div className={styles.friendInfo}>
-                      <div className={styles.friendNameRow}>
-                        <span className={styles.friendName}>{friend.name}</span>
-                        {friend.verified && (
-                          <svg className={styles.verifiedIcon} viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                          </svg>
-                        )}
-                      </div>
-                      <span className={styles.friendUsername}>{friend.username}</span>
-                    </div>
-                  </div>
-                  <button className={styles.friendMessageButton}>
-                    <MessageCircle className={styles.friendMessageIcon} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div> */}
         </div>
       </div>
     </div>

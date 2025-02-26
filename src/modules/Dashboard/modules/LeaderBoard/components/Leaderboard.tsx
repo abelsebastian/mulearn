@@ -4,6 +4,7 @@ import { TopPlayers } from "./top-players";
 import { LeaderboardTable } from "./leaderboard-table";
 import { FilterBar } from "./filter-bar";
 import styles from "../pages/leaderboard.module.css";
+import { FilterBarCategories } from "./filter-categories";
 
 
 interface LeaderboardEntry {
@@ -18,6 +19,7 @@ interface LeaderboardEntry {
 interface LeaderboardProps {
   data: LeaderboardEntry[];
   filterOptions?: ("monthly" | "yearly" | "overall")[];
+  leaderBoardOptions?: { label: string; value: string }[];
   categoryOptions?: { label: string; value: string }[];
   defaultFilter?: "monthly" | "yearly" | "overall";
   defaultCategory?: string;
@@ -27,6 +29,12 @@ interface LeaderboardProps {
 export default function Leaderboard({
   data = [], 
   filterOptions = ["monthly", "yearly", "overall"],
+  leaderBoardOptions = [
+    { label: "Main", value: "all" },
+    { label: "Launchpad", value: "student" },
+    { label: "YIP", value: "mentor" },
+    { label: "Talent Accelerator", value: "campus" },
+  ],
   categoryOptions = [
     { label: "All Categories", value: "all" },
     { label: "Student", value: "student" },
@@ -61,6 +69,7 @@ export default function Leaderboard({
           activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
           filterOptions={filterOptions}
+          programOptions={leaderBoardOptions}
           categoryOptions={categoryOptions}
         />
         <TopPlayers topPlayers={topPlayers} activeFilter={activeFilter} />

@@ -1,0 +1,105 @@
+/* Page Container */
+.pageContainer {
+    padding: 24px;
+    background-color: #fff;
+    color: #000;
+  }
+  
+  .pageTitle {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 16px;
+  }
+  
+  .tabButton {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .activeTab {
+    border-bottom: 2px solid #456ff6;
+    color: #456ff6;
+  }
+  
+  /* Tab Content */
+  .tabContentContainer {
+    margin-bottom: 24px;
+  }
+  
+  .tabContent {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Cards Container */
+  .cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  /* Learning Path Cards */
+  .learningPathCard {
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+    width: 250px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: left;
+  }
+
+  .learningPathCard  h3{
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .learningPathCard  p{
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  
+  .startButton {
+    background-color: #456ff6;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  
+  /* Common Card (for Think Tank and Mentors) */
+  .commonCard {
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .profileImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+  }
+  
+  .linkedinIcon {
+    color: #0077b5;
+    font-size: 1.5rem;
+  }
+  
