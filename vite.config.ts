@@ -4,6 +4,7 @@ import postcssNesting from "postcss-nesting";
 import path from "path";
 import viteCompression from "vite-plugin-compression";
 // import eslint from 'vite-plugin-eslint'
+
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({

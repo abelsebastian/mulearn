@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SideNavBar.module.css";
 import { MdNotifications, MdNotificationAdd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dpm from "../assets/images/dpm.webp";
 import { IoMdLogIn } from "react-icons/io";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
@@ -17,6 +17,8 @@ import { SiDiscord } from "react-icons/si";
 import { MuButtonLight } from "@/MuLearnComponents/MuButtons/MuButton";
 import MuLogOut from "../assets/svg/MuLogOut";
 import toast from "react-hot-toast";
+import GameProgressBar from "../modules/ProgressBar/components/GameProgressBar";
+import { getPublicUserLevels, getUserLevels } from "../modules/Profile/services/api";
 
 const TopNavBar = () => {
     const navigate = useNavigate();
@@ -26,6 +28,33 @@ const TopNavBar = () => {
     const [notificationList, setNotificationList] = useState<
         NotificationProps[]
     >([]);
+
+    const { id } = useParams<{ id: string }>();
+      const [userLevelData, setUserLevelData] = useState([]);
+      const [isLoading, setIsLoading] = useState(true);
+      const [error, setError] = useState("");
+    
+      useEffect(() => {
+        const fetchLevelData = async () => {
+          try {
+            setIsLoading(true);
+            if (id) {
+              // Fetch public user levels if an id is provided
+              await getPublicUserLevels(setUserLevelData, id);
+            } else {
+              // Fetch authenticated user's levels if no id
+              await getUserLevels(setUserLevelData);
+            }
+          } catch (err) {
+            console.error("Error fetching level data:", err);
+            setError("Failed to load level data");
+          } finally {
+            setIsLoading(false);
+          }
+        };
+        fetchLevelData();
+      }, [id]);
+
     const notificationStyle = {
         backgroundColor: "#ffffff00",
         _hover: {
@@ -85,6 +114,15 @@ const TopNavBar = () => {
                                 <SiDiscord size={30} />
                             </a> */}
                             {/* <i className="fi fi-sr-settings"></i> */}
+                            <div className="cursor-pointer"
+                                onClick={() => {
+                                    navigate("/dashboard/leaderboard")
+                                }}
+                            >
+                                <GameProgressBar levelData={userLevelData}/>
+                               
+                            
+                            </div>
                             <Popover placement="bottom-end">
                                 <PopoverTrigger>
                                     <Button
@@ -116,15 +154,9 @@ const TopNavBar = () => {
                                     />
                                 </PopoverContent>
                             </Popover>
-                            <div className={styles.karma}
-                                 onClick={() => {
-                                    navigate("/dashboard/leaderboard")
-                                }}
-                            >
-                            <img src="/assets/Flame Icon.png" width="28px" alt="img"
-                                />
-                                <span>10000</span>
-                                </div>
+                           
+
+                            
                             {
                                 refreshToken && (
                                     <div id="profile" className={styles.profile}>

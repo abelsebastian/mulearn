@@ -76,6 +76,7 @@ import MuLearnersSearchPage from "./modules/Dashboard/modules/Search/Pages/Mulea
 import CampusForumPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumPage";
 import CampusForumLandingPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumLanding";
 import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
+import Mappage from "./modules/Dashboard/modules/ProgressBar/components/pages/MapPage";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -399,6 +400,8 @@ function App() {
                 { path: "bootcamps", element: <ComingSoonPage /> },
                 { path: "learningCircles", element: <ComingSoonPage /> },
                 { path: "courses", element: <CoursesMainPage /> },
+
+                {path: "map", element: <Mappage />},
 
             ]
         },
