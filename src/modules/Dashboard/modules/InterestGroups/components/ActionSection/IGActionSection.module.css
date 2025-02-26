@@ -1,105 +1,257 @@
 /* Page Container */
 .pageContainer {
-    padding: 24px;
-    background-color: #fff;
-    color: #000;
-  }
-  
-  .pageTitle {
-    font-size: 2rem;
-    margin-bottom: 16px;
-  }
-  
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 16px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 16px;
-  }
-  
-  .tabButton {
-    background: none;
-    border: none;
-    font-size: 1rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    color: #666;
-  }
-  
-  .activeTab {
-    border-bottom: 2px solid #456ff6;
-    color: #456ff6;
-  }
-  
-  /* Tab Content */
-  .tabContentContainer {
-    margin-bottom: 24px;
-  }
-  
-  .tabContent {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-  
-  /* Cards Container */
-  .cardsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  
-  /* Learning Path Cards */
-  .learningPathCard {
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    padding: 16px;
-    width: 250px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-align: left;
-  }
+  padding: 24px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  .learningPathCard  h3{
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
 
-  .learningPathCard  p{
-    font-size: 0.75rem;
-    font-weight: 400;
-  }
-  
-  .startButton {
-    background-color: #456ff6;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    margin-top: 8px;
-    font-size: 0.75rem;
-    cursor: pointer;
-  }
-  
-  /* Common Card (for Think Tank and Mentors) */
-  .commonCard {
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    padding: 16px;
-    width: 200px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .profileImage {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 8px;
-  }
-  
-  .linkedinIcon {
-    color: #0077b5;
-    font-size: 1.5rem;
-  }
-  
+.tabButton {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #666666;
+  transition: color 0.3s ease, border-bottom 0.2s ease;
+  border-radius: 4px 4px 0 0;
+}
+
+.tabButton:hover {
+  color: #456ff6;
+}
+
+.activeTab {
+  border-bottom: 3px solid #456ff6;
+  color: #456ff6;
+  font-weight: 600;
+}
+
+/* Tab Content */
+.tabContentContainer {
+  margin-bottom: 24px;
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.tabContent {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333333;
+}
+
+/* About Section Specific Styles */
+.tabContent.about {
+  padding: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); /* Subtle gradient */
+  border-radius: 10px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Soft inner shadow */
+}
+
+.tabContent.about p {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #2c2c2c;
+  margin-bottom: 24px;
+  line-height: 1.8;
+  max-width: 800px; /* Constrain width for readability */
+}
+
+/* Career Paths Section */
+.tabContent.about h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 28px;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.tabContent.about h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #456ff6; /* Accent underline */
+  border-radius: 2px;
+}
+
+.careerPath {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid #456ff6; /* Left accent border */
+}
+
+.careerPath:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.careerPath h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.careerPath p {
+  font-size: 0.95rem;
+  color: #555555;
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.careerPath ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.careerPath li {
+  font-size: 0.9rem;
+  color: #666666;
+  padding: 8px 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.careerPath li::before {
+  content: "✔"; /* Checkmark icon */
+  color: #456ff6;
+  font-size: 0.9rem;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Existing Card Styles (unchanged) */
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.learningPathCard {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.learningPathCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.learningPathCard h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+}
+
+.learningPathCard p {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666666;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.startButton {
+  background-color: #456ff6;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.startButton:hover {
+  background-color: #3458d6;
+  transform: scale(1.02);
+}
+
+.eventCard {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.eventCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.eventCard img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.eventCard h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+}
+
+.eventCard p {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #666666;
+  margin: 0 0 8px;
+}
+
+.eventCard a {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #456ff6;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: color 0.3s ease;
+}
+
+.eventCard a:hover {
+  color: #3458d6;
+  text-decoration: underline;
+}
