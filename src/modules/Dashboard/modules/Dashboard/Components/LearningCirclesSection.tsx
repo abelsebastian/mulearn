@@ -1,39 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./LearningCirclesSection.module.css";
 import { getMeetups } from "../../LearningCircleV2/services/LearningCircleAPIs";
 import { CircleMeetupInfo } from "../../LearningCircleV2/services/LearningCircleInterface";
 import EventDetailsModal from "../../LearningCircleV2/components/EventDetailsModal/EventDetailsModal";
-import { useNavigate } from "react-router-dom";
 
-const LearningCirclesSection: React.FC = () => {
-  // Store fetched data as the original type
+const meetupCache: { [key: string]: CircleMeetupInfo[] } = {};
+
+const useMeetups = (category: string, limit: number = 6) => {
   const [meetups, setMeetups] = useState<CircleMeetupInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchMeetups = async () => {
+      // Check cache first
+      if (meetupCache[category]) {
+        setMeetups(meetupCache[category].slice(0, limit));
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const res = await getMeetups(category);
+        meetupCache[category] = res; // Cache the full result
+        setMeetups(res.slice(0, limit));
+      } catch (error) {
+        console.error("Failed to fetch meetups:", error);
+        setMeetups([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMeetups();
+  }, [category, limit]); 
+
+  return { meetups, isLoading };
+};
+
+const LearningCirclesSection: React.FC = () => {
+  const { meetups, isLoading } = useMeetups("all"); 
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMeetup, setSelectedMeetup] = useState<CircleMeetupInfo | undefined>(undefined);
 
-  // Hard-coded category for fetching meetups
-  const category = "all";
-  const navigate = useNavigate();
-
-  // Fetch data from the API
-  useEffect(() => {
-    setIsLoading(true);
-    getMeetups(category)
-      .then((res: CircleMeetupInfo[]) => {
-        setMeetups(res.slice(0, 6));
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, [category]);
-
-  // Open the modal with the selected meetup's details
-  const handleCircleClick = (meetup: CircleMeetupInfo) => {
+  const handleCircleClick = useCallback((meetup: CircleMeetupInfo) => {
     setSelectedMeetup(meetup);
     setIsModalOpen(true);
-  };
+  }, []);
+
+  const handleNavigate = useCallback(() => {
+    navigate("/dashboard/learningcircle");
+  }, [navigate]); 
 
   return (
     <>
@@ -46,15 +64,18 @@ const LearningCirclesSection: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h3 className={styles.title}>Learning Circles</h3>
-          <span className={styles.arrow} onClick={() => navigate("/dashboard/learningcircle")}>›</span>
+          <span className={styles.arrow} onClick={handleNavigate}>
+            ›
+          </span>
         </div>
+
         {isLoading ? (
           <p>Loading...</p>
         ) : (
           <div className={styles.list}>
-            {meetups.map((meetup, index) => (
+            {meetups.map((meetup) => (
               <div
-                key={index}
+                key={meetup.id}
                 className={styles.circleItem}
                 onClick={() => handleCircleClick(meetup)}
               >
@@ -73,7 +94,8 @@ const LearningCirclesSection: React.FC = () => {
                     </span>
                   </div>
                   <div className={styles.tagsContainer}>
-                    {/* If your CircleMeetupInfo has tags or interests, map them here */}
+                    {/* Add tags if CircleMeetupInfo includes them */}
+                    {/* Example: meetup.tags?.map(tag => <span key={tag}>{tag}</span>) */}
                   </div>
                 </div>
                 <button className={styles.ctaButton}>Join</button>
@@ -86,4 +108,4 @@ const LearningCirclesSection: React.FC = () => {
   );
 };
 
-export default LearningCirclesSection;
+export default memo(LearningCirclesSection);
