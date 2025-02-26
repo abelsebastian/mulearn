@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bell, MoreHorizontal } from 'lucide-react';
 import styles from './InterestGroupOne.module.css';
 import SidebarBannerSlider from '../../components/SideBannerSlider/SideBannerSlider';
 import IGActionSection from '../../components/ActionSection/IGActionSection';
 import { interestGroups } from '../../data/interestGroups';
+import ComingSoonPage from '/src/modules/Common/Authentication/pages/ComingSoon';
+
+const memberAvatars = [
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&q=80",
+  "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=40&h=40&q=80",
+  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&q=80",
+  "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=40&h=40&q=80",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&q=80",
+];
 
 const CommunityForum = () => {
   const { id } = useParams();
-  const memberAvatars = [
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&q=80",
-    "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=40&h=40&q=80",
-    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&q=80",
-    "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=40&h=40&q=80",
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&q=80",
-  ];
 
-  const groupData = interestGroups.find(group => group.id === id) || null;
+
+  const groupData = useMemo(() => interestGroups.find(group => group.id === id) || null, [id]);
 
   if (!groupData) {
-    return <div>Interest Group not found</div>;
+    return <div className='w-full h-full flex justify-center items-center'><ComingSoonPage/></div>;
   }
 
   return (

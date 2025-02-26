@@ -42,7 +42,6 @@ const DashboardRootLayout = (props: { component?: any }) => {
 
     useEffect(() => {
         const userInfo = fetchLocalStorage<UserInfo>("userInfo");
-        console.log("logging user ingo",userInfo);
         if (userInfo.user_domains.length === 0 || userInfo.user_endgoals.length === 0) {
             navigate("/register/pathfinder?ruri=/dashboard/home");
         }
