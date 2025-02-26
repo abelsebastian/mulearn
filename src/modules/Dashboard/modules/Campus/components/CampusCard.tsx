@@ -7,9 +7,9 @@ interface CampusCardData {
     name: string;
     code: string;
     grade?: "A" | "B" | "C" | "N/A";
-    lead: string;
+    lead?: string;
     enabler?: string;
-    karmaPoints: string;
+    userCount: string;
 }
 
 interface CampusCardProps {
@@ -75,6 +75,7 @@ const CampusCard: React.FC<CampusCardProps> = ({ data, onSelect }) => {
                     <h2 className={styles.userName}>
                         {data.name.trim() || "Unknown Campus"} ({data.code})
                     </h2>
+                    {data.grade && (
                     <div className={styles.gradeSection}>
                         {getGradeIcon(data.grade)}
                         <span className={styles.userRole}>Grade {data.grade || "N/A"}</span>
@@ -115,12 +116,15 @@ const CampusCard: React.FC<CampusCardProps> = ({ data, onSelect }) => {
                                 </Dialog.Content>
                             </Dialog.Portal>
                         </Dialog.Root>
-                    </div>
-                    <p className={styles.userKarma}>Yearly Karma: {formatKarma(data.karmaPoints)}</p>
-                    <div className={styles.leadership}>
-                        <span className={styles.leaderLabel}>Lead:</span>
-                        <span className={styles.leaderName}>{data.lead || "N/A"}</span>
-                    </div>
+                    </div>)}
+                    <p className={styles.userKarma}>Students Count: {formatKarma(data.userCount)}</p>
+                    {data.lead && (
+                        <div className={styles.leadership}>
+                            <span className={styles.leaderLabel}>Lead:</span>
+                            <span className={styles.leaderName}>{data.lead || "N/A"}</span>
+                        </div>
+                    )}
+                 
                     {data.enabler && (
                         <div className={styles.leadership}>
                             <span className={styles.leaderLabel}>Enabler:</span>
