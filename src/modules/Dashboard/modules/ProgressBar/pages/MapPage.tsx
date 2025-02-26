@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
-import { getPublicUserLevels, getUserLevels } from "../../../Profile/services/api";
-import GameProgressBar from "../GameProgressBar";
+import { getPublicUserLevels, getUserLevels } from "../../Profile/services/api";
+import GameProgressBar from "../components/GameProgressBar";
 
 const Mappage = () => {
   const { id } = useParams<{ id: string }>();
