@@ -24,6 +24,8 @@ type UserInfo = {
     cipher?: string;
     profile_pic?: string;
     interest_selected: string | null;
+    user_domains: string[];
+    user_endgoals: string[];
 };
 
 type User ={

@@ -7,6 +7,13 @@ import LearningCirclesSection from "../Components/LearningCirclesSection";
 import styles from "./DashboardPage.module.css";
 
 // Move static data outside component to prevent recreation
+const EVENTS =  [
+  { id: "evt-001", title: "UI/UX Design Sprint Workshop", link: "https://uiuxcommunity.com/events/design-sprint", venue: "Online via Zoom", eventType: "Online" as "Online", date: "March 15, 2025", time: "14:00 - 17:00 GMT", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800" },
+  { id: "evt-002", title: "Figma Advanced Prototyping Masterclass", link: "https://uiuxcommunity.com/events/figma-masterclass", venue: "Semarang Convention Center", eventType: "Offline" as "Offline", date: "April 10, 2025", time: "09:00 - 12:00 WIB", image: '/assets/interestgroup_assets/Top100Desigers3.png' },
+  { id: "evt-003", title: "User Research Techniques Webinar", link: "https://uiuxcommunity.com/events/user-research-webinar", venue: "Online via Microsoft Teams", eventType: "Online" as "Online", date: "May 5, 2025", time: "10:00 - 11:30 GMT", image: '/assets/interestgroup_assets/Top100Desigers2.png' },
+  { id: "evt-004", title: "UI Design Trends 2025 Conference", link: "https://uiuxcommunity.com/events/ui-trends-2025", venue: "Jakarta Design Hub", eventType: "Offline" as "Offline", date: "June 20, 2025", time: "13:00 - 17:00 WIB", image: '/assets/interestgroup_assets/Top100Desigers3.png' },
+  { id: "evt-005", title: "Accessibility in UX Design Workshop", link: "https://uiuxcommunity.com/events/accessibility-workshop", venue: "Online via Google Meet", eventType: "Online" as "Online", date: "July 12, 2025", time: "15:00 - 16:30 GMT", image: '/assets/interestgroup_assets/Top100Desigers2.png' },
+]
 const CREATIVE_GROUPS = [
   {
     title: "Video Editing",
@@ -100,7 +107,7 @@ const DashboardPage = memo(() => {
         <section className={styles.slider}>
           <h2 className={styles.happeningTitle}>Happening Now</h2>
           <div className={styles.happeningCardsContainer}>
-            <SidebarBannerSlider />
+            <SidebarBannerSlider events={EVENTS} />
           </div>
         </section>
       </div>

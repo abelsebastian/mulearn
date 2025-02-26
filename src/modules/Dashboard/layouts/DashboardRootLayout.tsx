@@ -1,5 +1,5 @@
 import styles from "../components/SideNavBar.module.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SideNavBar from "../components/SideNavBar";
 import TopNavBar from "../components/TopNavBar";
 import { Suspense, useEffect, useState } from "react";
@@ -27,6 +27,7 @@ declare global {
     }
 }
 const DashboardRootLayout = (props: { component?: any }) => {
+    const navigate = useNavigate();
     const [connected, setConnected] = useState(false);
 
     const Management: ManagementTypes[] =
@@ -36,6 +37,14 @@ const DashboardRootLayout = (props: { component?: any }) => {
         if (userInfo) {
             const existInGuild = userInfo.exist_in_guild;
             setConnected(existInGuild);
+        }
+    }, []);
+
+    useEffect(() => {
+        const userInfo = fetchLocalStorage<UserInfo>("userInfo");
+        console.log("logging user ingo",userInfo);
+        if (userInfo.user_domains.length === 0 || userInfo.user_endgoals.length === 0) {
+            navigate("/register/pathfinder?ruri=/dashboard/home");
         }
     }, []);
 
