@@ -12,12 +12,11 @@ const levels = [
 ];
 
 const LevelMap = () => {
-  const handleLevelClick = (level) => {
-    // Here you could open a modal with challenge details
+  const handleLevelClick = (level: { id: string; label: string }) => {
     console.log("Clicked:", level.label);
   };
 
-  const handleChallengeAction = (level) => {
+  const handleChallengeAction = (level: { id: string; label: string }) => {
     console.log("Challenge action clicked for:", level.label);
   };
 

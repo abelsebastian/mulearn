@@ -1,4 +1,5 @@
 import LevelMap from "./Map"
+//@ts-ignore
 import { ReactFlowProvider } from "reactflow";
 
 function Dashboard() {

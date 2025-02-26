@@ -4,12 +4,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import styles from './CommunityForum.module.css';
 
+const images = [
+  '/assets/interestgroup_assets/Top 100 Designers.png',
+  '/assets/interestgroup_assets/Top100Desigers2.png',
+  '/assets/interestgroup_assets/Top100Desigers3.png',
+];
 const SidebarBannerSlider = () => {
-  const images = [
-    '/assets/interestgroup_assets/Top 100 Designers.png',
-    '/assets/interestgroup_assets/Top100Desigers2.png',
-    '/assets/interestgroup_assets/Top100Desigers3.png',
-  ];
 
   return (
     <div className={styles.sidebarBannerSlider}>

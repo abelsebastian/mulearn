@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Flame, Star, Zap } from "lucide-react";
-import style from "./GameProgressBar.module.css"
+import style from "./GameProgressBar.module.css";
 
 interface Level {
   tasks?: { completed: boolean; karma?: number }[];
@@ -19,33 +19,29 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
     );
   }
 
-  const totalKarmaEarned = levelData.reduce((acc, level) => {
-    const levelKarma = level.tasks && Array.isArray(level.tasks)
-      ? level.tasks.reduce((taskAcc, task) => {
+  const totalKarmaEarned = useMemo(() => {
+    return levelData.reduce((acc, level) => {
+      const levelKarma = level.tasks?.reduce((taskAcc, task) => {
         return task.completed ? taskAcc + (task.karma || 0) : taskAcc;
-      }, 0)
-      : 0;
-    return acc + levelKarma;
-  }, 0);
+      }, 0) || 0;
+      return acc + levelKarma;
+    }, 0);
+  }, [levelData]);
 
   const [localTotalKarma, setLocalTotalKarma] = useState(totalKarmaEarned);
 
-  // Sync localTotalKarma with prop changes
   useEffect(() => {
     setLocalTotalKarma(totalKarmaEarned);
   }, [totalKarmaEarned]);
 
-  const pointsPerLevel = levelData.map((level) => level.karma || 0);
+  const pointsPerLevel = useMemo(() => levelData.map((level) => level.karma || 0), [levelData]);
   const maxLevel = levelData.length;
 
-  const getLevelMetrics = (totalKarma: number, pointsPerLevel: number[], maxLevel: number): { level: number, currentPoints: number, totalRequired: number, progress: number } => {
+  const getLevelMetrics = useMemo(() => {
     let currentLevel = 1;
-    let karmaInLevel = totalKarma;
+    let karmaInLevel = localTotalKarma;
 
-    while (
-      currentLevel < maxLevel &&
-      karmaInLevel >= pointsPerLevel[currentLevel - 1]
-    ) {
+    while (currentLevel < maxLevel && karmaInLevel >= pointsPerLevel[currentLevel - 1]) {
       karmaInLevel -= pointsPerLevel[currentLevel - 1];
       currentLevel += 1;
     }
@@ -58,26 +54,18 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
       karmaInLevel = totalRequired;
     }
 
-    return {
-      level: currentLevel,
-      currentPoints: karmaInLevel,
-      totalRequired,
-      progress,
-    };
-  };
+    return { level: currentLevel, currentPoints: karmaInLevel, totalRequired, progress };
+  }, [localTotalKarma, pointsPerLevel, maxLevel]);
 
-  const { level: displayLevel, currentPoints: displayPoints, totalRequired, progress } =
-    getLevelMetrics(localTotalKarma, pointsPerLevel, maxLevel);
-
+  const { level: displayLevel, currentPoints: displayPoints, totalRequired, progress } = getLevelMetrics;
   const roundedPoints = Math.round(displayPoints);
-  const pointsToLevelUp = Math.max(0, totalRequired - roundedPoints);
-
+  
   const icons: { [key: number]: JSX.Element } = {
-    1: <Flame className="w-8 h-8 text-yellow-400" />,
-    2: <Star className="w-8 h-8 text-yellow-400" />,
+    1: <Flame className="w-8 h-8 text-yellow-400" />, 
+    2: <Star className="w-8 h-8 text-yellow-400" />, 
     3: <Zap className="w-8 h-8 text-yellow-400" />
   };
-
+  
   const icon = icons[Math.min(displayLevel, 3)] || icons[1];
 
   return (
@@ -85,15 +73,8 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
       <div className="flex items-center w-full max-w-2xl h-9 mx-auto px-4 relative">
         <motion.div
           className={`${style.iconContainer} w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700`}
-          animate={{
-            scale: [1, 1, 1],
-            rotate: [0, 10, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ scale: [1, 1, 1], rotate: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           aria-hidden="true"
         >
           {icon}
@@ -105,9 +86,7 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
           </div>
           <div
             className="relative h-6 w-44 rounded-full overflow-hidden mt-1"
-            style={{
-              background: "rgba(30, 41, 59, 0.8)",
-            }}
+            style={{ background: "rgba(30, 41, 59, 0.8)" }}
             role="progressbar"
             aria-valuenow={roundedPoints}
             aria-valuemin={0}
@@ -129,10 +108,8 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
         </div>
       </div>
 
-
       <span className="sr-only">
-        Level {displayLevel}, {roundedPoints} out of {totalRequired} karma towards level{" "}
-        {displayLevel + 1}
+        Level {displayLevel}, {roundedPoints} out of {totalRequired} karma towards level {displayLevel + 1}
       </span>
     </div>
   );
