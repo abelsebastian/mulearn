@@ -75,6 +75,10 @@ import CampusSearchPage from "./modules/Dashboard/modules/Campus/pages/CampusSea
 import MuLearnersSearchPage from "./modules/Dashboard/modules/Search/Pages/MulearnersSearchPage";
 import CampusForumPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumPage";
 import CampusForumLandingPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumLanding";
+import Dashboardpage from "./modules/Dashboard/modules/Dashboard/Pages/Dashboardpage";
+import LevelMap from "./modules/Dashboard/modules/Map/Pages/Map";
+import Dashboard from "./modules/Dashboard/modules/Map/Pages/DashBoard";
+import LearningPathPage from "./modules/Dashboard/modules/LearningPathNew/Pages/LearningPathPage";
 import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
 
 const Profile = lazy(
@@ -410,7 +414,8 @@ function App() {
                     path: "/dashboard",
                     element: <DashboardRootLayout />,
                     children: [
-                        { path: "home", element: <ProfileV2 /> },
+                        { path: "home", element: <Dashboardpage/> },
+                        { path: "learn", element: <LearningPathPage/> },
                         { path: "profile", element: <Profile /> },
                         { path: "profileV2", element: <ProfileV2 /> },
                         { path: "muverse", element: <ComingSoonPage /> },

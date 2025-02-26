@@ -21,11 +21,10 @@ function InterestGroupsPage() {
 
   const categories = [
     { id: 'all', name: 'All Categories' },
-    { id: 'space', name: 'Space & Astronomy' },
-    { id: 'tech', name: 'Technology' },
-    { id: 'gaming', name: 'Gaming' },
-    { id: 'art', name: 'Art & Design' },
-    { id: 'science', name: 'Science' },
+    { id: 'creative', name: 'Creative' },
+    { id: 'software', name: 'Software' },
+    { id: 'hardware', name: 'Hardware' },
+    { id: 'management', name: 'Management' },
   ];
 
   const imageUrls = [
