@@ -42,7 +42,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
 
     useEffect(() => {
         const userInfo = fetchLocalStorage<UserInfo>("userInfo");
-        if (userInfo.user_domains.length === 0 || userInfo.user_endgoals.length === 0) {
+        if (userInfo.user_domains?.length === 0 || userInfo.user_endgoals?.length === 0) {
             navigate("/register/pathfinder?ruri=/dashboard/home");
         }
     }, []);

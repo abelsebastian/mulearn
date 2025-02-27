@@ -2,7 +2,7 @@
 .container {
   padding: 24px;
   background-color: #ffffff;
-  max-width: 100%;
+  width: 100%;
 }
 
 /* Grid Layout */

@@ -71,7 +71,7 @@ export const login = (
                         );
                         refreshRoles();
                         if (response.data.response.exist_in_guild) {
-                            navigate("/dashboard/profile");
+                            navigate("/dashboard/home");
                         } else {
                             if (redirectPath) {
                                 navigate(`/${redirectPath}`);

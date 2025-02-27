@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import styles from "./LearningPathPage.module.css";
 import levelsData from "../modules/LevelsData";
+import levelsDataUIUX from "../modules/LevelsDataUIUX";
+import CardCarousel from "../modules/CardCarousal";
+
+// Uncomment and use this when API integration is ready
+// import { fetchLevelData } from "../api/levelApi"; 
 
 interface OffCanvasProps {
   isOpen: boolean;
@@ -36,7 +42,7 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
                     border: "1px solid #ddd",
                     borderRadius: "8px",
                     padding: "8px",
-                    marginBottom: "8px"
+                    marginBottom: "8px",
                   }}
                 >
                   <strong>{ig.name}</strong> — {ig.description}
@@ -108,6 +114,10 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
                 </ul>
               </div>
             </div>
+
+            <div className={styles.offCanvasSection}>
+              <button className={styles.proofOfWorkButton}><a href={"/"}> Submit proof work</a></button>
+            </div>
           </>
         )}
       </div>
@@ -127,30 +137,32 @@ const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
     "#90EE90",
     "#F5DEB3",
     "#FFDAB9",
-    "#DDA0DD"
+    "#DDA0DD",
   ];
 
   return (
     <div className={styles.card}>
-      <div className={styles.cardIcon}>{card.icon}</div>
-      <div className={styles.cardTitle}>{card.title}</div>
-      <div className={styles.cardDesc}>{card.desc}</div>
-      <div className={styles.cardIg}>
-        <strong>IG:</strong> {card.ig}
-      </div>
-      <div className={styles.cardSkills}>
-        <strong>Skills:</strong>{" "}
-        {card.skills?.map((skill: string, index: number) => (
-          <span
-            key={skill}
-            className={styles.skillPill}
-            style={{
-              backgroundColor: skillColors[index % skillColors.length]
-            }}
-          >
-            {skill}
-          </span>
-        ))}
+      <div className={styles.cardContent}>
+        <div className={styles.cardIcon}>{card.icon}</div>
+        <div className={styles.cardTitle}>{card.title}</div>
+        <div className={styles.cardDesc}>{card.desc}</div>
+        <div className={styles.cardIg}>
+          <strong>IG:</strong> {card.ig}
+        </div>
+        <div className={styles.cardSkills}>
+          <strong>Skills:</strong>{" "}
+          {card.skills?.map((skill: string, index: number) => (
+            <span
+              key={skill}
+              className={styles.skillPill}
+              style={{
+                backgroundColor: skillColors[index % skillColors.length],
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
       </div>
       <button className={styles.viewButton} onClick={onClickCTA}>
         View
@@ -169,10 +181,9 @@ const InterestGroupCard: React.FC<InterestGroupCardProps> = ({ data, onClickCTA 
     <div className={styles.card}>
       <div className={styles.cardIcon}>{data.icon}</div>
       <ul className={styles.igPreviewList}>
-          <li key={data.id}>
-            <strong>{data.name}</strong> — {data.description}
-          </li>
-        {/* {data.interestGroups.length > 2 && <li>... more</li>} */}
+        <li key={data.id}>
+          <strong>{data.name}</strong> — {data.description}
+        </li>
       </ul>
       <button className={styles.viewButton} onClick={onClickCTA}>
         View
@@ -182,8 +193,17 @@ const InterestGroupCard: React.FC<InterestGroupCardProps> = ({ data, onClickCTA 
 };
 
 const LearningPathPage: React.FC = () => {
-  // Only level 1 is unlocked initially.
-  const unlockedLevel = 1;
+  const { id } = useParams<{ id: string }>();
+  const dataSource = id ? levelsDataUIUX : levelsData;
+
+  // (API call code can be placed here when ready, currently commented out)
+  // useEffect(() => {
+  //    if(id) {
+  //       fetchDataForId(id).then(response => setData(response));
+  //    }
+  // }, [id]);
+
+  const unlockedLevel = 2;
   const [offCanvasOpen, setOffCanvasOpen] = useState(false);
   const [selectedData, setSelectedData] = useState<any | null>(null);
 
@@ -201,7 +221,7 @@ const LearningPathPage: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.mainTitle}>Learning Path</h1>
 
-      {levelsData.map((level) => {
+      {dataSource.map((level) => {
         // Determine if the level is locked (levels > unlockedLevel)
         const isLocked = level.level > unlockedLevel;
         return (
@@ -209,44 +229,53 @@ const LearningPathPage: React.FC = () => {
             <h2>Level {level.level}</h2>
             <h4 className={styles.levelSubtitle}>{level.subtitle}</h4>
             {isLocked && (
-              <p className={styles.lockedText}>
-                Complete Level {level.level - 1} to unlock
-              </p>
+              <div className={styles.unlockTaskSection}>
+                <p className={styles.lockedText}>
+                  Complete Level {level.level - 1} to unlock
+                  {/* or{" "}
+             <span className={styles.levellerTask}>Do a leveller task</span> to unlock Level {level.level - 1} */}
+                </p>
+                {level.leveller && <button onClick={() => handleOpenOffCanvas(level.leveller)}>Unlock now</button>}
+              </div>
             )}
 
             <div
-              className={`${styles.cardsContainer} ${
-                isLocked ? styles.locked : ""
-              }`}
+              className={`${styles.cardsContainer} ${isLocked ? styles.locked : ""
+                }`}
             >
-              {level.level === 4 && level.interestGroups ? (
-                 level.interestGroups?.map((card: any) => (
-                    <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
+              {level.level === 4 && !id && level.interestGroups ? (
+                level.interestGroups.map((card: any) => (
+                  <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
                     {isLocked && (
                       <div className={styles.lockedRibbon}>
                         Complete Level {level.level - 1} to unlock
                       </div>
                     )}
-              <InterestGroupCard
-                  data={card}
-                  onClickCTA={() => handleOpenOffCanvas(level)}
-                />
-                  </div>
-                ))
-              ) : (
-                level.cards?.map((card: any) => (
-                    <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
-                    {isLocked && (
-                      <div className={styles.lockedRibbon}>
-                        Complete Level {level.level - 1} to unlock
-                      </div>
-                    )}
-                    <TaskCard
-                      card={card}
-                      onClickCTA={() => handleOpenOffCanvas(card)}
+                    <InterestGroupCard
+                      data={card}
+                      onClickCTA={() => handleOpenOffCanvas(level)}
                     />
                   </div>
                 ))
+              ) : (
+                level.cards &&
+                level.cards.length > 0 && (
+                  <CardCarousel>
+                    {level.cards.map((card: any) => (
+                      <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
+                        {isLocked && (
+                          <div className={styles.lockedRibbon}>
+                            Complete Level {level.level - 1} to unlock
+                          </div>
+                        )}
+                        <TaskCard
+                          card={card}
+                          onClickCTA={() => handleOpenOffCanvas(card)}
+                        />
+                      </div>
+                    ))}
+                  </CardCarousel>
+                )
               )}
             </div>
           </div>

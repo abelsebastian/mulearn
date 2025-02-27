@@ -18,10 +18,13 @@ const InterestGroups: React.FC<InterestGroupsProps> = ({ title, groups }) => {
   const navigate = useNavigate();
   return (
     <div className={styles.container}>
-      <h3 className={styles.header}>Interest groups in {title}</h3>
+      <div className={styles.IgTitleContainer}>
+        <h3 className={styles.header}>Interest groups in {title}</h3>
+        <button onClick={()=> navigate('/dashboard/interestgroups')}>Show more &gt; </button>
+      </div>
       <div className={styles.list}>
         {groups.map((group, index) => (
-          <div key={index} className={styles.groupItem} onClick={() => navigate(group.link)}>
+          <div key={index} className={styles.groupItem} onClick={() => navigate(`/dashboard/${group.link}`)}>
             <img
               src={"/assets/IG/mobile_dev.jpg"}
               alt={group.title}

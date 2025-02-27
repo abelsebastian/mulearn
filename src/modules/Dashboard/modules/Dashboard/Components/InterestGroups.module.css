@@ -10,7 +10,6 @@
     font-size: 1rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 16px;
   }
   
   .list {
@@ -43,6 +42,19 @@
     background-color: #456ff6;
     transition: width 0.3s ease;
     z-index: 0;
+  }
+
+  .IgTitleContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .IgTitleContainer button{
+    font-size: 0.75rem;
+    color: #456ff6;
+    cursor: pointer;
   }
   
   /* On hover, expand the pseudo-element to fill the entire card */
@@ -91,4 +103,12 @@
   .arrowIcon {
     font-size: 1rem;
   }
+
+  /* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    margin: 18px 0;
+  }
+}
+
   

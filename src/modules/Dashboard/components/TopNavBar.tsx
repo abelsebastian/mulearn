@@ -19,15 +19,18 @@ import MuLogOut from "../assets/svg/MuLogOut";
 import toast from "react-hot-toast";
 import GameProgressBar from "../modules/ProgressBar/components/GameProgressBar";
 import { getPublicUserLevels, getUserLevels } from "../modules/Profile/services/api";
+import ModeSwitchModal from "../modules/Dashboard/Components/ModeSwitchModal";
+import { selectDomainCategory } from "../modules/Dashboard/Api/ModeSwitchApi";
 
 const TopNavBar = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
-    const [notificationList, setNotificationList] = useState<NotificationProps[]>([]);
+    // const [notificationList, setNotificationList] = useState<NotificationProps[]>([]);
     const [userLevelData, setUserLevelData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
+    const [switchDomainModal, setSwitchDomainModal] = useState(false);
 
     const userInfo = useMemo(() => fetchLocalStorage("userInfo"), []);
     //@ts-ignore
@@ -72,18 +75,41 @@ const TopNavBar = () => {
     }, [userSettings, handleClickOutside]);
 
     const refreshToken = localStorage.getItem("refreshToken");
-
+    const handleOnSubmit = (data: string): void => {
+        selectDomainCategory({ domains: [data] });
+        const userInfoStr = localStorage.getItem("userInfo");
+        if (userInfoStr) {
+          const userInfo = JSON.parse(userInfoStr);
+          if (Array.isArray(userInfo.user_domains)) {
+            userInfo.user_domains[0] = data;
+          } else {
+            userInfo.user_domains = [data];
+          }
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        }
+        window.location.reload();
+      };
+      
+      
+ 
     return (
-        <div id="top_nav" className={styles.top_nav}>
-            <div className={styles.nav}>
-                <div className={styles.nav_items}>
-                    <b className={styles.greetings}><i>Hello</i>, <b>{name}</b> 👋</b>
-                    <div className={styles.mulearn_brand2}></div>
-                    <div className={styles.menu}>
-                        <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                            <GameProgressBar levelData={userLevelData} />
-                        </div>
-                        <Popover placement="bottom-end">
+        <>
+            <div id="top_nav" className={styles.top_nav}>
+                <div className={styles.nav}>
+                    <div className={styles.nav_items}>
+                        <b className={styles.greetings}><i>Hello</i>, <b>{name}</b> 👋</b>
+                        <div className={styles.mulearn_brand2}></div>
+                        <div className={styles.menu}>
+                            <div className={styles.modeContainer}>
+                                <span>
+                                    Mode:
+                                </span>
+                                <span className={styles.userDomain} onClick={() => setSwitchDomainModal(true)}>{userInfo.user_domains?.[0]?.toUpperCase() || ''}</span>
+                            </div>
+                            <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
+                                <GameProgressBar levelData={userLevelData} />
+                            </div>
+                            {/* <Popover placement="bottom-end">
                             <PopoverTrigger>
                                 <Button
                                     onClick={() => getNotifications(setNotificationList)}
@@ -102,38 +128,44 @@ const TopNavBar = () => {
                             <PopoverContent background="transparent" border="none">
                                 <NotificationTab notificationList={notificationList} setNotificationList={setNotificationList} />
                             </PopoverContent>
-                        </Popover>
-                        {refreshToken && (
-                            <div id="profile" className={styles.profile}>
-                                <img onClick={() => setUserSettings(!userSettings)} src={profilePic || dpm} alt="" />
-                            </div>
-                        )}
-                        {userSettings && (
-                            <div id="user_settings" className={styles.user_settings}>
+                        </Popover> */}
+                            {refreshToken && (
+                                <div id="profile" className={styles.profile}>
+                                    <img onClick={() => setUserSettings(!userSettings)} src={profilePic || dpm} alt="" />
+                                </div>
+                            )}
+                            {userSettings && (
+                                <div id="user_settings" className={styles.user_settings}>
+                                    <MuButtonLight
+                                        text="Log Out"
+                                        icon={<MuLogOut />}
+                                        style={{ backgroundColor: "#fff", color: "#FF7676", marginBottom: "0px", minWidth: "0px", padding: "0px" }}
+                                        onClick={() => {
+                                            localStorage.clear();
+                                            toast.error("Logged Out, Redirecting to login page.");
+                                            setTimeout(() => window.location.reload(), 900);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            {!refreshToken && (
                                 <MuButtonLight
-                                    text="Log Out"
-                                    icon={<MuLogOut />}
-                                    style={{ backgroundColor: "#fff", color: "#FF7676", marginBottom: "0px", minWidth: "0px", padding: "0px" }}
-                                    onClick={() => {
-                                        localStorage.clear();
-                                        toast.error("Logged Out, Redirecting to login page.");
-                                        setTimeout(() => window.location.reload(), 900);
-                                    }}
+                                    text="LogIn"
+                                    style={{ backgroundColor: "#2563EB", color: "white", minWidth: "0", width: "90px", marginRight: "2rem" }}
+                                    onClick={() => navigate("/login")}
                                 />
-                            </div>
-                        )}
-                        {!refreshToken && (
-                            <MuButtonLight
-                                text="LogIn"
-                                style={{ backgroundColor: "#2563EB", color: "white", minWidth: "0", width: "90px", marginRight: "2rem" }}
-                                onClick={() => navigate("/login")}
-                            />
-                        )}
+                            )}
+                        </div>
                     </div>
+                    <hr />
                 </div>
-                <hr />
             </div>
-        </div>
+            {
+                switchDomainModal && (
+                    <ModeSwitchModal isOpen={switchDomainModal} onClose={() => setSwitchDomainModal(false)} onSubmit={handleOnSubmit}/>
+                )
+            }
+        </>
     );
 };
 

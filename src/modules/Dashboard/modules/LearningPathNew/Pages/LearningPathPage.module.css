@@ -73,6 +73,29 @@
   text-align: center;
 }
 
+.unlockTaskSection{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.unlockTaskSection button{
+  background-color: #456ff6;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.85rem;
+  color: white;
+}
+
+.proofOfWorkButton{
+  background-color: #456ff6;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 0.85rem;
+  color: white;
+  width: 100%;
+}
+
 /* Card Styles (for levels 1–3) */
 .card {
   background-color: #fff;
@@ -80,12 +103,19 @@
   border: 1px solid #ddd;
   padding: 16px;
   width: 250px;
+  min-height: 20rem; /* fixed height */
   margin-right: 16px;
   margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 18rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardContent {
+  flex: 1;
 }
 
 .card:hover {
@@ -124,6 +154,7 @@
   border-radius: 12px;
   padding: 2px 8px;
   margin-right: 4px;
+  margin-bottom: 4px;
   font-size: 0.7rem;
   color: #333;
 }
@@ -133,7 +164,7 @@
   color: #fff;
   border: none;
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   margin-top: 8px;
 }

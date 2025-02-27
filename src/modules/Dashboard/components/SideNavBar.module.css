@@ -80,6 +80,28 @@
     overflow: scroll;
 }
 
+.modeContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.modeContainer button {
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+.userDomain{
+    background-color: #007bff;
+    padding: 10px;
+    color: white;
+    border-radius: 10px;
+    margin-left: 6px;
+    cursor: pointer;
+}
+
 .side_nav_bar_container .side_nav_bar .side_nav_bar_items .bottomButtons {
     width: 100%;
 }
