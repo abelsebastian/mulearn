@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import { publicGateway } from "@/MuLearnServices/apiGateways"; 
 import { dashboardRoutes } from "@/MuLearnServices/urls"; 
 
-interface User {
+interface Campus {
   id: string;
   title: string;
   code: string;
@@ -23,7 +23,7 @@ interface Pagination {
 }
 
 interface ApiResponseData {
-  data: User[];
+  data: Campus[];
   pagination: Pagination;
 }
 
@@ -36,7 +36,7 @@ interface ApiResponse {
   response: ApiResponseData;
 }
 
-interface GetUserParams {
+interface GetCampusParams {
   search?: string;
   pageIndex?: number;
   perPage?: number;
@@ -48,7 +48,7 @@ const getCollegeList = async ({
   search = "",
   pageIndex = 1,
   perPage,
-}: Omit<GetUserParams, "type">): Promise<ApiResponseData> => {
+}: Omit<GetCampusParams, "type">): Promise<ApiResponseData> => {
   try {
     const response = await publicGateway.get<ApiResponse>(dashboardRoutes.getCollegeList, {
       params: {
@@ -109,7 +109,7 @@ const getSchoolList = async ({
   search = "",
   pageIndex = 1,
   perPage,
-}: Omit<GetUserParams, "type">): Promise<ApiResponseData> => {
+}: Omit<GetCampusParams, "type">): Promise<ApiResponseData> => {
   try {
     const response = await publicGateway.get<ApiResponse>(dashboardRoutes.getSchoolList, {
       params: {
@@ -171,7 +171,7 @@ export const getCampuses = async ({
   pageIndex = 1,
   perPage,
   type = "college",
-}: GetUserParams): Promise<ApiResponseData> => {
+}: GetCampusParams): Promise<ApiResponseData> => {
   try {
     if (type === "all") {
       const [collegeData, schoolData] = await Promise.all([

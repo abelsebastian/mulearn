@@ -136,6 +136,10 @@ const CampusList: React.FC<{
                                 lead: undefined,  // Not available in API
                                 enabler: undefined, // Not available in API
                                 userCount: campus.user_count.toString(),
+                                district: campus.district,
+                                zone: campus.zone,
+                                state: campus.state,
+                                country: campus.country,
                             }}
                             onSelect={() => onSelect(campus)}
                         />
