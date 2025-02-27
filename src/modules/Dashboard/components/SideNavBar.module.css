@@ -14,6 +14,8 @@
     flex-direction: column;
 }
 
+
+
 .menu_btn .lines {
     width: 25px;
     height: 4px;
@@ -313,4 +315,65 @@
     .main_content {
         margin-top: 10vh;
     }
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.overlay_content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+}
+
+.overlay_content h1 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #333;
+}
+
+.overlay_content p {
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 16px;
+}
+
+.domain_options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.domain_button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.domain_button:hover {
+    background-color: #0056b3;
+}
+
+.domain_button:active {
+    background-color: #004085;
 }

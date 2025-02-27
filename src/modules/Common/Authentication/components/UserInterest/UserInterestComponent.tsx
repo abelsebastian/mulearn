@@ -9,7 +9,6 @@ import { TagsInput } from "react-tag-input-component";
 import { PowerfulButton } from "@/MuLearnComponents/MuButtons/MuButton";
 import { privateGateway, publicGateway } from "@/MuLearnServices/apiGateways";
 import { onboardingRoutes } from "@/MuLearnServices/urls";
-
 import styles from "./UserInterestComponent.module.css";
 import muBrand from "/src/modules/Common/Authentication/assets/µLearn.png";
 import OnboardingTemplate from "../OnboardingTeamplate/OnboardingTemplate";
@@ -18,6 +17,8 @@ import maker from "/src/modules/Common/Authentication/assets/interests/makers.sv
 import management from "/src/modules/Common/Authentication/assets/interests/management.svg";
 import software from "/src/modules/Common/Authentication/assets/interests/software.svg";
 import others from "/src/modules/Common/Authentication/assets/interests/others.svg";
+import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
+import { Toast } from "@chakra-ui/react";
 
 const CheckMark = () => (
     <svg
@@ -72,9 +73,10 @@ export default function UserInterestSelectionComponent({
     const [otherEndgoal, setOtherEndgoal] = useState<string[]>([]);
     const [interests, setInterests] = useState(INITIAL_INTERESTS);
     const [endgoals, setEndgoals] = useState(INITIAL_ENDGOALS);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const defaultInterests = searchParams.get("interests")?.split(",") ?? [];
     const defaultEndgoals = searchParams.get("endgoals")?.split(",") ?? [];
+    const ruri = searchParams.get("ruri") ?? "/dashboard";
 
     useEffect(() => {
         const fetchInterestGroups = async () => {
@@ -158,15 +160,46 @@ export default function UserInterestSelectionComponent({
         }
     }, [interests, otherInterest]);
 
-    const handleSubmit = () => {
-        onContinue({
-            choosen_interests: interests
-                .filter(i => i.checked)
-                .map(i => i.value),
-            choosen_endgoals: endgoals.filter(e => e.checked).map(e => e.value),
+    const handleSubmit = async () => {
+        const selectedInterests = interests.filter(i => i.checked).map(i => i.value);
+        const selectedEndgoals = endgoals.filter(e => e.checked).map(e => e.value);
+        const allInterests = [...selectedInterests, ...otherInterest];
+        const allEndgoals = [...selectedEndgoals, ...otherEndgoal];
+
+        const data = {
+            choosen_interests: selectedInterests,
+            choosen_endgoals: selectedEndgoals,
             other_interests: otherInterest,
             other_endgoals: otherEndgoal
-        });
+        };
+
+        try {
+            if (allInterests.length > 0) {
+                await privateGateway.post(
+                    `${onboardingRoutes.register}select-domains/`,
+                    { domains: allInterests }
+                );
+            }
+
+            if (allEndgoals.length > 0) {
+                await privateGateway.post(
+                    `${onboardingRoutes.register}select-endgoals/`,
+                    { endgoals: allEndgoals }
+                );
+            }
+
+            onContinue(data);
+            navigate(ruri);
+        } catch (err) {
+            console.error("Failed to submit interests and endgoals:", err);
+            // Optionally handle error (e.g., show a toast notification)
+            Toast({
+                title: "Failed to submit interests and endgoals",
+                status: "error",
+                duration: 5000,
+                isClosable: true
+            });
+        }
     };
 
     const isInterestSelected = interests.some(interest => interest.checked);
@@ -193,7 +226,6 @@ export default function UserInterestSelectionComponent({
                             } ${isOthers ? styles.others : ""}`}
                             onClick={() => handleChange(item.value, isInterest)}
                         >
-                            {/* {isChecked && <CheckMark />} */}
                             {isInterest ? (
                                 <div className={styles.content}>
                                     <img
@@ -273,10 +305,6 @@ export default function UserInterestSelectionComponent({
 
     return (
         <OnboardingTemplate>
-            {/* <OnboardingHeader
-                title="Create an Account"
-                desc="Please Enter Your Information"
-            /> */}
             <div className={styles.popUp}>
                 <div className={styles.box}>
                     <img src={muBrand} alt="mulearn" />

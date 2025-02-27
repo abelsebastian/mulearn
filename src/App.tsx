@@ -80,6 +80,7 @@ import LevelMap from "./modules/Dashboard/modules/Map/Pages/Map";
 import Dashboard from "./modules/Dashboard/modules/Map/Pages/DashBoard";
 import LearningPathPage from "./modules/Dashboard/modules/LearningPathNew/Pages/LearningPathPage";
 import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
+import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -403,6 +404,8 @@ function App() {
                 { path: "bootcamps", element: <ComingSoonPage /> },
                 { path: "learningCircles", element: <ComingSoonPage /> },
                 { path: "courses", element: <CoursesMainPage /> },
+
+                {path: "map", element: <Mappage />},
 
             ]
         },
