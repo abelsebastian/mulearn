@@ -243,8 +243,8 @@ const LearningPathPage: React.FC = () => {
               className={`${styles.cardsContainer} ${isLocked ? styles.locked : ""
                 }`}
             >
-              {level.level === 4 && !id && level.interestGroups ? (
-                level.interestGroups.map((card: any) => (
+              {"interestGroups" in level && level.level === 4 && !id ? (
+                level.interestGroups?.map((card: any) => (
                   <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
                     {isLocked && (
                       <div className={styles.lockedRibbon}>
