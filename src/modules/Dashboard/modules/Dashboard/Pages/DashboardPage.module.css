@@ -38,6 +38,7 @@
 .welcomeTitle {
   font-size: clamp(1.2rem, 3vw, 2.5rem);
   font-weight: bold;
+  width: max-content;
   text-align: left;
 }
 
@@ -50,7 +51,7 @@
   background-color: #fff;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   width: 100%;
 }
 
@@ -164,6 +165,24 @@
   padding: 10px 0;
 }
 
+.welcomeSectionImage {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+@media (min-width: 600px) and (max-width: 900px) {
+  .welcomeTitle {
+    width: fit-content;
+  }
+  .welcomeMessage {
+    font-size: 0.75rem;
+    width: fit-content;
+    margin-right: 5rem;
+  }
+
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .wrapper {
@@ -171,42 +190,47 @@
     gap: 24px;
     align-items: center;
   }
-  
+
   .slider {
     margin-left: 0;
     width: 100%;
     max-width: 400px;
   }
-  
+
+  .welcomeMessage {
+    font-size: 0.75rem;
+    /* margin-right: 5rem; */
+  }
+
   .rightWrapper {
     width: 100%;
     max-width: 400px;
   }
-  
+
   .welcomeSection {
     flex-direction: column;
     align-items: flex-start;
     text-align: center;
     padding: 10px 15px;
   }
-  
+
   .welcomeText {
     width: 100%;
     align-items: center;
     margin-left: 0;
     margin-bottom: 12px;
   }
-  
+
   .dashboardImage {
     width: 80%;
     margin: 0 auto;
   }
-  
+
   .welcomeMessage {
     font-size: 0.7rem;
     text-align: center;
   }
-  
+
   .happeningCardsContainer {
     display: flex;
     justify-content: center;
@@ -217,8 +241,14 @@
   .welcomeTitle {
     font-size: 1.25rem;
   }
-  
-  .button, .button2 {
+
+  .welcomeSectionImage {
+    justify-content: center;
+  }
+
+
+  .button,
+  .button2 {
     padding: 8px;
     font-size: 0.75rem;
   }
@@ -228,7 +258,7 @@
   .welcomeTitle {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
   }
-  
+
   .dashboardImage {
     width: 256px;
   }

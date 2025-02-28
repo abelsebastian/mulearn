@@ -116,7 +116,7 @@ const DashboardPage = () => {
     }, [userDomains[0]]);
 
     const handleStartLearning = useCallback(() => {
-        navigate('/dashboard/learn');
+        navigate('/dashboard/learning-path');
     }, [navigate]);
 
     const handleJoinLearning = useCallback(() => {
@@ -163,7 +163,7 @@ const DashboardPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div>
+                    <div className={styles.welcomeSectionImage}>
                         <img
                             src={src}
                             alt={alt}
