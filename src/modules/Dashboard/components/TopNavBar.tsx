@@ -21,21 +21,49 @@ import GameProgressBar from "../modules/ProgressBar/components/GameProgressBar";
 import { getPublicUserLevels, getUserLevels } from "../modules/Profile/services/api";
 import ModeSwitchModal from "../modules/Dashboard/Components/ModeSwitchModal";
 import { selectDomainCategory } from "../modules/Dashboard/Api/ModeSwitchApi";
+import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
+import { privateGateway } from "@/MuLearnServices/apiGateways";
+
+// Define UserInfo interface if not already defined elsewhere
+interface UserInfo {
+    full_name?: string;
+    profile_pic?: string;
+    user_domains?: string[];
+}
 
 const TopNavBar = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
-    // const [notificationList, setNotificationList] = useState<NotificationProps[]>([]);
     const [userLevelData, setUserLevelData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
+    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-    const userInfo = useMemo(() => fetchLocalStorage<UserInfo>("userInfo"), []);
-    //@ts-ignore
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await privateGateway.get(dashboardRoutes.getInfo);
+                const fetchedUserInfo = response.data.response; 
+                setUserInfo(fetchedUserInfo);
+                localStorage.setItem("userInfo", JSON.stringify(fetchedUserInfo));
+            } catch (err) {
+                console.error("Failed to fetch user info:", err);
+                const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
+                if (storedUserInfo) setUserInfo(storedUserInfo);
+            }
+        };
+
+        const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
+        if (storedUserInfo) {
+            setUserInfo(storedUserInfo);
+        } else {
+            fetchUserInfo();
+        }
+    }, []);
+
     const name = userInfo?.full_name?.split(" ")[0] || "";
-    //@ts-ignore
     const profilePic = userInfo?.profile_pic || null;
 
     useEffect(() => {
@@ -75,23 +103,43 @@ const TopNavBar = () => {
     }, [userSettings, handleClickOutside]);
 
     const refreshToken = localStorage.getItem("refreshToken");
-    const handleOnSubmit = (data: string): void => {
-        selectDomainCategory({ domains: [data] });
-        const userInfoStr = localStorage.getItem("userInfo");
-        if (userInfoStr) {
-          const userInfo = JSON.parse(userInfoStr);
-          if (Array.isArray(userInfo.user_domains)) {
-            userInfo.user_domains[0] = data;
-          } else {
-            userInfo.user_domains = [data];
-          }
-          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+    const handleOnSubmit = async (data: string): Promise<void> => {
+        try {
+            await privateGateway.post(
+                `${onboardingRoutes.register}select-domains/`,
+                { domains: [data] }
+            );
+
+            selectDomainCategory({ domains: [data] }); 
+
+            const userInfoStr = localStorage.getItem("userInfo");
+            let updatedUserInfo: UserInfo;
+
+            if (userInfoStr) {
+                updatedUserInfo = JSON.parse(userInfoStr);
+            } else {
+                updatedUserInfo = { user_domains: [] }; 
+            }
+
+            if (Array.isArray(updatedUserInfo.user_domains)) {
+                updatedUserInfo.user_domains[0] = data;
+            } else {
+                updatedUserInfo.user_domains = [data];
+            }
+
+            localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+            setUserInfo(updatedUserInfo);
+
+            toast.success("Domain updated successfully!");
+        } catch (error) {
+            console.error("Failed to update domain on server:", error);
+            toast.error("Failed to update domain. Please try again.");
+        } finally {
+            window.location.reload(); 
         }
-        window.location.reload();
-      };
-      
-      
- 
+    };
+
     return (
         <>
             <div id="top_nav" className={styles.top_nav}>
@@ -101,37 +149,24 @@ const TopNavBar = () => {
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
                             <div className={styles.modeContainer}>
-                                <span>
-                                    Mode:
+                                <span>Mode:</span>
+                                <span
+                                    className={styles.userDomain}
+                                    onClick={() => setSwitchDomainModal(true)}
+                                >
+                                    {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                 </span>
-                                <span className={styles.userDomain} onClick={() => setSwitchDomainModal(true)}>{userInfo.user_domains?.[0]?.toUpperCase() || ''}</span>
                             </div>
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
                                 <GameProgressBar levelData={userLevelData} />
                             </div>
-                            {/* <Popover placement="bottom-end">
-                            <PopoverTrigger>
-                                <Button
-                                    onClick={() => getNotifications(setNotificationList)}
-                                    backgroundColor="#ffffff00"
-                                    _hover={{ backgroundColor: "#ffffff00" }}
-                                    _active={{ backgroundColor: "#eee" }}
-                                    aspectRatio="1/1"
-                                    borderRadius="15px"
-                                    fontSize="30px"
-                                    width="50px"
-                                    padding="10px"
-                                >
-                                    {notificationList.length === 0 ? <MdNotifications size={50} /> : <MdNotificationAdd />}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent background="transparent" border="none">
-                                <NotificationTab notificationList={notificationList} setNotificationList={setNotificationList} />
-                            </PopoverContent>
-                        </Popover> */}
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>
-                                    <img onClick={() => setUserSettings(!userSettings)} src={profilePic || dpm} alt="" />
+                                    <img
+                                        onClick={() => setUserSettings(!userSettings)}
+                                        src={profilePic || dpm}
+                                        alt=""
+                                    />
                                 </div>
                             )}
                             {userSettings && (
@@ -160,11 +195,13 @@ const TopNavBar = () => {
                     <hr />
                 </div>
             </div>
-            {
-                switchDomainModal && (
-                    <ModeSwitchModal isOpen={switchDomainModal} onClose={() => setSwitchDomainModal(false)} onSubmit={handleOnSubmit}/>
-                )
-            }
+            {switchDomainModal && (
+                <ModeSwitchModal
+                    isOpen={switchDomainModal}
+                    onClose={() => setSwitchDomainModal(false)}
+                    onSubmit={handleOnSubmit}
+                />
+            )}
         </>
     );
 };
