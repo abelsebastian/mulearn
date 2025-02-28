@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Flame, Star, Zap } from "lucide-react";
 import style from "./GameProgressBar.module.css";
+import karmaIcon from "../assets/karma-icon.png"
 
 interface Level {
   tasks?: { completed: boolean; karma?: number }[];
@@ -70,22 +71,22 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
 
   return (
     <div className="">
-      <div className="flex items-center w-full max-w-2xl h-9 mx-auto px-4 relative">
+      <div className="flex items-center  h-9 mx-auto px-4 relative">
         <motion.div
-          className={`${style.iconContainer} w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700`}
-          animate={{ scale: [1, 1, 1], rotate: [0, 10, 0] }}
+          className={`${style.iconContainer} w-8 h-8 md:w-12 md:h-12 flex items-center justify-center ring-2 ring-white rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700`}
+       
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           aria-hidden="true"
         >
-          {icon}
+          <img src={karmaIcon} className="w-6 h-6"/>
         </motion.div>
 
         <div className="flex flex-col flex-grow items-start justify-center !z-0">
-          <div className="text-white text-base md:text-xs font-bold bg-blue-500 !px-6 py-1 rounded-tr-sm">
+          <div className="text-white text-[.5rem] md:text-xs  font-bold bg-blue-500 !px-6 py-1 rounded-tr-sm">
             Level {displayLevel}
           </div>
           <div
-            className="relative h-6 w-44 rounded-full overflow-hidden mt-1"
+            className="relative h-4 md:h-6 w-24 md:w-36 rounded-full overflow-hidden mt-1"
             style={{ background: "rgba(30, 41, 59, 0.8)" }}
             role="progressbar"
             aria-valuenow={roundedPoints}
@@ -100,7 +101,7 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
               transition={{ duration: 0.4, ease: "easeOut" }}
             />
             <div className="absolute inset-2 flex items-center justify-end pr-4">
-              <span className="text-white font-medium text-xs md:text-xs">
+              <span className="text-white font-medium text-[.7rem] md:text-xs">
                 {roundedPoints}/{totalRequired}
               </span>
             </div>

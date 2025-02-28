@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bell, MoreHorizontal } from 'lucide-react';
 import styles from './InterestGroupOne.module.css';
@@ -15,7 +15,7 @@ const memberAvatars = [
   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&q=80",
 ];
 
-const interestGroupsObject: { [key: string]: InterestGroupData } = Object.fromEntries(
+const interestGroupsObject = Object.fromEntries(
   interestGroups.map(group => [group.id, group])
 );
 
@@ -38,26 +38,27 @@ const CommunityForum = () => {
                 src={groupData.bannerImage}
                 alt={`${groupData.title} Banner`}
                 className={styles.bannerImage}
+                loading="lazy"
               />
               <div className={styles.bannerOverlay}>
                 <div className={styles.bannerLogo}>{groupData.title.slice(0, 3).toUpperCase()}</div>
                 <div className={styles.bannerMemberInfo}>Member since {groupData.memberSince}</div>
               </div>
-              <button className={styles.bellButton}>
+              {/* <button className={styles.bellButton} aria-label="Notifications">
                 <Bell className={styles.bellIcon} />
-              </button>
+              </button> */}
             </div>
 
             <div className={styles.communityInfo}>
               <h1 className={styles.forumTitle}>{groupData.title}</h1>
               <div className={styles.forumSubInfo}>
-                <span>{groupData.isPublic ? "Public" : "Private"} Community</span>
-                <span>•</span>
-                <span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
-                <span>•</span>
-                <span>Office Hours: {groupData.officeHours}</span>
-                <span>•</span>
-                <span>Think Tank Meeting: {groupData.thinkTankMeeting}</span>
+                <span><span>•</span>{groupData.isPublic ? "Public" : "Private"} Community</span>
+              
+                <span><span>•</span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
+                
+                <span> <span>•</span>Office Hours: {groupData.officeHours}</span>
+               
+                <span> <span>•</span>Think Tank Meeting: {groupData.thinkTankMeeting}</span>
               </div>
             </div>
 
@@ -70,14 +71,15 @@ const CommunityForum = () => {
                       src={avatar}
                       alt={`Member ${index + 1}`}
                       className={styles.avatarImage}
+                      loading="lazy"
                     />
                   ))}
                 </div>
                 <span className={styles.memberText}>Jiso and 5 other friends are members</span>
               </div>
-              <button className={styles.moreButton}>
+              {/* <button className={styles.moreButton} aria-label="More options">
                 <MoreHorizontal className={styles.moreIcon} />
-              </button>
+              </button> */}
             </div>
             <IGActionSection data={groupData} />
           </div>
@@ -97,6 +99,7 @@ const CommunityForum = () => {
               <button
                 className={styles.officeHoursButton}
                 onClick={() => window.location.href = "https://discord.gg/yourchannel"}
+                aria-label="Join office hours"
               >
                 Join
               </button>

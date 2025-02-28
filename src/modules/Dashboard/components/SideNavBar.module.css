@@ -295,7 +295,7 @@
         width: 100vw;
         position: fixed;
     }
-
+    
     .right_side {
         z-index: 0;
     }
@@ -337,8 +337,110 @@
     .main_content {
         margin-top: 10vh;
     }
+    .userDomain{
+        font-size: .7rem;
+        padding: .5rem;
+    }
+   
 }
 
+
+
+@media  screen and (max-width: 600px) {
+    .side_nav_bar_container .side_nav_bar .side_nav_bar_items .side_nav_bar_item {
+        height: 40px;
+    }
+
+    .side_nav_bar_container .side_nav_bar .side_nav_bar_items .side_nav_bar_item .side_nav_bar_item_icon {
+        margin-right: 10px;
+    }
+
+    .side_nav_bar_container .side_nav_bar .side_nav_bar_items .side_nav_bar_item .side_nav_bar_item_text {
+        font-size: 16px;
+    }
+
+    .side_nav_bar_container .side_nav_bar .side_nav_bar_items .bottomButtons {
+        gap: 10px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu {
+        gap: 10px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu i {
+        height: 15px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu .profile img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu .user_settings {
+        top: 60px;
+        right: 30px;
+        padding: 5px 15px;
+        font-size: 13px;
+    }
+
+    .right_side .top_nav .nav hr {
+        margin-top: 10px;
+    }
+
+    .right_side .top_nav .nav .nav_items .greetings {
+        font-size: 18px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu {
+        font-size: 18px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 90%;
+        align-items: center;
+
+    }
+
+    .right_side .top_nav .nav .nav_items .menu .profile img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu .user_settings {
+        top: 50px;
+        right: 20px;
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu i {
+        height: 15px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu {
+        gap: 10px;
+    }
+
+    .right_side .top_nav .nav .nav_items .menu .profile img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .modeText{
+        display: none;
+    }
+    
+
+    
+    
+}
+
+@media screen and (max-width: 320px) {
+    .userDomain{
+        font-size: .5rem;
+        padding: .5rem;
+    }
+}
 
 .overlay {
     position: fixed;
@@ -399,3 +501,4 @@
 .domain_button:active {
     background-color: #004085;
 }
+

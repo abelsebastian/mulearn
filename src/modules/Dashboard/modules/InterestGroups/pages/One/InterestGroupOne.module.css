@@ -1,452 +1,315 @@
-/* Main Container */
 .container {
-  padding: 24px;
+  padding: clamp(8px, 2vw, 24px);
   background-color: #ffffff;
   width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow-x: hidden;
 }
 
-/* Grid Layout */
 .mainGrid {
   display: grid;
-  grid-template-columns: 75% 25%;
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: clamp(8px, 2vw, 24px);
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Main Content (Forum Area) */
 .mainContent {
-  /* Additional styling if needed */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media screen and (min-width: 768px) {
+  .mainGrid {
+    grid-template-columns: 75% 25%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 75% 25%;
+  }
 }
 
 .forumCard {
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 24px;
+  padding: clamp(8px, 2vw, 24px);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Banner */
+.forumCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
 .bannerWrapper {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: clamp(8px, 2vw, 24px);
+  width: 100%;
 }
 
 .bannerImage {
   width: 100%;
-  height: 192px;
+  height: clamp(100px, 20vw, 192px);
   object-fit: cover;
   border-radius: 12px;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .bannerOverlay {
   position: absolute;
-  left: 24px;
-  bottom: -34px;
+  left: clamp(8px, 2vw, 24px);
+  bottom: -20px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(4px, 1vw, 16px);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .bannerLogo {
-  width: 64px;
-  height: 64px;
-  background-color: #3B82F6;
+  width: clamp(32px, 8vw, 64px);
+  height: clamp(32px, 8vw, 64px);
+  background-color: #3b82f6;
   border-radius: 16px;
   color: #fff;
-  font-size: 24px;
+  font-size: clamp(0.875rem, 2vw, 1.5rem);
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.bannerLogo:hover {
+  transform: scale(1.05);
 }
 
 .bannerMemberInfo {
-  color: #6B7280;
-  margin-top: 2rem;
-  font-size: 0.75rem;
+  color: #6b7280;
+  font-size: clamp(0.5rem, 1vw, 0.75rem);
 }
 
 .bellButton {
   position: absolute;
-  right: 24px;
-  top: 24px;
-  padding: 8px;
+  right: clamp(8px, 2vw, 24px);
+  top: clamp(8px, 2vw, 24px);
+  padding: clamp(4px, 1vw, 8px);
   background-color: #fff;
   border: none;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bellButton:hover {
+  background-color: #f3f4f6;
 }
 
 .bellIcon {
-  width: 20px;
-  height: 20px;
-  color: #6B7280;
+  width: clamp(12px, 2vw, 20px);
+  height: clamp(12px, 2vw, 20px);
+  color: #6b7280;
 }
 
-/* Forum Info */
 .communityInfo {
-  margin-bottom: 0.5rem;
-}
-
-
-.sidebarBanner img{
-  border-radius: 20px;
-  height: auto;
-  width: 300px;
-}
-
-.sidebarBanner{
-  display: flex;
-  justify-content: center;
-}
-
-.sidebar{
-  display: flex;
-  justify-content: flex-start;
-
+  margin-bottom: clamp(4px, 1vw, 16px);
+  margin-top: 1rem;
 }
 
 .forumTitle {
-  font-size: 1.5rem;
-  margin-top: 3rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(8px, 2vw, 24px);
   font-weight: 800;
   text-align: left;
-  color: #1F2937;
+  color: #1f2937;
 }
 
 .forumSubInfo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #6B7280;
+  gap: clamp(2px, 1vw, 8px);
+  font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+  color: #6b7280;
+  flex-wrap: wrap;
 }
 
-/* Member Avatars */
 .memberSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: clamp(8px, 2vw, 24px);
+  flex-wrap: wrap;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .avatarGroup {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: clamp(2px, 1vw, 8px);
 }
 
 .avatarStack {
   display: flex;
-  margin-left: -8px;
+  margin-left: -clamp(2px, 1vw, 8px);
 }
 
 .avatarImage {
-  width: 32px;
-  height: 32px;
+  width: clamp(20px, 4vw, 32px);
+  height: clamp(20px, 4vw, 32px);
   border-radius: 50%;
   border: 2px solid #fff;
 }
 
 .memberText {
-  font-size: 14px;
-  color: #6B7280;
+  font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+  color: #6b7280;
 }
 
 .moreButton {
-  padding: 4px;
+  padding: clamp(2px, 1vw, 8px);
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .moreIcon {
-  width: 24px;
-  height: 24px;
-  color: #9CA3AF;
+  width: clamp(16px, 3vw, 24px);
+  height: clamp(16px, 3vw, 24px);
+  color: #9ca3af;
+  transition: transform 0.3s ease;
 }
 
-/* Navigation Menu */
+.moreButton:hover .moreIcon {
+  transform: rotate(90deg);
+}
+
 .navMenu {
   display: flex;
-  gap: 32px;
-  border-bottom: 1px solid #E5E7EB;
-  margin-bottom: 24px;
+  gap: clamp(8px, 2vw, 32px);
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: clamp(8px, 2vw, 24px);
+  overflow-x: auto;
+  padding-bottom: clamp(4px, 1vw, 16px);
+  width: 100%;
+  max-width: 100%;
 }
 
 .navButton {
-  font-size: 16px;
-  color: #9CA3AF;
-  padding-bottom: 8px;
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  color: #9ca3af;
+  padding-bottom: clamp(2px, 1vw, 8px);
   background: none;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.navButton:hover,
+.navButtonActive {
+  color: #3b82f6;
 }
 
 .navButtonActive {
-  font-size: 16px;
-  color: #3B82F6;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #3B82F6;
+  border-bottom: 2px solid #3b82f6;
   font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
 }
 
-/* Post Creation */
-.postCreation {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background-color: #F3F4F6;
-  border-radius: 12px;
-  margin-bottom: 24px;
-}
-
-.postUserAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.postInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: #6B7280;
-  outline: none;
-}
-
-/* Post Actions */
-.postActions {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 16px;
-  margin-bottom: 24px;
-}
-
-.actionButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #9CA3AF;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.actionIcon {
-  width: 20px;
-  height: 20px;
-}
-
-/* Post Container */
-.postContainer {
-  margin-top: 24px;
-  border-top: 1px solid #E5E7EB;
-  padding-top: 24px;
-}
-
-.postHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-}
-
-.postHeaderLeft {
-  display: flex;
-  gap: 12px;
-}
-
-.postAvatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-}
-
-.postInfo {
-  font-size: 14px;
-  color: #6B7280;
-}
-
-.postNameRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.postName {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1F2937;
-}
-
-.followButton {
-  font-size: 14px;
-  color: #3B82F6;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.postTime {
-  font-size: 14px;
-  color: #6B7280;
-}
-
-.postMoreButton {
-  padding: 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.postMoreIcon {
-  width: 24px;
-  height: 24px;
-  color: #9CA3AF;
-}
-
-.postText {
-  font-size: 16px;
-  color: #4B5563;
-  line-height: 1.5;
-}
-
-/* Sidebar */
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Sidebar Sections */
 .sidebarSection {
   background-color: #fff;
   border-radius: 12px;
-  padding: 16px;
+  padding: clamp(8px, 2vw, 16px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  position: sticky;
+  position: static;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media screen and (min-width: 1024px) {
+  .sidebarSection {
+    position: sticky;
+    top: clamp(16px, 2vw, 24px);
+  }
 }
 
 .sidebarTitle {
-  font-size: 0.9rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
   font-weight: 600;
-  color: #6B7280;
-  margin-bottom: 16px;
+  color: #6b7280;
+  margin-bottom: clamp(4px, 1vw, 16px);
   text-align: center;
+  word-wrap: break-word;
 }
 
-.sidebarList {
+.sidebarBanner {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.sidebarItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sidebarItemLeft {
-  display: flex;
-  align-items: center;
-  font-size: 0.5rem;
-  gap: 12px;
-}
-
-.sidebarItemText {
-  font-size: 0.8rem;
-  color: #374151;
-}
-
-/* Notification Badge */
-.notificationBadge {
-  background-color: #EF4444;
-  color: #fff;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 9999px;
-}
-
-/* Friends List */
-.friendsList {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.friendItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.friendItemLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.friendAvatarContainer {
-  position: relative;
-}
-
-.friendAvatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.friendOnlineIndicator {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background-color: #10B981;
-  border: 2px solid #fff;
-  border-radius: 50%;
-}
-
-.friendInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.friendNameRow {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.sidebarBanner img {
+  border-radius: 20px;
+  width: 100%;
+  height: auto;
+  max-width: 300px;
 }
 
 .officeHoursCard {
   background-color: #456ff6;
   color: #f7f7f7;
   border-radius: 8px;
-  padding: 16px;
+  padding: clamp(8px, 2vw, 16px);
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.officeHoursCard h3{
-  font-size: 0.85rem;
+.officeHoursCard:hover {
+  transform: translateY(-2px);
 }
 
-.officeHoursCardTiming{
+.officeHoursCard h3 {
+  font-size: clamp(0.625rem, 1.5vw, 0.85rem);
+}
+
+.officeHoursCardTiming {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: clamp(4px, 1vw, 16px);
+  flex-wrap: wrap;
+  gap: clamp(4px, 1vw, 16px);
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.officeHoursCardTiming p{
-  font-size: 0.9rem;
+.officeHoursCardTiming p {
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
   font-weight: 700;
 }
 
@@ -454,93 +317,209 @@
   background-color: #fff;
   color: #456ff6;
   border: none;
-  padding: 8px 16px;
+  padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 16px);
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 8px;
-  font-size: 0.8rem;
+  margin-top: clamp(4px, 1vw, 16px);
+  font-size: clamp(0.625rem, 1.5vw, 0.8rem);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: auto;
+  max-width: 100%;
 }
 
-.friendName {
-  font-size: 16px;
-  font-weight: 500;
-  color: #374151;
+.officeHoursButton:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
 }
 
-.verifiedIcon {
-  width: 16px;
-  height: 16px;
-  color: #3B82F6;
+@media screen and (max-width: 480px) {
+  .bannerOverlay {
+    flex-direction: column;
+    align-items: flex-start;
+    bottom: -15px;
+    padding: 0 8px;
+  }
+
+  .forumSubInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .memberSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .navMenu {
+    justify-content: flex-start;
+    padding-left: 8px;
+  }
 }
 
-.friendUsername {
-  font-size: 14px;
-  color: #6B7280;
+@media screen and (min-width: 1024px) {
+  .bannerImage {
+    height: clamp(180px, 20vw, 220px);
+  }
+
+  .forumTitle {
+    font-size: clamp(1.5rem, 2vw, 1.75rem);
+  }
+  .communityIcon {
+    width: clamp(32px, 8vw, 64px);
+    height: clamp(32px, 8vw, 64px);
+  }
 }
 
-.friendMessageButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.friendMessageIcon {
-  width: 20px;
-  height: 20px;
-  color: #9CA3AF;
-}
-
-/* Community Icons (Sidebar) */
-.communityIconBox {
-  width: 40px;
-  height: 40px;
-  background-color: #3B82F6;
+.sidebarSection {
+  background-color: #fff;
   border-radius: 12px;
-  color: #fff;
-  font-size: 20px;
+  padding: clamp(8px, 2vw, 16px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: static;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media screen and (min-width: 1024px) {
+  .sidebarSection {
+    position: sticky;
+    top: clamp(16px, 2vw, 24px);
+  }
+}
+
+.sidebarTitle {
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: clamp(4px, 1vw, 16px);
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vw, 16px);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.sidebarItem {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  padding: clamp(4px, 1vw, 8px);
+  overflow-x: hidden;
 }
 
-.communityIconBoxDark {
-  width: 40px;
-  height: 40px;
-  background-color: #374151;
-  border-radius: 12px;
-  color: #fff;
-  font-size: 20px;
+.sidebarItemLeft {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: clamp(4px, 1vw, 12px);
+  width: 100%;
+  overflow-x: hidden;
+  flex-wrap: wrap;
 }
 
 .communityIcon {
-  width: 24px;
-  height: 24px;
-  color: #3B82F6;
+  width: clamp(24px, 5vw, 40px);
+  height: clamp(24px, 5vw, 40px);
+  object-fit: cover;
+  border-radius: 8px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.communityIconAndroid {
-  width: 24px;
-  height: 24px;
-  color: #10B981;
+.sidebarItemText {
+  font-size: clamp(0.625rem, 1.5vw, 0.8rem);
+  color: #374151;
+  word-wrap: break-word;
+  max-width: calc(100% - 40px);
 }
 
-.communityIconDesktop {
-  width: 24px;
-  height: 24px;
-  color: #6B7280;
+@media screen and (max-width: 480px) {
+  .sidebarList {
+    gap: 2px;
+  }
+
+  .sidebarItem {
+    padding: 2px;
+  }
+
+  .sidebarItemLeft {
+    gap: 2px;
+  }
+
+  .communityIcon {
+    width: clamp(20px, 5vw, 24px);
+    height: clamp(20px, 5vw, 24px);
+  }
+
+  .sidebarItemText {
+    font-size: clamp(0.5rem, 1.5vw, 0.625rem);
+    max-width: calc(100% - 30px);
+  }
 }
 
-.communityIconRi {
-  width: 24px;
-  height: 24px;
-  color: #60A5FA;
+@media screen and (min-width: 768px) {
+  .sidebarList {
+    gap: clamp(8px, 1vw, 16px);
+  }
+
+  .sidebarItem {
+    padding: clamp(6px, 1vw, 8px);
+  }
+
+  .sidebarItemLeft {
+    gap: clamp(8px, 1vw, 12px);
+  }
+
+  .communityIcon {
+    width: clamp(32px, 5vw, 40px);
+    height: clamp(32px, 5vw, 40px);
+  }
+
+  .sidebarItemText {
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    max-width: calc(100% - 40px);
+  }
 }
 
-.communityIconSchool {
-  width: 24px;
-  height: 24px;
-  color: #3B82F6;
+@media screen and (min-width: 1024px) {
+  .sidebarList {
+    gap: clamp(12px, 1vw, 16px);
+  }
+
+  .sidebarItem {
+    padding: clamp(8px, 1vw, 8px);
+  }
+
+  .sidebarItemLeft {
+    gap: clamp(12px, 1vw, 12px);
+  }
+
+  .communityIcon {
+    width: clamp(40px, 5vw, 40px);
+    height: clamp(40px, 5vw, 40px);
+  }
+
+  .sidebarItemText {
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    max-width: calc(100% - 40px);
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .bannerLogo {
+    font-size: clamp(1.5rem, 2vw, 1.75rem);
+  }
+
+  .forumSubInfo {
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+  }
 }

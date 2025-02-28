@@ -149,7 +149,7 @@ const TopNavBar = () => {
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
                             <div className={styles.modeContainer}>
-                                <span>Mode:</span>
+                                <span className={styles.modeText}>Mode:</span>
                                 <span
                                     className={styles.userDomain}
                                     onClick={() => setSwitchDomainModal(true)}

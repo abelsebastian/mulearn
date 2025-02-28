@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Search, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Users, ChevronLeft, ChevronRight, Users2 } from 'lucide-react';
 import styles from './InterestGroupsPage.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
@@ -125,40 +125,46 @@ function InterestGroupsPage() {
         {/* Interest Groups Grid */}
         <div className={styles.Grid}>
           {paginatedGroups.map((group) => (
-            <div key={group.id} className={styles.GroupCard} onClick={() => navigate(`/dashboard/interestgroups/${group.id}`)}>
-              <div className={styles.GroupImageWrapper}>
-                {
-                  group.image ? (
-                    <img src={group.image} alt={group.name} className={styles.GroupImage} />
-                  ) : (
-                    // <img src={`https://source.unsplash.com/random/800x600/?${group.name}`} alt={group.name} className={styles.GroupImage} />
-                    (() => {
-                      const randomIndex = Math.floor(Math.random() * imageUrls.length);
-                      const randomImageUrl = imageUrls[randomIndex];
-                      return (
-                        <img
-                          src={randomImageUrl}
-                          alt="Random"
-                          className={styles.GroupImage}
-                        />
-                      );
-                    })()
-                  )
-                }
-                <div className={styles.GroupOverlay}>
-                  <span className={styles.GroupCategory}>
-                    {categories.find(c => c.id === group.category)?.name}
-                  </span>
-                </div>
-              </div>
-              <div className={styles.GroupDetails}>
-                <h3 className={styles.GroupTitle}>{group.name}</h3>
-                <div className={styles.GroupParticipants}>
-                  <Users className={styles.ParticipantsIcon} />
-                  <span>{group.members} participants</span>
-                </div>
+            <div
+            key={group.id}
+            className={styles.GroupCard}
+            onClick={() => navigate(`/dashboard/interestgroups/${group.id}`)}
+          >
+            <div className={styles.GroupImageWrapper}>
+              {group.image ? (
+                <img
+                  src={group.image}
+                  alt={group.name}
+                  className={styles.GroupImage}
+                />
+              ) : (
+                (() => {
+                  const randomIndex = Math.floor(Math.random() * imageUrls.length);
+                  const randomImageUrl = imageUrls[randomIndex];
+                  return (
+                    <img
+                      src={randomImageUrl}
+                      alt="Random"
+                      className={styles.GroupImage}
+                    />
+                  );
+                })()
+              )}
+              <div className={styles.GroupOverlay}>
+                <span className={styles.GroupParticipantsBadge}>
+                  <Users2 className={styles.GroupParticipantsIcon} />
+                  {group.members || "0"} 
+                </span>
               </div>
             </div>
+            <div className={styles.GroupDetails}>
+              {group.category && <span className={styles.GroupCategory}>
+                {categories.find(c => c.id === group.category)?.name}
+                </span>}
+            
+              <h3 className={styles.GroupTitle}>{group.name}</h3>
+            </div>
+          </div>
           ))}
         </div>
 
