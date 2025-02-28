@@ -32,7 +32,7 @@ const TopNavBar = () => {
     const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
 
-    const userInfo = useMemo(() => fetchLocalStorage("userInfo"), []);
+    const userInfo = useMemo(() => fetchLocalStorage<UserInfo>("userInfo"), []);
     //@ts-ignore
     const name = userInfo?.full_name?.split(" ")[0] || "";
     //@ts-ignore

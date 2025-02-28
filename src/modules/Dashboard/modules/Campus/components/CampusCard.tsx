@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./CampusCard.module.css";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Trophy, Info, X } from "lucide-react";
+import { FaUserGroup } from "react-icons/fa6";
 
 interface CampusCardData {
     name: string;
@@ -10,6 +11,10 @@ interface CampusCardData {
     lead?: string;
     enabler?: string;
     userCount: string;
+    district: string,
+    zone: string,
+    state: string,
+    country: string,
 }
 
 interface CampusCardProps {
@@ -117,7 +122,7 @@ const CampusCard: React.FC<CampusCardProps> = ({ data, onSelect }) => {
                             </Dialog.Portal>
                         </Dialog.Root>
                     </div>)}
-                    <p className={styles.userKarma}>Students Count: {formatKarma(data.userCount)}</p>
+                    <p className={styles.userKarma}><span><FaUserGroup/></span><span>{formatKarma(data.userCount)} Students</span> </p>
                     {data.lead && (
                         <div className={styles.leadership}>
                             <span className={styles.leaderLabel}>Lead:</span>

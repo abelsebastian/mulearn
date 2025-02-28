@@ -7,12 +7,23 @@ import AvgKarma from '../../../Profile/assets/svg/AvgKarma';
 import Rank from '../../../Profile/assets/svg/Rank';
 import UserCard from '/src/modules/Dashboard/components/UserCard';
 import AsideDetails from '/src/modules/Dashboard/components/AsideDetails';
+import { useNavigate } from 'react-router-dom';
 
 const IGActionSection = ({ data }: { data: InterestGroupData }) => {
-  const tabNames = ["Learning Paths", "About", "Forum", "Members", "Events", "Think Tank", "Mentors"];
+  const tabNames = [
+    "About",
+    "Learning Paths",
+    // "Forum",
+    "Members",
+    "Events",
+    "Think Tank",
+    "Mentors",
+    "Blogs and People",
+  ];
   const [activeTab, setActiveTab] = useState("About");
   const [isAsideOpen, setIsAsideOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<CardData | null>(null);
+  const navigate = useNavigate();
 
   const handleSelect = (cardData: CardData) => {
     setSelectedUser(cardData);
@@ -30,20 +41,31 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
         return (
           <div className={`${styles.tabContent} ${styles.about}`}>
             <p>{data.tabs.about.description}</p>
-            <h3>Career Paths</h3>
-            <div className="flex justify-center items-center gap-4">
-              {data.tabs.about.careerPaths.map((path) => (
-                <div key={path.title} className={styles.careerPath}>
-                  <h4>{path.title}</h4>
-                  <p>{path.description}</p>
-                  <ul>
-                    {path.skills.map((skill, index) => (
-                      <li key={index}>{skill}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <p>Explore our resources here: <a className='!text-blue-600 cursor-pointer' onClick={() => navigate(data.tabs.about.foundationDeck)}>foundation deck</a></p>
+            <div className="flex flex-col justify-center items-start gap-4 flex-wrap">
+              <div>
+
+                <h3>Prerequisites</h3>
+                <ul className={styles.prerequisitesList}>
+                  {data.prerequisites.map((prerequisite, index) => (
+                    <li key={index} className={styles.prerequisiteItem}>
+                      {prerequisite}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <h3>Opportunities</h3>
+              <div className="flex flex-wrap">
+
+                {data.tabs.about.opportunities.map((opportunity) => (
+                  <div key={opportunity.title} className={styles.careerPath}>
+                    <h4>{opportunity.title}</h4>
+                    <p>{opportunity.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+
           </div>
         );
       case "Forum":
@@ -70,9 +92,15 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
               <div key={event.id} className={styles.eventCard}>
                 <img src={event.image} alt={event.title} className={styles.eventImage} />
                 <h3>{event.title}</h3>
-                <p><strong>Date:</strong> {event.date} | <strong>Time:</strong> {event.time}</p>
-                <p><strong>Venue:</strong> {event.venue} ({event.eventType})</p>
-                <a href={event.link} target="_blank" rel="noopener noreferrer">Join Event</a>
+                <p>
+                  <strong>Date:</strong> {event.date} | <strong>Time:</strong> {event.time}
+                </p>
+                <p>
+                  <strong>Venue:</strong> {event.venue} ({event.eventType})
+                </p>
+                <a href={event.link} target="_blank" rel="noopener noreferrer">
+                  Join Event
+                </a>
               </div>
             ))}
           </div>
@@ -110,13 +138,53 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
             ))}
           </div>
         );
+      case "Blogs and People":
+        return (
+          <div className={`${styles.tabContent} ${styles.blogsAndPeople}`}>
+            <div className={styles.section}>
+              <h3>Top Blogs to Follow</h3>
+              <div className={styles.blogsContainer}>
+                {data.blogsToFollow.map((blog, index) => (
+                  <div key={index} className={styles.blogCard}>
+                    <h4>{blog.name}</h4>
+                    <a
+                      href={blog.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.blogLink}
+                    >
+                      Visit Blog
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.section}>
+              <h3>People to Follow</h3>
+              <div className={styles.peopleContainer}>
+                {data.peopleToFollow.map((person, index) => (
+                  <div key={index} className={styles.personCard}>
+                    <h4>{person.name}</h4>
+                    <a
+                      href={person.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.personLink}
+                    >
+                      Follow on LinkedIn
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
   };
 
   const renderAsideContent = (user: CardData) => {
-    // Determine user type
     const isThinkTank = !user.muid && !user.karma && user.role && user.expertise;
     const isRegularUser = user.muid || user.karma;
 
@@ -153,7 +221,6 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
           {isRegularUser && user.muid && <p className={asideStyles.profileUsername}>{user.muid}</p>}
           <p className={asideStyles.profileCollegeName}>{getPrimaryOrganization()}</p>
           {isRegularUser && <p className={asideStyles.profileLevel}>LEVEL 5</p>}
-          {/* Expertise tags for think tank or mentor */}
           {(isThinkTank || (!isRegularUser && user.expertise)) && (
             <div className={asideStyles.expertiseTags}>
               {getExpertiseTags().length > 0 ? (
@@ -169,7 +236,6 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
           )}
         </div>
 
-        {/* Stats only for regular users */}
         {isRegularUser && (
           <div className={asideStyles.statsGrid}>
             <div className={asideStyles.statsCard}>

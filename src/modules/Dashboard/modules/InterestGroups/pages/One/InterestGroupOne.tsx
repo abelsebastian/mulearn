@@ -4,7 +4,7 @@ import { Bell, MoreHorizontal } from 'lucide-react';
 import styles from './InterestGroupOne.module.css';
 import SidebarBannerSlider from '../../components/SideBannerSlider/SideBannerSlider';
 import IGActionSection from '../../components/ActionSection/IGActionSection';
-import { interestGroups } from '../../data/interestGroups';
+import { InterestGroupData, interestGroups } from '../../data/interestGroups';
 import ComingSoonPage from '/src/modules/Common/Authentication/pages/ComingSoon';
 
 const memberAvatars = [
@@ -15,14 +15,17 @@ const memberAvatars = [
   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&q=80",
 ];
 
+const interestGroupsObject: { [key: string]: InterestGroupData } = Object.fromEntries(
+  interestGroups.map(group => [group.id, group])
+);
+
 const CommunityForum = () => {
   const { id } = useParams();
 
-
-  const groupData = useMemo(() => interestGroups.find(group => group.id === id) || null, [id]);
+  const groupData = useMemo(() => (id ? interestGroupsObject[id] : null), [id]);
 
   if (!groupData) {
-    return <div className='w-full h-full flex justify-center items-center'><ComingSoonPage/></div>;
+    return <div className='w-full h-full flex justify-center items-center'><ComingSoonPage /></div>;
   }
 
   return (
@@ -51,6 +54,10 @@ const CommunityForum = () => {
                 <span>{groupData.isPublic ? "Public" : "Private"} Community</span>
                 <span>•</span>
                 <span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
+                <span>•</span>
+                <span>Office Hours: {groupData.officeHours}</span>
+                <span>•</span>
+                <span>Think Tank Meeting: {groupData.thinkTankMeeting}</span>
               </div>
             </div>
 
@@ -86,7 +93,7 @@ const CommunityForum = () => {
           <div className={styles.officeHoursCard}>
             <h3>Office Hours Timings</h3>
             <div className={styles.officeHoursCardTiming}>
-              <p>Every Thursday 8:30 - 9:30</p>
+              <p>{groupData.officeHours}</p>
               <button
                 className={styles.officeHoursButton}
                 onClick={() => window.location.href = "https://discord.gg/yourchannel"}
