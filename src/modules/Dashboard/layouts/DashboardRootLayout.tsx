@@ -74,7 +74,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
             icon: <i className="fi fi-sr-clipboard-user"></i>
         },
         {
-            url: "/dashboard/learn",
+            url: "/dashboard/learning-path",
             title: "Learning Paths",
             hasView: true,
             icon: <FaMapLocationDot />
@@ -115,12 +115,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <IoIosRocket />
         },
-        {
-            url: "/dashboard/profile",
-            title: "Profile",
-            hasView: true,
-            icon: <i className="fi fi-sr-clipboard-user"></i>
-        },
+        // {
+        //     url: "/dashboard/profile",
+        //     title: "Profile",
+        //     hasView: true,
+        //     icon: <i className="fi fi-sr-clipboard-user"></i>
+        // },
         {
             url: "/dashboard/management",
             title: "Management",

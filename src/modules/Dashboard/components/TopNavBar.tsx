@@ -156,6 +156,8 @@ const TopNavBar = () => {
                                 >
                                     {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                 </span>
+                                {/* <span className={styles.userDomain} onClick={() => setSwitchDomainModal(true)}>{//@ts-ignore 
+                                userInfo?.user_domains?.[0]?.toUpperCase() || ''}</span> */}
                             </div>
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
                                 <GameProgressBar levelData={userLevelData} />
@@ -171,6 +173,15 @@ const TopNavBar = () => {
                             )}
                             {userSettings && (
                                 <div id="user_settings" className={styles.user_settings}>
+                                    <MuButtonLight
+                                        text="Profile"
+                                        icon={<i className="fi fi-sr-clipboard-user"></i>}
+                                        style={{ backgroundColor: "#fff", color: "gray", marginBottom: "0px", minWidth: "0px", padding: "0px" }}
+                                        onClick={() => {
+                                            navigate('/dashboard/profile');
+                                            setUserSettings(!userSettings)
+                                        }}
+                                    />
                                     <MuButtonLight
                                         text="Log Out"
                                         icon={<MuLogOut />}

@@ -125,7 +125,7 @@ const DashboardPage = () => {
 
     const imageMap: { [key: string]: { src: string; alt: string } } = {
         coder: { src: "/assets/landing/coder2.png", alt: "Coding illustration" },
-        hardware: { src: "/assets/landing/maker.png", alt: "Maker illustration" },
+        maker: { src: "/assets/landing/maker.png", alt: "Maker illustration" },
         creative: { src: "/assets/landing/creative.png", alt: "Designer illustration" },
         manager: { src: "/assets/landing/manager.png", alt: "Manager illustration" }
     };

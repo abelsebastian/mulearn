@@ -418,8 +418,8 @@ function App() {
                     element: <DashboardRootLayout />,
                     children: [
                         { path: "home", element: <Dashboardpage/> },
-                        { path: "learn", element: <LearningPathPage/> },
-                        { path: "learn/:id", element: <LearningPathPage/> },
+                        { path: "learning-path", element: <LearningPathPage/> },
+                        { path: "learning-path/:id", element: <LearningPathPage/> },
                         { path: "profile", element: <Profile /> },
                         { path: "profileV2", element: <ProfileV2 /> },
                         { path: "muverse", element: <ComingSoonPage /> },

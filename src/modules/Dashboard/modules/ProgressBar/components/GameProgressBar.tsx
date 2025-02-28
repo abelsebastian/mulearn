@@ -11,13 +11,13 @@ interface Level {
 }
 
 export default function GameProgressBar({ levelData = [] }: { levelData: Level[] }) {
-  if (!levelData || levelData.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center p-4">
-        <p className="text-gray-500"></p>
-      </div>
-    );
-  }
+  // if (!levelData || levelData.length === 0) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center p-4">
+  //       <p className="text-gray-500"></p>
+  //     </div>
+  //   );
+  // }
 
   const totalKarmaEarned = useMemo(() => {
     return levelData.reduce((acc, level) => {

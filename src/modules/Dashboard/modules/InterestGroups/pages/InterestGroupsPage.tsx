@@ -74,7 +74,6 @@ function InterestGroupsPage() {
   };
 
   return (
-    
     <div className={styles.MainWrapper}>
       <div className={styles.Banner}>
         <div className={styles.BannerContent}>
@@ -96,11 +95,11 @@ function InterestGroupsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.SearchInput}
-                />
+              />
             </div>
 
             {/* Category Filter */}
-            <div className={styles.CategoryFilter}>
+            {/* <div className={styles.CategoryFilter}>
               {categories.map((category) => (
                 <button
                 key={category.id}
@@ -114,14 +113,14 @@ function InterestGroupsPage() {
                   {category.name}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
-              {isLoading && (
-                          <div>
-                              <MuLoader />
-                          </div>
-                      )}
+        {isLoading && (
+          <div>
+            <MuLoader />
+          </div>
+        )}
 
         {/* Interest Groups Grid */}
         <div className={styles.Grid}>

@@ -32,7 +32,6 @@ const SidebarBannerSlider: React.FC<SidebarBannerSliderProps> = ({ events }) => 
         {events.map((event) => (
           <SwiperSlide key={event.id} className={styles.swiperSlide}>
             <img src={event.image} alt={event.title} className={styles.sliderImage} />
-           
           </SwiperSlide>
         ))}
       </Swiper>
