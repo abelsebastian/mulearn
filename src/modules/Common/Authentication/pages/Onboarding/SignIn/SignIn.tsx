@@ -152,17 +152,21 @@ export default function SignIn() {
                                 </div>
                                 <div className={styles.noAccount}>
                                     <a
+                                        // href={
+                                        //     ruri
+                                        //         ? `/register/?ruri=${ruri}`
+                                        //         : "/register"
+                                        // }
                                         href={
-                                            ruri
-                                                ? `/register/?ruri=${ruri}`
-                                                : "/register"
+
+                                            "/register"
                                         }
                                     >
                                         Don't have an account? Sign up
                                     </a>
                                 </div>
-                                <div className={styles.noAccount} onClick={()=> navigate('/') } style={{cursor: 'pointer'}}>
-                                        Homepage
+                                <div className={styles.noAccount} onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+                                    Homepage
                                 </div>
                             </Form>
                         </div>

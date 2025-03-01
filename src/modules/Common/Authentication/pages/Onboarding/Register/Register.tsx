@@ -21,25 +21,12 @@ export default function RegisterPage() {
             userData: userData
         }).then(res => {
             if (res) {
-                checkUserDomainsAndEndgoals();
+                navigate("/register/organization");
             }
         });
     };
 
-    const checkUserDomainsAndEndgoals = () => {
-        privateGateway.get(dashboardRoutes.getInfo)
-            .then(response => {
-                const userInfo = response.data.response;
-                if (userInfo.user_domains?.length === 0 || userInfo.user_endgoals?.length === 0) {
-                    navigate("/register/pathfinder?ruri=/dashboard/home");
-                } else {
-                    navigate(ruri ? ruri : "/dashboard/home");
-                }
-            })
-            .catch(err => {
-                toast.error("Failed to fetch user info");
-            });
-    };
+  
 
     return (
         <AccountCreationComponent

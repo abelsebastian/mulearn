@@ -85,6 +85,8 @@ const TopNavBar = () => {
         fetchLevelData();
     }, [id]);
 
+
+
     const handleClickOutside = useCallback((event: MouseEvent) => {
         const div = document.getElementById("user_settings");
         const profile = document.getElementById("profile");
@@ -110,33 +112,22 @@ const TopNavBar = () => {
                 `${onboardingRoutes.register}select-domains/`,
                 { domains: [data] }
             );
-
-            selectDomainCategory({ domains: [data] }); 
-
-            const userInfoStr = localStorage.getItem("userInfo");
-            let updatedUserInfo: UserInfo;
-
-            if (userInfoStr) {
-                updatedUserInfo = JSON.parse(userInfoStr);
-            } else {
-                updatedUserInfo = { user_domains: [] }; 
-            }
-
-            if (Array.isArray(updatedUserInfo.user_domains)) {
-                updatedUserInfo.user_domains[0] = data;
-            } else {
-                updatedUserInfo.user_domains = [data];
-            }
-
+    
+            selectDomainCategory({ domains: [data] });
+    
+            const response = await privateGateway.get(dashboardRoutes.getInfo);
+            const updatedUserInfo = response.data.response; 
+    
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+            
             setUserInfo(updatedUserInfo);
-
+    
             toast.success("Domain updated successfully!");
         } catch (error) {
             console.error("Failed to update domain on server:", error);
             toast.error("Failed to update domain. Please try again.");
         } finally {
-            window.location.reload(); 
+            window.location.reload();
         }
     };
 

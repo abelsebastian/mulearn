@@ -121,13 +121,10 @@ interface ApiInterestGroup {
   created_at: string;
 }
 
-interface UserInfo {
-  user_domains: string[];
-}
-
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
+  const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
   const userDomains: string[] =
     fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];
 
@@ -196,7 +193,7 @@ const DashboardPage = () => {
           <section className={styles.welcomeSection}>
             <div className={styles.welcomeText}>
               <h1 className={styles.welcomeTitle}>
-                Welcome back <span>Ashwant</span> 👋
+                Welcome back <span>{userName}</span> 👋
               </h1>
               <p className={styles.welcomeMessage}>
                 You have grown 240% from past week, Keep it up and improve your

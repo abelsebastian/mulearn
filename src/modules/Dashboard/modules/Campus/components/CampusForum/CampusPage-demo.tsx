@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Trophy, Users, Info, Medal, X } from "lucide-react";
+import { useParams } from "react-router-dom";
 import styles from "./campusdetails.module.css";
 import CLIcon from "../../assets/images/CampusLeadIcon.svg";
 import CEIcon from "../../assets/images/CampusEnablerIcon.png";
+import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { convertDateToDayAndMonth } from "/src/modules/Dashboard/utils/common";
+import { privateGateway } from "@/MuLearnServices/apiGateways";
 
-// Define Campus type to match mockCampusData
 interface Campus {
-    id: string;
     college_name: string;
     campus_code: string;
     campus_zone: string;
-    total_karma: string;
-    grade: "A" | "B" | "C" | "N/A";
+    campus_level: number;
+    total_karma: number;
+    total_members: number;
+    active_members: number;
+    rank: number;
     lead: { campus_lead: string; enabler: string };
-}
-
-// Props interface for CampusDetails
-interface CampusDetailsProps {
-    campusData: Campus;
 }
 
 interface GradeRequirement {
@@ -26,7 +28,6 @@ interface GradeRequirement {
     requirements: string[];
 }
 
-// Grade requirements (unchanged)
 const gradeRequirements: GradeRequirement[] = [
     {
         grade: "A",
@@ -42,11 +43,62 @@ const gradeRequirements: GradeRequirement[] = [
     },
 ];
 
-// Utility function to generate random values
-const getRandomActiveStudents = () => Math.floor(Math.random() * (500 - 100 + 1)) + 100; // Random between 100-500
-const getRandomOverallRank = () => Math.floor(Math.random() * (50 - 1 + 1)) + 1; // Random between 1-50
+const CampusDetails: React.FC = () => {
+    const { org_id } = useParams<{ org_id: string }>();
+    const [campusData, setCampusData] = useState<Campus | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
+    const getGradeFromLevel = (level: number): "A" | "B" | "C" | "N/A" => {
+        if (level >= 4) return "A";
+        if (level >= 3) return "B";
+        if (level >= 2) return "C";
+        return "N/A";
+    };
+
+    useEffect(() => {
+        const fetchCampusData = async () => {
+            try {
+                // Fetch campus details
+                const campusResponse = await privateGateway.get(`/api/v1/dashboard/campus/${org_id}`);
+                const campus = campusResponse.data.response;
+
+                // Fetch weekly karma (not used in UI yet, but fetched for potential future use)
+                const weeklyKarmaResponse = await privateGateway.get(`/api/v1/dashboard/campus/weekly-karma/${org_id}`);
+                const weeklyKarma = weeklyKarmaResponse.data.response;
+
+                // Fetch student level data (not used in UI yet, but fetched for completeness)
+                const studentLevelResponse = await axios.get(`/api/v1/dashboard/campus/student-level/${org_id}`);
+                const studentLevel = studentLevelResponse.data.response;
+
+                setCampusData({
+                    college_name: campus.college_name || "Unknown College",
+                    campus_code: campus.campus_code || "N/A",
+                    campus_zone: campus.campus_zone || "N/A",
+                    campus_level: campus.campus_level || 0,
+                    total_karma: campus.total_karma || 0,
+                    total_members: campus.total_members || 0,
+                    active_members: campus.active_members || 0,
+                    rank: campus.rank || 0,
+                    lead: {
+                        campus_lead: campus.lead?.campus_lead || "Not Assigned",
+                        enabler: campus.lead?.enabler || "",
+                    },
+                });
+            } catch (err) {
+                console.error("Failed to fetch campus data:", err);
+                toast.error("Failed to load campus details");
+                setError("Failed to load campus data");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (org_id) {
+            fetchCampusData();
+        }
+    }, [org_id]);
+
     const getGradeIcon = (grade: "A" | "B" | "C" | "N/A"): JSX.Element | null => {
         switch (grade) {
             case "A":
@@ -58,21 +110,25 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
             case "N/A":
                 return <Trophy className="h-8 w-8" style={{ color: "#64748B" }} />;
             default:
-                return null; // Fallback, though not needed with type restriction
+                return null;
         }
     };
 
-    // Map campusData to component fields, adding random values for missing fields
-    const displayData = {
-        name: campusData.college_name,
-        code: campusData.campus_code,
-        grade: campusData.grade,
-        karmaPoints: parseInt(campusData.total_karma),
-        activeStudents: getRandomActiveStudents(), // Random value since not in mockCampusData
-        campusLead: campusData.lead.campus_lead,
-        campusEnabler: campusData.lead.enabler,
-        overallRank: getRandomOverallRank(), // Random value since not in mockCampusData
-    };
+    if (isLoading) {
+        return <MuLoader />;
+    }
+
+    if (error || !campusData) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.wrapper}>
+                    <p>Unable to load campus details. Please try again later.</p>
+                </div>
+            </div>
+        );
+    }
+
+    const grade = getGradeFromLevel(campusData.campus_level);
 
     return (
         <div className={styles.container}>
@@ -80,7 +136,7 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                 <div className={styles.header}>
                     <div className={styles.titleSection}>
                         <h1 className={styles.title}>
-                            {displayData.name} ({displayData.code})
+                            {campusData.college_name} ({campusData.campus_code})
                         </h1>
                     </div>
                 </div>
@@ -128,8 +184,8 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                             </Dialog.Root>
                         </div>
                         <div className={styles.gradeDisplay}>
-                            {getGradeIcon(displayData.grade)}
-                            <span className={styles.gradeText}>Grade {displayData.grade}</span>
+                            {getGradeIcon(grade)}
+                            <span className={styles.gradeText}>Grade {grade}</span>
                         </div>
                     </div>
 
@@ -138,7 +194,7 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                             <h3 className={styles.cardTitle}>Karma Points</h3>
                             <Medal size={16} style={{ color: "#0066FF" }} />
                         </div>
-                        <div className={styles.statsValue}>{displayData.karmaPoints.toLocaleString()}</div>
+                        <div className={styles.statsValue}>{campusData.total_karma.toLocaleString()}</div>
                         <p className={styles.statsLabel}>Points earned this year</p>
                     </div>
 
@@ -147,7 +203,7 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                             <h3 className={styles.cardTitle}>Active Students</h3>
                             <Users size={16} style={{ color: "#0066FF" }} />
                         </div>
-                        <div className={styles.statsValue}>{displayData.activeStudents}</div>
+                        <div className={styles.statsValue}>{campusData.active_members}</div>
                         <p className={styles.statsLabel}>Currently active</p>
                     </div>
 
@@ -156,7 +212,7 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                             <h3 className={styles.cardTitle}>Overall Rank</h3>
                             <Trophy size={16} style={{ color: "#0066FF" }} />
                         </div>
-                        <div className={styles.statsValue}>#{displayData.overallRank}</div>
+                        <div className={styles.statsValue}>#{campusData.rank}</div>
                         <p className={styles.statsLabel}>Among all campuses</p>
                     </div>
                 </div>
@@ -167,15 +223,15 @@ const CampusDetails: React.FC<CampusDetailsProps> = ({ campusData }) => {
                         <div className={styles.leaderCard}>
                             <div className="flex items-center flex-col">
                                 <img src={CLIcon} alt="Campus Lead" className={styles.leaderIcon} />
-                                <div className={styles.leaderName}>{displayData.campusLead}</div>
+                                <div className={styles.leaderName}>{campusData.lead.campus_lead}</div>
                                 <span className={styles.leaderRole}>Campus Lead</span>
                             </div>
                         </div>
-                        {displayData.campusEnabler && (
+                        {campusData.lead.enabler && (
                             <div className={styles.leaderCard}>
                                 <div className="flex flex-col items-center">
                                     <img src={CEIcon} alt="Campus Enabler" className={styles.leaderIcon} />
-                                    <div className={styles.leaderName}>{displayData.campusEnabler}</div>
+                                    <div className={styles.leaderName}>{campusData.lead.enabler}</div>
                                     <span className={styles.leaderRole}>Campus Lead Enabler</span>
                                 </div>
                             </div>

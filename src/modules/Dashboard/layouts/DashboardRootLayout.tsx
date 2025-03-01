@@ -33,23 +33,17 @@ const DashboardRootLayout = (props: { component?: any }) => {
     const Management: ManagementTypes[] = Object.values(managementTypes).slice(2);
 
     useEffect(() => {
-        const initializeUserInfo = async () => {
-            let userInfo = fetchLocalStorage<UserInfo>("userInfo");
-            if (!userInfo) {
-                try {
-                    const response = await privateGateway.get(dashboardRoutes.getInfo);
-                    userInfo = response.data.response; 
-                    if (userInfo) {
-                        localStorage.setItem("userInfo", JSON.stringify(userInfo));
-                        console.log("Fetched and stored userInfo:", userInfo);
-                    }
-                } catch (err) {
-                    console.error("Failed to fetch user info:", err);
-                }
-            }
+    const initializeUserInfo = async () => {
+        try {
+            const response = await privateGateway.get(dashboardRoutes.getInfo);
+            const userInfo = response.data.response; 
+            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            
             if (userInfo) {
+              
                 setConnected(userInfo.exist_in_guild ?? false);
 
+              
                 if (
                     !userInfo.user_domains?.length ||
                     !userInfo.user_endgoals?.length
@@ -57,12 +51,15 @@ const DashboardRootLayout = (props: { component?: any }) => {
                     navigate("/register/pathfinder?ruri=/dashboard/home");
                 }
             }
-
+        } catch (err) {
+            console.error("Failed to fetch user info:", err);
+        } finally {
             setIsLoading(false);
-        };
+        }
+    };
 
-        initializeUserInfo();
-    }, [navigate]); 
+    initializeUserInfo();
+}, [navigate]);
    
 
 

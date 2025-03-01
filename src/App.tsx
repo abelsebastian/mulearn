@@ -81,6 +81,7 @@ import Dashboard from "./modules/Dashboard/modules/Map/Pages/DashBoard";
 import LearningPathPage from "./modules/Dashboard/modules/LearningPathNew/Pages/LearningPathPage";
 import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
 import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
+import CampusDetails from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -396,7 +397,7 @@ function App() {
                 { path: "mulearners", element: <MuLearnersSearchPage/>},
                 { path: "mentors", element: <MentorSearchPage/> },
                 {path: "campus", element: <CampusSearchPage/>},
-                {path: "campus/:id", element: <CampusForumLandingPage/>},
+                {path: "campus/:org_id", element: <CampusDetails/>},
                 { path: "interestgroups", element: <InterestGroupsPage /> },
                 { path: "interestgroups/:id", element: <InterestGroupOne /> },
                 { path: "special-events", element: <SpecialEvents /> },

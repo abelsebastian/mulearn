@@ -18,7 +18,7 @@ interface AboutSectionProps {
 
 const AboutSection: React.FC<AboutSectionProps> = ({ campusData }) => (
   <div>
-      <CampusDetails campusData={campusData} />
+      {/* <CampusDetails campusData={campusData} /> */}
   </div>
 );
 

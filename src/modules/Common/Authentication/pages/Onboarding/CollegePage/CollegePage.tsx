@@ -155,7 +155,7 @@ export default function CollegePage() {
         }).then(res => {
             if (res) {
                 if (ruri) {
-                    navigate(`/${ruri}`);
+                    navigate(`${ruri}`);
                 } else {
                     navigate("/dashboard/home");
                 }
