@@ -1,3 +1,4 @@
+import { get } from "http";
 import {
     getMeetupInfo,
     joinMeetup,
@@ -93,6 +94,7 @@ export const dashboardRoutes = {
     getKarmaVoucher: "/api/v1/dashboard/karma-voucher/",
     getKarmaVoucherList: "api/v1/dashboard/karma-voucher/import/",
     getKarmaVoucherTemplate: "api/v1/dashboard/karma-voucher/base-template/",
+    getKarmaFeed: "/api/v1/dashboard/profile/karma-feed/",
 
     getChannels: "/api/v1/dashboard/channels/",
     createChannel: "/api/v1/dashboard/channels/",
@@ -120,6 +122,9 @@ export const dashboardRoutes = {
     getPublicUserLog: "/api/v1/dashboard/profile/user-log/${muid}/",
     getUserSuggestion: "/api/v1/dashboard/profile/user-suggestion/",
     getStudentLeaderBoard: "/api/v1/leaderboard/students/",
+    getMonthlyStudentLeaderBoard: "/api/v1/leaderboard/students-monthly/",
+    getCollegeLeaderBoard: "/api/v1/leaderboard/colleges/",
+    getCollegeMonthlyLeaderBoard: "/api/v1/leaderboard/colleges-monthly/",
     getIgDetails: "/api/v1/dashboard/profile/ig-edit/",
     getSocials: "/api/v1/dashboard/profile/socials/",
     postProfileImage: "/api/v1/dashboard/user/profile/update/",

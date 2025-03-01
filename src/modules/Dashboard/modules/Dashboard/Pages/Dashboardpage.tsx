@@ -6,7 +6,7 @@ import KarmaEarners from "../Components/KarmaEarners";
 import LearningCirclesSection from "../Components/LearningCirclesSection";
 import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
-import { getDomainBasedInterestGroups } from "../services/api";
+import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
 
 // Move static data outside component to prevent recreation
 const DOMAIN_IMAGES = {
@@ -125,6 +125,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
   const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
+  const [karmaFeed, setKarmaFeed] = useState<KarmaFeedItem[]>([]);
   const userDomains: string[] =
     fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];
 
@@ -152,13 +153,36 @@ const DashboardPage = () => {
     fetchInterestGroups();
   }, [userDomains[0]]);
 
-    const handleStartLearning = useCallback(() => {
-        navigate('/dashboard/learning-path');
-    }, [navigate]);
+  const handleStartLearning = useCallback(() => {
+    navigate('/dashboard/learning-path');
+  }, [navigate]);
 
   const handleJoinLearning = useCallback(() => {
     navigate("/dashboard/learningcircle");
   }, [navigate]);
+
+
+  useEffect(() => {
+    async function fetchKarmaFeed() {
+      try {
+        const response = await getKarmaFeed();
+        if (!response) {
+          console.error("Failed to fetch karma feed");
+          return;
+        }
+        console.log("Karma feed fetched successfully");
+        setKarmaFeed(response);
+        console.log(response)
+      } catch (error) {
+        console.error("Failed to fetch karma feed:", error);
+      }
+    }
+    fetchKarmaFeed()
+  }, []);
+
+  
+
+
 
   const imageMap: { [key: string]: { src: string; alt: string } } = {
     coder: {
@@ -235,11 +259,11 @@ const DashboardPage = () => {
               <SidebarBannerSlider events={EVENTS} />
             </div>
           </section>
+          {karmaFeed.length > 1 && karmaFeed[0].user && karmaFeed[1].user && (
           <KarmaEarners
-            highestStudent={KARMA_DATA.highestStudent}
-            highestCollege={KARMA_DATA.highestCollege}
-            longestStreak={KARMA_DATA.longestStreak}
-          />
+            highestStudent={karmaFeed[0]}
+            highestCollege={karmaFeed[1]}
+          />)}
           <InterestGroups title={userDomains[0]} groups={interestGroups} />
         </aside>
       </div>

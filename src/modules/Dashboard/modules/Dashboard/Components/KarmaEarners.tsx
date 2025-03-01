@@ -4,25 +4,19 @@ import { FaFire } from "react-icons/fa";
 
 type KarmaEarnersProps = {
   highestStudent: {
-    name: string;
-    currentKarma: number;
-    earnedYesterday: number;
+    user: string;
+    karma: number;
+    muid?: string;
   };
   highestCollege: {
-    name: string;
-    currentKarma: number;
-    earnedYesterday: number;
-  };
-  longestStreak: {
-    name: string;
-    streakDays: number;
+    user: string;
+    karma: number;
   };
 };
 
 const KarmaEarners: React.FC<KarmaEarnersProps> = ({
   highestStudent,
   highestCollege,
-  longestStreak,
 }) => {
   return (
     <div className={styles.container}>
@@ -31,30 +25,21 @@ const KarmaEarners: React.FC<KarmaEarnersProps> = ({
         <div className={`${styles.earnerItem} ${styles.studentCard}`}>
           <div className={styles.earnerTitle}>Highest Karma Earner (Student)</div>
           <div className={styles.earnerDetails}>
-            <span className={styles.earnerName}>{highestStudent.name}</span>
-            <span className={styles.currentKarma}>{highestStudent.currentKarma}</span>
-            <span className={styles.earnedYesterday}>
-              +{highestStudent.earnedYesterday} yesterday
-            </span>
+            <span className={styles.earnerName}>AwinDas R</span>
+            <span className={styles.earnerName}>awindasr@mulearn</span>
+
+            <span className={styles.currentKarma}>{highestStudent.karma}</span>
+           
           </div>
         </div>
         <div className={`${styles.earnerItem} ${styles.collegeCard}`}>
           <div className={styles.earnerTitle}>Highest Karma Earner (College)</div>
           <div className={styles.earnerDetails}>
-            <span className={styles.earnerName}>{highestCollege.name}</span>
-            <span className={styles.currentKarma}>{highestCollege.currentKarma}</span>
-            <span className={styles.earnedYesterday}>
+            <span className={styles.earnerName}>{highestCollege.user}</span>
+            <span className={styles.currentKarma}>{highestCollege.karma}</span>
+            {/* <span className={styles.earnedYesterday}>
               +{highestCollege.earnedYesterday} yesterday
-            </span>
-          </div>
-        </div>
-        <div className={`${styles.earnerItem} ${styles.streakCard}`}>
-          <div className={styles.earnerTitle}>Longest Streak Holder</div>
-          <div className={styles.earnerDetails}>
-            <span className={styles.earnerName}>{longestStreak.name}</span>
-            <span className={styles.streakDays}>
-              {longestStreak.streakDays} days <FaFire className={styles.fireIcon} />
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
