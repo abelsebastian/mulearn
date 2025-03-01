@@ -58,7 +58,7 @@
 .welcomeText {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: flex-start;
   margin-left: 0;
   width: 100%;
@@ -91,6 +91,7 @@
 
 .buttons {
   display: flex;
+  justify-content: start;
   font-size: clamp(0.7rem, 1.5vw, 0.8rem);
   margin-top: clamp(8px, 1vw, 12px);
   gap: clamp(4px, 1vw, 8px);
@@ -173,6 +174,9 @@
   .rightWrapper {
     width: auto;
   }
+  /* .welcomeText{
+    align-items: center;
+  } */
 }
 
 .dashboardImage {
@@ -195,13 +199,23 @@
   .welcomeTitle {
     font-size: clamp(1rem, 3vw, 1.25rem);
   }
+/* 
+  .welcomeText{
+    align-items: center;
+  } */
+
+  .welcomeTitle{
+    text-align: center;
+  }
 
   .welcomeMessage {
     font-size: clamp(0.7rem, 2vw, 0.8rem);
+    text-align: center;
   }
 
   .buttons {
     gap: clamp(2px, 1vw, 4px);
+    justify-content: center;
   }
 
   .button, .button2 {
@@ -223,6 +237,8 @@
 @media (min-width: 768px) {
   .welcomeTitle {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
+    text-align: center;
+    
   }
 
   .welcomeMessage {
