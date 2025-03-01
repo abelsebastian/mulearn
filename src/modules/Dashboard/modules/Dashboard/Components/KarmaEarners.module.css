@@ -1,5 +1,4 @@
 .container {
-    margin: 20px;
     padding: 16px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -17,6 +16,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 0 8px;
   }
     
   .earnerItem {
@@ -28,6 +28,8 @@
     flex-direction: column;
     text-align: left;
     cursor: pointer;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+
   }
     
   .earnerTitle {
@@ -42,6 +44,7 @@
     align-items: center;
     justify-content: start;
     gap: 12px;
+    flex-wrap: wrap;
     text-align: left;
   }
     
