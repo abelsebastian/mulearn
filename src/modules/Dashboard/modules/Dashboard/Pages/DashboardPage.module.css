@@ -100,6 +100,7 @@
   flex-wrap: wrap;
 }
 
+
 .button {
   background-color: #ffffff;
   color: #000000;
@@ -258,6 +259,7 @@
 @media (min-width: 1024px) {
   .welcomeTitle {
     font-size: clamp(2rem, 3vw, 2.5rem);
+    text-align: left;
   }
 
   .welcomeMessage {
