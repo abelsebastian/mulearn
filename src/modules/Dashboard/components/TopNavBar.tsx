@@ -64,7 +64,9 @@ const TopNavBar = () => {
         }
     }, []);
 
+    //@ts-ignore
     const userName = useUserStore((state) => state.userProfile.first_name);
+    //@ts-ignore
     const data = useUserStore((state) => state.userProfile);
     console.log(data,'data')
     const profilePic = userInfo?.profile_pic || null;

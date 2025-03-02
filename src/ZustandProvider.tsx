@@ -1,5 +1,5 @@
-
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface InterestGroup {
   id: string;
@@ -14,7 +14,7 @@ export interface KarmaDistribution {
 
 export interface UserProfile {
   full_name: string;
-  first_name: string,
+  first_name: string;
   college_code: string;
   college_id: string;
   org_district_id: string;
@@ -40,53 +40,43 @@ interface UserStore {
   resetUserProfile: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-  userProfile: {
-    full_name: "",
-    first_name: "",
-    college_code: "",
-    college_id: "",
-    org_district_id: "",
-    interest_groups: [{ id: "", name: "", karma: 0 }],
-    karma_distribution: [{ task_type: "", karma: 0 }],
-    gender: "",
-    id: "",
-    joined: "",
-    karma: 0,
-    rank: 0,
-    muid: "",
-    level: "",
-    profile_pic: "",
-    is_public: false,
-    percentile: 0,
-    roles: [],
-  },
-  setUserProfile: (profile) => set({ userProfile: profile }),
-  updateUserProfile: (updates) =>
-    set((state) => ({
-      userProfile: { ...state.userProfile, ...updates },
-    })),
-  resetUserProfile: () =>
-    set({
-      userProfile: {
-        full_name: "",
-        first_name: "",
-        college_code: "",
-        college_id: "",
-        org_district_id: "",
-        interest_groups: [{ id: "", name: "", karma: 0 }],
-        karma_distribution: [{ task_type: "", karma: 0 }],
-        gender: "",
-        id: "",
-        joined: "",
-        karma: 0,
-        rank: 0,
-        muid: "",
-        level: "",
-        profile_pic: "",
-        is_public: false,
-        percentile: 0,
-        roles: [],
-      },
+const initialUserProfile: UserProfile = {
+  full_name: "",
+  first_name: "",
+  college_code: "",
+  college_id: "",
+  org_district_id: "",
+  interest_groups: [{ id: "", name: "", karma: 0 }],
+  karma_distribution: [{ task_type: "", karma: 0 }],
+  gender: "",
+  id: "",
+  joined: "",
+  karma: 0,
+  rank: 0,
+  muid: "",
+  level: "",
+  profile_pic: "",
+  is_public: false,
+  percentile: 0,
+  roles: [],
+};
+
+export const useUserStore = create<UserStore>(
+  //@ts-ignore
+  persist(
+    (set) => ({
+      userProfile: initialUserProfile,
+      setUserProfile: (profile: UserProfile) => set({ userProfile: profile }),
+      updateUserProfile: (updates: Partial<UserProfile>) =>
+        set((state) => ({
+          userProfile: { ...state.userProfile, ...updates },
+        })),
+      resetUserProfile: () => set({ userProfile: initialUserProfile }),
     }),
-}));
+    {
+      name: "userStore", // key for localStorage
+      //@ts-ignore
+      getStorage: () => localStorage,
+    }
+  )
+);
