@@ -175,9 +175,6 @@
   .rightWrapper {
     width: auto;
   }
-  /* .welcomeText{
-    align-items: center;
-  } */
 }
 
 .dashboardImage {
@@ -232,6 +229,9 @@
   .dashboardImage {
     height: clamp(150px, 25vw, 200px);
     max-height: clamp(200px, 30vw, 300px);
+  }
+  .welcomeText{
+    align-items: center;
   }
 }
 

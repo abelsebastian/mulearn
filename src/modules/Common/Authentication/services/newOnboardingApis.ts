@@ -165,7 +165,7 @@ export const submitUserData = async ({
         return true;
     } catch (err: any) {
         setIsLoading(false);
-        const messages = err.response.data.message.general[0];
+        const messages = err.message;
         showToasts({
             messages: messages
         });
