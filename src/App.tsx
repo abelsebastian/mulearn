@@ -82,6 +82,7 @@ import LearningPathPage from "./modules/Dashboard/modules/LearningPathNew/Pages/
 import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
 import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
 import CampusDetails from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
+import LearningPathDetailPage from "./modules/Dashboard/modules/InterestGroups/components/LearningPathDetailPage";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -400,6 +401,7 @@ function App() {
                 {path: "campus/:org_id", element: <CampusDetails/>},
                 { path: "interestgroups", element: <InterestGroupsPage /> },
                 { path: "interestgroups/:id", element: <InterestGroupOne /> },
+                // {path: "interestgroups/:id/learning-path", element: <LearningPathDetailPage />},
                 { path: "special-events", element: <SpecialEvents /> },
                 {path: "leaderboard", element: <MuLeaderboardPage />},
                 { path: "bootcamps", element: <ComingSoonPage /> },

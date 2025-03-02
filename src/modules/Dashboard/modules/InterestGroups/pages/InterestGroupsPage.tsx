@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { getInterestGroups } from '../../InterestGroup/apis';
 import MuLoader from '@/MuLearnComponents/MuLoader/MuLoader';
+import {interestGroups} from "../data/interestGroups"; 
 
 function InterestGroupsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,6 +13,7 @@ function InterestGroupsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
   const navigate = useNavigate();
+  const [interestgroups, setInterestGroups] = useState<any[]>([]);  
 
   const [data, setData] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -40,24 +42,31 @@ function InterestGroupsPage() {
   ];
 
 
+  // useEffect(() => {
+  //   if (firstFetch.current) {
+  //     getInterestGroups(
+  //       setData,
+  //       1,
+  //       perPage,
+  //       setIsLoading,
+  //       setTotalPages,
+  //       "",
+  //       ""
+  //     );
+  //   }
+  //   firstFetch.current = false;
+  // }, []);
+
   useEffect(() => {
-    if (firstFetch.current) {
-      getInterestGroups(
-        setData,
-        1,
-        perPage,
-        setIsLoading,
-        setTotalPages,
-        "",
-        ""
-      );
-    }
-    firstFetch.current = false;
-  }, []);
+    setData(interestGroups);
+  }, [interestGroups]);
+
+  console.log(data);
+
 
   // Filter groups based on search and category
   const filteredGroups = data.filter(group => {
-    const matchesSearch = group.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = group.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || group.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -134,7 +143,7 @@ function InterestGroupsPage() {
               {group.image ? (
                 <img
                   src={group.image}
-                  alt={group.name}
+                  alt={group.title}
                   className={styles.GroupImage}
                 />
               ) : (
@@ -162,7 +171,7 @@ function InterestGroupsPage() {
                 {categories.find(c => c.id === group.category)?.name}
                 </span>}
             
-              <h3 className={styles.GroupTitle}>{group.name}</h3>
+              <h3 className={styles.GroupTitle}>{group.title}</h3>
             </div>
           </div>
           ))}

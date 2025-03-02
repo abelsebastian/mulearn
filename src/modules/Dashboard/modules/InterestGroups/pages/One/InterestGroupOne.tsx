@@ -41,8 +41,8 @@ const CommunityForum = () => {
                 loading="lazy"
               />
               <div className={styles.bannerOverlay}>
-                <div className={styles.bannerLogo}>{groupData.title.slice(0, 3).toUpperCase()}</div>
-                <div className={styles.bannerMemberInfo}>Member since {groupData.memberSince}</div>
+                <div className={styles.bannerLogo}>{groupData.title.slice(0, 1).toUpperCase()}</div>
+                {/* <div className={styles.bannerMemberInfo}>Member since {groupData.memberSince}</div> */}
               </div>
               {/* <button className={styles.bellButton} aria-label="Notifications">
                 <Bell className={styles.bellIcon} />
@@ -52,9 +52,9 @@ const CommunityForum = () => {
             <div className={styles.communityInfo}>
               <h1 className={styles.forumTitle}>{groupData.title}</h1>
               <div className={styles.forumSubInfo}>
-                <span><span>•</span>{groupData.isPublic ? "Public" : "Private"} Community</span>
+                {/* <span><span>•</span>{groupData.isPublic ? "Public" : "Private"} Community</span> */}
               
-                <span><span>•</span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
+                {/* <span><span>•</span>{(groupData.memberCount / 1000).toFixed(1)}k members</span> */}
                 
                 <span> <span>•</span>Office Hours: {groupData.officeHours}</span>
                
@@ -64,7 +64,7 @@ const CommunityForum = () => {
 
             <div className={styles.memberSection}>
               <div className={styles.avatarGroup}>
-                <div className={styles.avatarStack}>
+                {/* <div className={styles.avatarStack}>
                   {memberAvatars.map((avatar, index) => (
                     <img
                       key={index}
@@ -74,8 +74,8 @@ const CommunityForum = () => {
                       loading="lazy"
                     />
                   ))}
-                </div>
-                <span className={styles.memberText}>Jiso and 5 other friends are members</span>
+                </div> */}
+                {/* <span className={styles.memberText}>Jiso and 5 other friends are members</span> */}
               </div>
               {/* <button className={styles.moreButton} aria-label="More options">
                 <MoreHorizontal className={styles.moreIcon} />
@@ -89,7 +89,7 @@ const CommunityForum = () => {
           <div className={styles.sidebarSection}>
             <h2 className={styles.sidebarTitle}>Happening Now</h2>
             <div className={styles.sidebarBanner}>
-              <SidebarBannerSlider events={groupData.tabs.events} />
+              <SidebarBannerSlider events={groupData.tabs.events || []} />
             </div>
           </div>
           <div className={styles.officeHoursCard}>
@@ -101,14 +101,14 @@ const CommunityForum = () => {
                 onClick={() => window.location.href = "https://discord.gg/yourchannel"}
                 aria-label="Join office hours"
               >
-                Join
+                Add to calendar
               </button>
             </div>
           </div>
-          <div className={styles.sidebarSection}>
+          {/* <div className={styles.sidebarSection}>
             <h2 className={styles.sidebarTitle}>Partner Companies</h2>
             <div className={styles.sidebarList}>
-              {groupData.partnerCompanies.map((partner) => (
+              {groupData.partnerCompanies?.map((partner) => (
                 <div key={partner.id} className={styles.sidebarItem}>
                   <div className={styles.sidebarItemLeft}>
                     <img src={partner.image} alt={partner.title} className={styles.communityIcon} />
@@ -117,16 +117,16 @@ const CommunityForum = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className={styles.sidebarSection}>
-            <h2 className={styles.sidebarTitle}>Communities</h2>
+            <h2 className={styles.sidebarTitle}>Community Partners</h2>
             <div className={styles.sidebarList}>
-              {groupData.communityPartners.map((partner) => (
+              {groupData.communityPartners?.map((partner) => (
                 <div key={partner.id} className={styles.sidebarItem}>
                   <div className={styles.sidebarItemLeft}>
                     <img src={partner.image} alt={partner.title} className={styles.communityIcon} />
-                    <span className={styles.sidebarItemText}>{partner.title}</span>
+                    {/* <span className={styles.sidebarItemText}>{partner.title}</span> */}
                   </div>
                 </div>
               ))}

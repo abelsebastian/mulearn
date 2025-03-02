@@ -17,7 +17,7 @@ interface Event {
 }
 
 interface SidebarBannerSliderProps {
-  events: Event[];
+  events?: Event[];
 }
 
 const SidebarBannerSlider: React.FC<SidebarBannerSliderProps> = ({ events }) => {
@@ -29,7 +29,7 @@ const SidebarBannerSlider: React.FC<SidebarBannerSliderProps> = ({ events }) => 
         autoplay={{ delay: 3000 }}
         loop
       >
-        {events.map((event) => (
+        {events?.map((event) => (
           <SwiperSlide key={event.id} className={styles.swiperSlide}>
             <img src={event.image} alt={event.title} className={styles.sliderImage} />
           </SwiperSlide>

@@ -1,17 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { TagsInput } from "react-tag-input-component";
+// import { TagsInput } from "react-tag-input-component";
 import { PowerfulButton } from "@/MuLearnComponents/MuButtons/MuButton";
 import { publicGateway } from "@/MuLearnServices/apiGateways";
 import { onboardingRoutes } from "@/MuLearnServices/urls";
 import styles from "./UserInterestComponent.module.css";
-import muBrand from "/src/modules/Common/Authentication/assets/µLearn.png";
+import muBrand from "/src/modules/Common/Authentication/assets/µLearn.webp";
 import OnboardingTemplate from "../OnboardingTeamplate/OnboardingTemplate";
 import creative from "/src/modules/Common/Authentication/assets/interests/creative.svg";
 import maker from "/src/modules/Common/Authentication/assets/interests/makers.svg";
 import management from "/src/modules/Common/Authentication/assets/interests/management.svg";
 import software from "/src/modules/Common/Authentication/assets/interests/software.svg";
-import others from "/src/modules/Common/Authentication/assets/interests/others.svg";
+import { IoCheckmarkCircleSharp } from "react-icons/io5";
+// import others from "/src/modules/Common/Authentication/assets/interests/others.svg";
 
 const CheckMark = () => (
     <svg className={styles.checkmark} viewBox="0 0 24 24" width="24" height="24">
@@ -29,21 +30,34 @@ type InterestGroups = {
     [key: string]: InterestGroup[];
 };
 
+// const INITIAL_INTERESTS = [
+//     { title: "Coder", value: "coder", img: software, checked: false },
+//     { title: "Hardware", value: "hardware", img: maker, checked: false },
+//     { title: "Manager", value: "manager", img: management, checked: false },
+//     { title: "Creative", value: "creative", img: creative, checked: false },
+//     // { title: "Others", value: "others", img: others, checked: false }
+// ];
 const INITIAL_INTERESTS = [
     { title: "Coder", value: "coder", img: software, checked: false },
     { title: "Hardware", value: "hardware", img: maker, checked: false },
     { title: "Manager", value: "manager", img: management, checked: false },
     { title: "Creative", value: "creative", img: creative, checked: false },
-    { title: "Others", value: "others", img: others, checked: false }
 ];
 
+// const INITIAL_ENDGOALS = [
+//     { title: "Job", value: "job", checked: false },
+//     { title: "Research & Development", value: "r&d", checked: false },
+//     { title: "Entrepreneurship", value: "entrepreneurship", checked: false },
+//     { title: "Gig Works", value: "gig_work", checked: false },
+//     { title: "Higher Education", value: "higher_education", checked: false },
+//     // { title: "Others", value: "others", checked: false }
+// ];
 const INITIAL_ENDGOALS = [
     { title: "Job", value: "job", checked: false },
     { title: "Research & Development", value: "r&d", checked: false },
     { title: "Entrepreneurship", value: "entrepreneurship", checked: false },
     { title: "Gig Works", value: "gig_work", checked: false },
     { title: "Higher Education", value: "higher_education", checked: false },
-    { title: "Others", value: "others", checked: false }
 ];
 
 export default function UserInterestSelectionComponent({
@@ -53,8 +67,8 @@ export default function UserInterestSelectionComponent({
 }) {
     const [stepTwo, setStepTwo] = useState(false);
     const [interestGroups, setInterestGroups] = useState<InterestGroups>({});
-    const [otherInterest, setOtherInterest] = useState<string[]>([]);
-    const [otherEndgoal, setOtherEndgoal] = useState<string[]>([]);
+    // const [otherInterest, setOtherInterest] = useState<string[]>([]);
+    // const [otherEndgoal, setOtherEndgoal] = useState<string[]>([]);
     const [interests, setInterests] = useState(INITIAL_INTERESTS);
     const [endgoals, setEndgoals] = useState(INITIAL_ENDGOALS);
     const [searchParams] = useSearchParams();
@@ -94,28 +108,28 @@ export default function UserInterestSelectionComponent({
 
     const handleChange = useCallback((value: string, isInterest: boolean) => {
         const setter = isInterest ? setInterests : setEndgoals;
-        const otherSetter = isInterest ? setOtherInterest : setOtherEndgoal;
+        // const otherSetter = isInterest ? setOtherInterest : setOtherEndgoal;
 
         setter((prev: any) => {
             const newItems = prev.map((item: any) =>
                 item.value === value ? { ...item, checked: !item.checked } : item
             );
-            if (value === "others" && newItems.find((item: any) => item.value === "others")?.checked === false) {
-                otherSetter([]);
-            }
+            // if (value === "others" && newItems.find((item: any) => item.value === "others")?.checked === false) {
+            //     otherSetter([]);
+            // }
             return newItems;
         });
     }, []);
 
     const handleContinue = useCallback(() => {
         const selectedInterests = interests.filter(interest => interest.checked);
-        if (selectedInterests.some(i => i.value === "others") && otherInterest.length === 0) {
-            return;
-        }
-        if (selectedInterests.length > 0 || otherInterest.length > 0) {
+        // if (selectedInterests.some(i => i.value === "others") && otherInterest.length === 0) {
+        //     return;
+        // }
+        if (selectedInterests.length > 0) {
             setStepTwo(true);
         }
-    }, [interests, otherInterest]);
+    }, [interests]);
 
     const handleSubmit = useCallback(() => {
         const selectedInterests = interests.filter(i => i.checked).map(i => i.value);
@@ -123,11 +137,11 @@ export default function UserInterestSelectionComponent({
         const data = {
             choosen_interests: selectedInterests,
             choosen_endgoals: selectedEndgoals,
-            other_interests: otherInterest,
-            other_endgoals: otherEndgoal
+            other_interests: [], // Send empty array to keep API working
+            other_endgoals: []  // Send empty array to keep API working
         };
         onContinue(data); // Pass data to parent
-    }, [interests, endgoals, otherInterest, otherEndgoal, onContinue]);
+    }, [interests, endgoals]);
 
     const isInterestSelected = interests.some(interest => interest.checked);
     const isEndgoalSelected = endgoals.some(endgoal => endgoal.checked);
@@ -136,15 +150,15 @@ export default function UserInterestSelectionComponent({
         (items: typeof interests | typeof endgoals, isInterest: boolean) => (
             <div className={styles.itemsContainer}>
                 {items.map(item => {
-                    const isOthers = item.value === "others";
+                    // const isOthers = item.value === "others";
                     const isChecked = item.checked;
-                    const otherItems = isInterest ? otherInterest : otherEndgoal;
-                    const setOtherItems = isInterest ? setOtherInterest : setOtherEndgoal;
+                    // const otherItems = isInterest ? otherInterest : otherEndgoal;
+                    // const setOtherItems = isInterest ? setOtherInterest : setOtherEndgoal;
 
                     return (
                         <div
                             key={item.value}
-                            className={`${styles.itemsCard} ${isChecked ? styles.checked : ""} ${isOthers ? styles.others : ""}`}
+                            className={`${styles.itemsCard} ${isChecked ? styles.checked : ""}`}
                             onClick={() => handleChange(item.value, isInterest)}
                         >
                             {isInterest ? (
@@ -153,16 +167,25 @@ export default function UserInterestSelectionComponent({
                                     <p className={styles.title}>{item.title}</p>
                                 </div>
                             ) : (
-                                <p>{item.title}</p>
+                                <div className={styles.content}> 
+                                    <p className={styles.title}>{item.title}</p>
+                                </div>
+                            )}
+                            {isChecked && (
+                                <IoCheckmarkCircleSharp className={styles.checkmark} />
                             )}
                             {isInterest && (
-                                <>
-                                    <div className={styles.infoButton} onClick={e => e.stopPropagation()}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
-                                        </svg>
-                                    </div>
+                                <div className={styles.infoButton} onClick={(e) => e.stopPropagation()}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                                    </svg>
                                     <div className={styles.interestInfo}>
                                         <h4>This category includes:</h4>
                                         <ul>
@@ -171,10 +194,10 @@ export default function UserInterestSelectionComponent({
                                             ))}
                                         </ul>
                                     </div>
-                                </>
+                                </div>
                             )}
-                            {isOthers && isChecked && (
-                                <div onClick={e => e.stopPropagation()}>
+                            {/* {isOthers && isChecked && !isInterest && (
+                                <div onClick={(e) => e.stopPropagation()}>
                                     <TagsInput
                                         value={otherItems}
                                         onBlur={(e: any) => {
@@ -189,13 +212,13 @@ export default function UserInterestSelectionComponent({
                                         separators={[","]}
                                     />
                                 </div>
-                            )}
+                            )} */}
                         </div>
                     );
                 })}
             </div>
         ),
-        [handleChange, interestGroups, otherInterest, otherEndgoal]
+        [handleChange, interestGroups]
     );
 
     return (

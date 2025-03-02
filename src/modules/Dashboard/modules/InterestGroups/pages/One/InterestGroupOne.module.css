@@ -277,6 +277,8 @@
 }
 
 .officeHoursCard {
+  margin-top: 30px;
+
   background-color: #456ff6;
   color: #f7f7f7;
   border-radius: 8px;
@@ -284,7 +286,7 @@
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
-  width: 100%;
+  width: 90%;
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -375,10 +377,10 @@
 .sidebarSection {
   background-color: #fff;
   border-radius: 12px;
-  padding: clamp(8px, 2vw, 16px);
+  /* padding: clamp(8px, 2vw, 16px); */
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   position: static;
-  width: 100%;
+  width: 90%;
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -399,9 +401,61 @@
   word-wrap: break-word;
 }
 
+/* Position the aside from the right side of the viewport as an overlay */
+.asideDetails {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Start off-screen to the right */
+  width: 300px; /* Adjust width as needed */
+  height: 100vh;
+  background: white;
+  z-index: 1000;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.asideDetails.open {
+  right: 0; /* Slide in to be visible on the right side of the viewport */
+}
+
+/* Optional: Style the close button */
+.asideDetails .closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 16px);
+  background-color: #456ff6;
+  color: white;
+  border: none;
+  border-radius: clamp(4px, 0.5vw, 6px);
+  font-size: clamp(0.75rem, 1vw, 0.85rem);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.asideDetails .closeButton:hover {
+  background-color: #3458d6;
+  transform: scale(1.02);
+}
+
+/* Ensure the aside adapts to smaller screens */
+@media screen and (max-width: 768px) {
+  .asideDetails {
+    width: 100%; /* Full width on mobile */
+    right: -100%; /* Start fully off-screen on mobile */
+  }
+
+  .asideDetails.open {
+    right: 0; /* Slide in fully on mobile */
+  }
+}
+
 .sidebarList {
   display: flex;
   flex-direction: column;
+  
   gap: clamp(4px, 1vw, 16px);
   width: 100%;
   overflow-x: hidden;
@@ -427,11 +481,14 @@
 }
 
 .communityIcon {
-  width: clamp(24px, 5vw, 40px);
-  height: clamp(24px, 5vw, 40px);
-  object-fit: cover;
+  /* width: clamp(24px, 5vw, 40px);
+  height: clamp(24px, 5vw, 40px); */
+  object-fit: contain;
   border-radius: 8px;
-  max-width: 100%;
+  /* max-width: 100%; */
+  width: 200px !important;
+  height: 50px !important;
+
   overflow-x: hidden;
 }
 

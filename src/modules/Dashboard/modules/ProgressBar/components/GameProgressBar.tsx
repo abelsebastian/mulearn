@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Flame, Star, Zap } from "lucide-react";
 import style from "./GameProgressBar.module.css";
 import karmaIcon from "../assets/karma-icon.png"
+import { Img } from "@chakra-ui/react";
 
 interface Level {
   tasks?: { completed: boolean; karma?: number }[];
@@ -70,15 +71,16 @@ export default function GameProgressBar({ levelData = [] }: { levelData: Level[]
   const icon = icons[Math.min(displayLevel, 3)] || icons[1];
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex items-center  h-9 mx-auto px-4 relative">
         <motion.div
-          className={`${style.iconContainer} w-8 h-8 md:w-12 md:h-12 flex items-center justify-center ring-2 ring-white rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700`}
+          className={`${style.iconContainer} w-8 h-8 md:w-12 md:h-12 !flex !items-center !justify-center ring-2 ring-white rounded-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700`}
        
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           aria-hidden="true"
         >
-          <img src={karmaIcon} className="w-6 h-6"/>
+          <Img src={karmaIcon} className="w-6 h-6 !m-0"  />
+          {/* <p className="text-white text-2xl text-center font-bold m-0">µ</p> */}
         </motion.div>
 
         <div className="flex flex-col flex-grow items-start justify-center !z-0">
