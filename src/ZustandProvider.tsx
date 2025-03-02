@@ -14,6 +14,7 @@ export interface KarmaDistribution {
 
 export interface UserProfile {
   full_name: string;
+  first_name: string,
   college_code: string;
   college_id: string;
   org_district_id: string;
@@ -42,6 +43,7 @@ interface UserStore {
 export const useUserStore = create<UserStore>((set) => ({
   userProfile: {
     full_name: "",
+    first_name: "",
     college_code: "",
     college_id: "",
     org_district_id: "",
@@ -68,6 +70,7 @@ export const useUserStore = create<UserStore>((set) => ({
     set({
       userProfile: {
         full_name: "",
+        first_name: "",
         college_code: "",
         college_id: "",
         org_district_id: "",

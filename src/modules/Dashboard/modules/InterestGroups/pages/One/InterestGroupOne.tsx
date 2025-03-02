@@ -41,7 +41,7 @@ const CommunityForum = () => {
                 loading="lazy"
               />
               <div className={styles.bannerOverlay}>
-                <div className={styles.bannerLogo}>{groupData.title.slice(0, 3).toUpperCase()}</div>
+                <div className={styles.bannerLogo}>{groupData.title.slice(0, 6).toUpperCase()}</div>
                 <div className={styles.bannerMemberInfo}>Member since {groupData.memberSince}</div>
               </div>
               {/* <button className={styles.bellButton} aria-label="Notifications">
@@ -52,13 +52,13 @@ const CommunityForum = () => {
             <div className={styles.communityInfo}>
               <h1 className={styles.forumTitle}>{groupData.title}</h1>
               <div className={styles.forumSubInfo}>
-                <span><span>•</span>{groupData.isPublic ? "Public" : "Private"} Community</span>
+                {/* <span><span></span>{groupData.isPublic ? "Public" : "Private"} Community</span> */}
               
-                <span><span>•</span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
+                <span><span></span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
                 
-                <span> <span>•</span>Office Hours: {groupData.officeHours}</span>
+                <span> <span>• </span>Office Hours: {groupData.officeHours}</span>
                
-                <span> <span>•</span>Think Tank Meeting: {groupData.thinkTankMeeting}</span>
+                {/* <span> <span>•</span>Think Tank Meeting: {groupData.thinkTankMeeting}</span> */}
               </div>
             </div>
 

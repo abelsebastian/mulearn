@@ -23,6 +23,7 @@ import ModeSwitchModal from "../modules/Dashboard/Components/ModeSwitchModal";
 import { selectDomainCategory } from "../modules/Dashboard/Api/ModeSwitchApi";
 import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
+import { useUserStore } from "/src/ZustandProvider";
 
 // Define UserInfo interface if not already defined elsewhere
 interface UserInfo {
@@ -63,7 +64,9 @@ const TopNavBar = () => {
         }
     }, []);
 
-    const name = userInfo?.full_name?.split(" ")[0] || "";
+    const userName = useUserStore((state) => state.userProfile.first_name);
+    const data = useUserStore((state) => state.userProfile);
+    console.log(data,'data')
     const profilePic = userInfo?.profile_pic || null;
 
     useEffect(() => {
@@ -136,7 +139,7 @@ const TopNavBar = () => {
             <div id="top_nav" className={styles.top_nav}>
                 <div className={styles.nav}>
                     <div className={styles.nav_items}>
-                        <b className={styles.greetings}><i>Hello</i>, <b>{name}</b> 👋</b>
+                        <b className={styles.greetings}><i>Hello</i>, <b>{userName}</b> 👋</b>
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
                             <div className={styles.modeContainer}>

@@ -88,7 +88,7 @@
   background-color: #3b82f6;
   border-radius: 16px;
   color: #fff;
-  font-size: clamp(0.875rem, 2vw, 1.5rem);
+  font-size: clamp(0.4rem, 0.5vw, 0.9rem);
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -280,13 +280,15 @@
   background-color: #456ff6;
   color: #f7f7f7;
   border-radius: 8px;
-  padding: clamp(8px, 2vw, 16px);
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+  width: 90%;
+  max-width: 90%;
+  /* overflow-x: hidden; */
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  margin-right: 1rem;
 }
 
 .officeHoursCard:hover {
@@ -295,17 +297,19 @@
 
 .officeHoursCard h3 {
   font-size: clamp(0.625rem, 1.5vw, 0.85rem);
+  margin-bottom: 0.7rem;
 }
 
 .officeHoursCardTiming {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: clamp(4px, 1vw, 16px);
+  /* margin-top: clamp(4px, 1vw, 16px); */
   flex-wrap: wrap;
   gap: clamp(4px, 1vw, 16px);
   width: 100%;
   overflow-x: hidden;
+  /* margin-bottom: 2rem; */
 }
 
 .officeHoursCardTiming p {
@@ -320,7 +324,7 @@
   padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 16px);
   border-radius: 4px;
   cursor: pointer;
-  margin-top: clamp(4px, 1vw, 16px);
+  /* margin-top: clamp(4px, 1vw, 16px); */
   font-size: clamp(0.625rem, 1.5vw, 0.8rem);
   transition: background-color 0.3s ease, transform 0.3s ease;
   width: auto;
@@ -516,7 +520,7 @@
 
 @media screen and (min-width: 1200px) {
   .bannerLogo {
-    font-size: clamp(1.5rem, 2vw, 1.75rem);
+    font-size: clamp(0.9rem, 0.8vw, 0.9rem);
   }
 
   .forumSubInfo {

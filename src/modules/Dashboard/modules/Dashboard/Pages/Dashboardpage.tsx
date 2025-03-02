@@ -7,6 +7,7 @@ import LearningCirclesSection from "../Components/LearningCirclesSection";
 import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
+import { useUserStore } from "/src/ZustandProvider";
 
 // Move static data outside component to prevent recreation
 const DOMAIN_IMAGES = {
@@ -124,7 +125,8 @@ interface ApiInterestGroup {
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
-  const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
+//   const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
+  const userName = useUserStore((state) => state.userProfile.first_name);
   const [karmaFeed, setKarmaFeed] = useState<KarmaFeedItem[]>([]);
   const userDomains: string[] =
     fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];

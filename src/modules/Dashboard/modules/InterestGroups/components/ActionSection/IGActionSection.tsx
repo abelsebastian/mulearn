@@ -44,7 +44,6 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
             <p>Explore our resources here: <a className='!text-blue-600 cursor-pointer' onClick={() => navigate(data.tabs.about.foundationDeck)}>foundation deck</a></p>
             <div className="flex flex-col justify-center items-start gap-4 flex-wrap">
               <div>
-
                 <h3>Prerequisites</h3>
                 <ul className={styles.prerequisitesList}>
                   {data.prerequisites.map((prerequisite, index) => (
@@ -55,8 +54,7 @@ const IGActionSection = ({ data }: { data: InterestGroupData }) => {
                 </ul>
               </div>
               <h3>Opportunities</h3>
-              <div className="flex flex-wrap">
-
+              <div className="flex flex-wrap justify-between">
                 {data.tabs.about.opportunities.map((opportunity) => (
                   <div key={opportunity.title} className={styles.careerPath}>
                     <h4>{opportunity.title}</h4>
