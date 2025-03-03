@@ -64,6 +64,24 @@ import ComingSoonPage from "./modules/Common/Authentication/pages/ComingSoon";
 import MuLearnLanding from "./modules/Dashboard/modules/landing/pages/LandingPage";
 import CoursesMainPage from "./modules/Dashboard/modules/Courses/Pages/CoursesMainPage";
 import ManagementPage from "./modules/Dashboard/modules/Management/Pages/ManagementPage";
+import ManageUsersPage from "./modules/Dashboard/modules/ManageUsers/ManageUsers";
+import UserRoleVerificationPage from "./modules/Dashboard/modules/UserRoleVerification/UserRoleVerification";
+import AffiliationPage from "./modules/Dashboard/modules/Affiliation/Pages/Affiliation";
+import OrganizationTransferPage from "./modules/Dashboard/modules/OrganizationTransfer/components/organizationTransfer";
+import ManageDepartmentsPage from "./modules/Dashboard/modules/Departments/Departments";
+import OrganizationsPage from "./modules/Dashboard/modules/Organizations/Organizations";
+import LCMeetupVerificationPage from "./modules/Dashboard/modules/LearningCircle/pages/Meetup/LcMeetup";
+import VerifyOrganizationsPage from "./modules/Dashboard/modules/VerifyOrganizations/VerifyOrganizations";
+import CollegeLevelsPage from "./modules/Dashboard/modules/CollegeLevels/CollegeLevels";
+import KarmaVoucherPage from "./modules/Dashboard/modules/KarmaVoucher/KarmaVoucher";
+import ErrorLogPage from "./modules/Dashboard/modules/ErrorLog/ErrorLog";
+import DynamicTypePage from "./modules/Dashboard/modules/DynamicType/DynamicType";
+import ManageRolesPage from "./modules/Dashboard/modules/ManageRoles/ManageRoles";
+import ManageLocationsPage from "./modules/Dashboard/modules/ManageLocation/ManageLocation";
+import ChannelsPage from "./modules/Dashboard/modules/Channels/Pages/Channels";
+import URLShortenerPage from "./modules/Dashboard/modules/UrlShortener/Pages/UrlShortener";
+import DiscordModerationPage from "./modules/Dashboard/modules/DiscordModeration/DiscordModeration";
+
 import MentorSearchPage from "./modules/Dashboard/modules/Mentors/Pages/MentorPage";
 import InterestGroupsPage from "./modules/Dashboard/modules/InterestGroups/pages/InterestGroupsPage";
 import InterestGroupOne from "./modules/Dashboard/modules/InterestGroups/pages/One/InterestGroupOne";
@@ -428,6 +446,28 @@ function App() {
                         { path: "muverse", element: <ComingSoonPage /> },
                         { path: "interestgroups", element: <ComingSoonPage /> },
                         { path: "management", element: <ManagementPage /> },
+                        { path: "management/user-management/manage-users", element: <ManageUsersPage /> },
+                        { path: "management/user-management/user-role-verification", element: <UserRoleVerificationPage /> },
+                        { path: "management/organization/affiliation", element: <AffiliationPage /> },
+                        { path: "management/organization/organization-transfer", element: <OrganizationTransferPage /> },
+                        { path: "management/organization/manage-departments", element: <ManageDepartmentsPage /> },
+                        { path: "management/organization/organizations", element: <OrganizationsPage /> },
+                        // { path: "management/task-management", element: <TaskManagementPage /> },
+                        // { path: "management/task-management/tasks", element: <TasksPage /> },
+                        // { path: "management/task-management/task-type", element: <TaskTypePage /> },
+                        // { path: "management/task-management/events", element: <EventsPage /> },
+                        { path: "management/interest-groups", element: <InterestGroupsPage /> },
+                        { path: "management/lc-meetup-verification", element: <LCMeetupVerificationPage /> },
+                        { path: "management/verify-organizations", element: <VerifyOrganizationsPage /> },
+                        { path: "management/college-levels", element: <CollegeLevelsPage /> },
+                        { path: "management/karma-voucher", element: <KarmaVoucherPage /> },
+                        { path: "management/error-log", element: <ErrorLogPage /> },
+                        { path: "management/dynamic-type", element: <DynamicTypePage /> },
+                        { path: "management/manage-roles", element: <ManageRolesPage /> },
+                        { path: "management/manage-locations", element: <ManageLocationsPage /> },
+                        { path: "management/channels", element: <ChannelsPage /> },
+                        { path: "management/url-shortener", element: <URLShortenerPage /> },
+                        { path: "management/discord-moderation", element: <DiscordModerationPage /> },
                         {
                             path: "connect-discord",
                             element: <ConnectDiscord />
@@ -556,6 +596,9 @@ function App() {
                                 />
                             )
                         },
+
+
+
                         {
                             path: "district-dashboard",
                             element: (
