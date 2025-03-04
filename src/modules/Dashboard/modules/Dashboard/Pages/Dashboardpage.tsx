@@ -222,7 +222,7 @@ const DashboardPage = () => {
                 Welcome back <span>{userName}</span> 👋
               </h1>
               <p className={styles.welcomeMessage}>
-                This version of the dashboard is currently under development. We appreciate your patience and apologize for any inconvenience. Stay tuned for updates
+              This dashboard is being updated. Expect improvements and possible bugs. Thanks for your patience!
               </p>
               <div className={styles.buttons}>
                 <button
