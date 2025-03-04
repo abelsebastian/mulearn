@@ -3,7 +3,7 @@ import { Search, Users, ChevronLeft, ChevronRight, Users2 } from 'lucide-react';
 import styles from './InterestGroupsPage.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
-import { getInterestGroups } from '../../InterestGroup/apis';
+import { getInterestGroups, getInterestGroupsList } from '../../InterestGroup/apis';
 import MuLoader from '@/MuLearnComponents/MuLoader/MuLoader';
 import {InterestGroupData, interestGroups} from "../data/interestGroups"; 
 
@@ -42,9 +42,10 @@ function InterestGroupsPage() {
   ];
 
 
+  // const response = await publicGateway.get(onboardingRoutes.interestGroups);
   useEffect(() => {
     if (firstFetch.current) {
-      getInterestGroups(
+      getInterestGroupsList(
         setData,
         1,
         perPage,
@@ -60,7 +61,6 @@ function InterestGroupsPage() {
   // useEffect(() => {
   //   setData(interestGroups);
   // }, [interestGroups]);
-
 
   const mappedData:InterestGroupData[] = interestGroups.filter(e => 
     data.some(d => d.id === e.id)

@@ -594,7 +594,7 @@ export const interestGroups: InterestGroupData[] = [
     memberCount: 4200,
     memberSince: "March 2021",
     isPublic: true,
-    officeHours: "Wednesday 9:00 PM @ Discord Lobby",
+    officeHours: "Wednesday 9:00 PM",
     thinkTankMeeting: "Friday 7:00 PM @ Google Meet",
     interestGroupLeads: {
       description:
@@ -1083,7 +1083,7 @@ export const interestGroups: InterestGroupData[] = [
     memberCount: 3000,
     memberSince: "September 2020",
     isPublic: true,
-    officeHours: "Monday 7:30 PM @ Discord Lobby",
+    officeHours: "Monday 7:30 PM",
     thinkTankMeeting: "First Wednesday 7:00 PM @ Google Meet",
     interestGroupLeads: {
       description:
@@ -1577,7 +1577,7 @@ export const interestGroups: InterestGroupData[] = [
     memberCount: 2500,
     memberSince: "January 2022",
     isPublic: true,
-    officeHours: "Friday 8:30 @ Discord Lobby",
+    officeHours: "Friday 8:30",
     thinkTankMeeting: "2nd Saturday 8:30 PM @ Google Meet",
     interestGroupLeads: {
       description:
@@ -4356,7 +4356,7 @@ QA
 //   memberCount: 25000,
 //   memberSince: "January 2022",
 //   isPublic: true,
-//   officeHours: "Thursday 9:00 PM @ Discord Lobby", // Updated from markdown
+//   officeHours: "Thursday 9:00 PM", // Updated from markdown
 //   thinkTankMeeting: "2nd Wednesday 8:30 PM @ Google Meet", // Updated from markdown
 //   interestGroupLeads: {
 //     description:
