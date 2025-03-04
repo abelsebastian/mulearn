@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { getInterestGroups } from '../../InterestGroup/apis';
 import MuLoader from '@/MuLearnComponents/MuLoader/MuLoader';
-import {interestGroups} from "../data/interestGroups"; 
+import {InterestGroupData, interestGroups} from "../data/interestGroups"; 
 
 function InterestGroupsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,31 +42,34 @@ function InterestGroupsPage() {
   ];
 
 
-  // useEffect(() => {
-  //   if (firstFetch.current) {
-  //     getInterestGroups(
-  //       setData,
-  //       1,
-  //       perPage,
-  //       setIsLoading,
-  //       setTotalPages,
-  //       "",
-  //       ""
-  //     );
-  //   }
-  //   firstFetch.current = false;
-  // }, []);
-
   useEffect(() => {
-    setData(interestGroups);
-  }, [interestGroups]);
+    if (firstFetch.current) {
+      getInterestGroups(
+        setData,
+        1,
+        perPage,
+        setIsLoading,
+        setTotalPages,
+        "",
+        ""
+      );
+    }
+    firstFetch.current = false;
+  }, []);
 
-  console.log(data);
+  // useEffect(() => {
+  //   setData(interestGroups);
+  // }, [interestGroups]);
+
+
+  const mappedData:InterestGroupData[] = interestGroups.filter(e => 
+    data.some(d => d.id === e.id)
+  );
 
 
   // Filter groups based on search and category
-  const filteredGroups = data.filter(group => {
-    const matchesSearch = group.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredGroups = mappedData.filter(group => {
+    const matchesSearch = group.title?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || group.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });

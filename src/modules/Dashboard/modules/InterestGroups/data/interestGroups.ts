@@ -63,6 +63,9 @@ export interface InterestGroupData {
   id: string;
   title: string;
   description: string;
+  category?: string
+  image?: string
+  members?: string
   bannerImage: string;
   memberCount: number;
   memberSince: string;
