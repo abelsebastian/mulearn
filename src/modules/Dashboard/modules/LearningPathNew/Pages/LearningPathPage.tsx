@@ -200,6 +200,7 @@ const InterestGroupCard: React.FC<InterestGroupCardProps> = ({ data, onClickCTA 
 };
 
 const LearningPathPage: React.FC = () => {
+ 
   const dataSource = levelsData;
 
   const [activeTab, setActiveTab] = useState<"startLearning" | "becomeExpert">("startLearning");
@@ -213,6 +214,8 @@ const LearningPathPage: React.FC = () => {
     left: 0,
     width: 0,
   });
+
+
 
   useEffect(() => {
     const activeElement = tabRefs.current[activeTab];

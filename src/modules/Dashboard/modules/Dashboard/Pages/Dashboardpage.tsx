@@ -125,7 +125,7 @@ interface ApiInterestGroup {
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
-//   const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
+  //   const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
   const userName = useUserStore((state) => state.userProfile.first_name);
   const [karmaFeed, setKarmaFeed] = useState<KarmaFeedItem[]>([]);
   const userDomains: string[] =
@@ -172,7 +172,7 @@ const DashboardPage = () => {
           console.error("Failed to fetch karma feed");
           return;
         }
-        console.log("Karma feed fetched successfully");
+        // console.log("Karma feed fetched successfully");
         setKarmaFeed(response);
         console.log(response)
       } catch (error) {
@@ -182,7 +182,7 @@ const DashboardPage = () => {
     fetchKarmaFeed()
   }, []);
 
-  
+
 
 
 
@@ -222,8 +222,7 @@ const DashboardPage = () => {
                 Welcome back <span>{userName}</span> 👋
               </h1>
               <p className={styles.welcomeMessage}>
-                You have grown 240% from past week, Keep it up and improve your
-                progress
+                This version of the dashboard is currently under development. We appreciate your patience and apologize for any inconvenience. Stay tuned for updates
               </p>
               <div className={styles.buttons}>
                 <button
@@ -240,6 +239,14 @@ const DashboardPage = () => {
                 >
                   Join Learning
                 </button>
+                <button
+                  className={styles.button2}
+                  onClick={() => window.open("https://api.whatsapp.com/send?phone=+919188684115&text=Hello,%20I%20want%20to%20report%20a%20bug.", "_blank")}
+                  aria-label="Report Issues"
+                >
+                  Report Issues
+                </button>
+
               </div>
             </div>
             <div>
@@ -262,10 +269,10 @@ const DashboardPage = () => {
             </div>
           </section>
           {karmaFeed.length > 1 && karmaFeed[0].user && karmaFeed[1].user && (
-          <KarmaEarners
-            highestStudent={karmaFeed[0]}
-            highestCollege={karmaFeed[1]}
-          />)}
+            <KarmaEarners
+              highestStudent={karmaFeed[0]}
+              highestCollege={karmaFeed[1]}
+            />)}
           <InterestGroups title={userDomains[0]} groups={interestGroups} />
         </aside>
       </div>

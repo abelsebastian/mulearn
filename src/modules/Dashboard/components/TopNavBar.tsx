@@ -25,14 +25,12 @@ import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
 import { useUserStore } from "/src/ZustandProvider";
 
-// Define UserInfo interface if not already defined elsewhere
-interface UserInfo {
-    full_name?: string;
-    profile_pic?: string;
-    user_domains?: string[];
+
+interface TopNavBarProps {
+    setUserInfo: (userInfo: UserInfo) => void;
 }
 
-const TopNavBar = () => {
+const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
@@ -40,36 +38,38 @@ const TopNavBar = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+    const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null); 
+
+    const userName = useUserStore((state) => state.userProfile.first_name);
+    const data = useUserStore((state) => state.userProfile);
+    const profilePic = userInfo?.profile_pic || null;
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
                 const response = await privateGateway.get(dashboardRoutes.getInfo);
-                const fetchedUserInfo = response.data.response; 
+                const fetchedUserInfo = response.data.response;
+                setLocalUserInfo(fetchedUserInfo);
                 setUserInfo(fetchedUserInfo);
                 localStorage.setItem("userInfo", JSON.stringify(fetchedUserInfo));
             } catch (err) {
                 console.error("Failed to fetch user info:", err);
                 const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
-                if (storedUserInfo) setUserInfo(storedUserInfo);
+                if (storedUserInfo) {
+                    setLocalUserInfo(storedUserInfo);
+                    setUserInfo(storedUserInfo); 
+                }
             }
         };
 
         const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
         if (storedUserInfo) {
+            setLocalUserInfo(storedUserInfo);
             setUserInfo(storedUserInfo);
         } else {
             fetchUserInfo();
         }
-    }, []);
-
-    //@ts-ignore
-    const userName = useUserStore((state) => state.userProfile.first_name);
-    //@ts-ignore
-    const data = useUserStore((state) => state.userProfile);
-    console.log(data,'data')
-    const profilePic = userInfo?.profile_pic || null;
+    }, [setUserInfo]);
 
     useEffect(() => {
         const fetchLevelData = async () => {
@@ -89,8 +89,6 @@ const TopNavBar = () => {
         };
         fetchLevelData();
     }, [id]);
-
-
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         const div = document.getElementById("user_settings");
@@ -121,11 +119,11 @@ const TopNavBar = () => {
             selectDomainCategory({ domains: [data] });
     
             const response = await privateGateway.get(dashboardRoutes.getInfo);
-            const updatedUserInfo = response.data.response; 
+            const updatedUserInfo = response.data.response;
     
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
-            
-            setUserInfo(updatedUserInfo);
+            setLocalUserInfo(updatedUserInfo);
+            setUserInfo(updatedUserInfo); // Update store with new user info
     
             toast.success("Domain updated successfully!");
         } catch (error) {
@@ -152,10 +150,10 @@ const TopNavBar = () => {
                                 >
                                     {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                 </span>
-                                {/* <span className={styles.userDomain} onClick={() => setSwitchDomainModal(true)}>{//@ts-ignore 
-                                userInfo?.user_domains?.[0]?.toUpperCase() || ''}</span> */}
                             </div>
-                            <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
+                            {/* <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}> */}
+                            <div >
+
                                 <GameProgressBar levelData={userLevelData} />
                             </div>
                             {refreshToken && (

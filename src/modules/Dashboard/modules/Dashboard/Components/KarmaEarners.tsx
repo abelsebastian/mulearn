@@ -25,9 +25,8 @@ const KarmaEarners: React.FC<KarmaEarnersProps> = ({
         <div className={`${styles.earnerItem} ${styles.studentCard}`}>
           <div className={styles.earnerTitle}>Highest Karma Earner (Student)</div>
           <div className={styles.earnerDetails}>
-            <span className={styles.earnerName}>AwinDas R</span>
-            <span className={styles.earnerName}>awindasr@mulearn</span>
-
+            <span className={styles.earnerName}>{highestStudent.user}</span>
+            <span className={styles.earnerName}>{highestCollege.user}</span>
             <span className={styles.currentKarma}>{highestStudent.karma}</span>
            
           </div>

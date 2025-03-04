@@ -55,7 +55,7 @@ export default function PathFinderComponent({
         if (currentQuestionIndex + 1 < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-            console.log("getRecommendedPathways", getRecommendedPathways());
+            // console.log("getRecommendedPathways", getRecommendedPathways());
             onContinue(getRecommendedPathways());
         }
     };

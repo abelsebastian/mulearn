@@ -84,7 +84,7 @@ export async function getKarmaFeed(): Promise<KarmaFeedItem[]> {
             ];
             return karmaFeed;
         }
-        console.log("No valid karma feed found in response");
+        // console.log("No valid karma feed found in response");
         return [];
     } catch (error) {
         console.error("Failed to fetch karma feed:", error);

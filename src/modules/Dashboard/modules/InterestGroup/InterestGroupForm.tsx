@@ -90,7 +90,7 @@ const IntrestGroupForm = forwardRef(
             // }
 
             if (isValid) {
-                console.log(updatedData);
+                // console.log(updatedData);
                 if (props.isEditMode) {
                     toast.promise(editInterestGroups(props.id, updatedData), {
                         loading: "Saving...",

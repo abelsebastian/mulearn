@@ -49,7 +49,7 @@
 /* Lock styling: gray out and disable interaction */
 .locked {
   opacity: 0.5;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .lockedCard {
