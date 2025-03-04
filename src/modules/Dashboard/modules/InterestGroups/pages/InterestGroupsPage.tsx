@@ -37,9 +37,6 @@ function InterestGroupsPage() {
     "/assets/IG/gamedev.webp",
     "/assets/IG/cloud.webp",
     "/assets/IG/productmanagement.webp",
-
-
-
   ];
 
 
@@ -156,7 +153,7 @@ function InterestGroupsPage() {
                   const randomImageUrl = imageUrls[randomIndex];
                   return (
                     <img
-                      src={group.title === "UI/UX Design" ? imageUrls[0] : group.title === "Web Development" ? imageUrls[1] : group.title === "Cybersecurity" ? imageUrls[2] : group.title === "Digital Marketing" ? imageUrls[3] : group.title === "Game Development" ? imageUrls[4] : group.title === "Cloud Computing" ? imageUrls[5] : imageUrls[6]}
+                      src={group.title === "UI/UX Interest Group" ? imageUrls[0] : group.title === "Web Development" ? imageUrls[1] : group.title === "Cybersecurity" ? imageUrls[2] : group.title === "Digital Marketing" ? imageUrls[3] : group.title === "Game Development" ? imageUrls[4] : group.title === "Cloud and DevOps" ? imageUrls[5] : imageUrls[6]}
                       alt="Random"
                       className={styles.GroupImage}
                     />
