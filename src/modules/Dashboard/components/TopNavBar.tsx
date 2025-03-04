@@ -162,6 +162,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                         onClick={() => setUserSettings(!userSettings)}
                                         src={profilePic || dpm}
                                         alt=""
+                                        style={{marginBottom: '0'}}
                                     />
                                 </div>
                             )}

@@ -101,7 +101,7 @@
   position: relative;
   display: flex;
   justify-content: center;
-  gap: 16px;
+  /* gap: 16px; */
   background-color: #ffffff;
   margin-bottom: 24px;
   width: fit-content;

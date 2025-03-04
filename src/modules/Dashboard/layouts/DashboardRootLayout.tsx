@@ -156,21 +156,20 @@ const DashboardRootLayout = (props: { component?: any }) => {
             roles: [roles.CAMPUS_LEAD, roles.LEAD_ENABLER, roles.ADMIN],
             icon: <i className="fi fi-sr-book-arrow-right"></i>
         },
-        
-        {
-            url: "/dashboard/zonal-dashboard",
-            title: "Zonal Dashboard",
-            hasView: true,
-            roles: [roles.ZONAL_CAMPUS_LEAD, roles.ADMIN],
-            icon: <i className="fi fi-sr-marker"></i>
-        },
-        {
-            url: "/dashboard/district-dashboard",
-            title: "District Dashboard",
-            hasView: true,
-            roles: [roles.DISTRICT_CAMPUS_LEAD, roles.ADMIN],
-            icon: <i className="fi fi-sr-map-marker"></i>
-        }
+        // {
+        //     url: "/dashboard/zonal-dashboard",
+        //     title: "Zonal Dashboard",
+        //     hasView: true,
+        //     roles: [roles.ZONAL_CAMPUS_LEAD, roles.ADMIN],
+        //     icon: <i className="fi fi-sr-marker"></i>
+        // },
+        // {
+        //     url: "/dashboard/district-dashboard",
+        //     title: "District Dashboard",
+        //     hasView: true,
+        //     roles: [roles.DISTRICT_CAMPUS_LEAD, roles.ADMIN],
+        //     icon: <i className="fi fi-sr-map-marker"></i>
+        // }
     ];
 
     if (isLoading) {
