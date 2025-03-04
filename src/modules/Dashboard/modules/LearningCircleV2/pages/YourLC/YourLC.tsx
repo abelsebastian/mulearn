@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { BiChevronRight } from "react-icons/bi";
 import { convertDateToDayAndMonthAndYear } from "../../../../utils/common";
 import { FiChevronLeft } from "react-icons/fi";
+import { CircleMeetupInfo, LearningCircleInfoBasic } from "../../services/LearningCircleInterface";
 
 export default function YourLC() {
     const [createdLearningCirlces, setCreatedLearningCirlces] = useState<

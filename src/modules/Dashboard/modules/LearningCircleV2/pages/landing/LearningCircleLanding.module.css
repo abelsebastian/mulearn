@@ -6,7 +6,7 @@
 .FindCircleContent,
 .LearningCircleCreateContent {
     width: 100%;
-    padding: 1rem 3rem;
+    /* padding: 1rem 3rem; */
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -17,6 +17,56 @@
 
 ! Learning Circle Landing Page
 */
+
+.eventDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #1a1a1a;
+}
+
+.eventDetails h3{
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.urlContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.joiningUrl {
+    color: #007bff;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.joiningUrlSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.joiningUrl{
+    color: #1a1a1a;
+}
+
+.copyButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copyButton:hover {
+    background-color: #0056b3;
+}
 
 .learningCircleLandingPage .headContent {
     display: flex;

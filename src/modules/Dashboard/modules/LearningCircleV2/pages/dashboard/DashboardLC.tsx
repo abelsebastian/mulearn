@@ -12,6 +12,7 @@ import { PowerfulButton } from "@/MuLearnComponents/MuButtons/MuButton";
 import { BiChevronRight, BiCopy, BiEdit } from "react-icons/bi";
 import { FiChevronLeft } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { LCMeetup, LearningCircleInfo } from "../../services/LearningCircleInterface";
 
 export default function DashboardLC() {
     const [circleInfo, setCircleInfo] = useState<LearningCircleInfo | null>(
@@ -173,7 +174,7 @@ export default function DashboardLC() {
                     <div className={styles.pastMeets}>
                         <h1>Your Past Meetups</h1>
                         <div className={styles.meetups}>
-                            {circleInfo.past_meetups.map((meetup, index) => (
+                            {circleInfo.past_meetups.map((meetup: LCMeetup, index: number) => (
                                 <div
                                     className={styles.meetup}
                                     key={meetup.id}

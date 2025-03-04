@@ -14,6 +14,7 @@ import { BiInfoCircle } from "react-icons/bi";
 import imageTop from "../../assets/images/LC2.webp";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { LearningCircleCreate } from "../../services/LearningCircleInterface";
 
 type interestGroupType = {
     value: string;

@@ -5,7 +5,6 @@ import { FormikTextInputWithoutLabel as SimpleInput } from "@/MuLearnComponents/
 import { Input, InputGroup, Switch, Tooltip } from "@chakra-ui/react";
 import {
     BiInfoCircle,
-    BiLeftArrow,
     BiRightArrow,
     BiSearch
 } from "react-icons/bi";
@@ -17,6 +16,7 @@ import {
 } from "../../services/LearningCircleAPIs";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import { LCMeetCreate, MapResult } from "../../services/LearningCircleInterface";
 
 export default function CreateLCMeetup() {
     const [isLoading, setIsLoading] = useState(false);
@@ -48,34 +48,37 @@ export default function CreateLCMeetup() {
         date: date(),
         duration: 3
     };
-    const onSubmit = (values: any) => {
-        if (!selectedLocation) {
-            toast.error("Please select a location for the meetup");
-            return;
-        }
-        setIsLoading(true);
-        const date = new Date(values.date);
-        const meetupData: LCMeetCreate = {
-            circle_id: params.circle_id ?? "",
-            title: values.title,
-            is_report_needed: values.is_proof_required,
-            report_description: values.proof_description,
-            meet_place: selectedLocation.name,
-            coord_x: selectedLocation.lat,
-            coord_y: selectedLocation.lon,
-            meet_time: date.toISOString(),
-            duration: values.duration
-        };
+    // const onSubmit = (values: any) => {
+    //     if (!selectedLocation) {
+    //         toast.error("Please select a location for the meetup");
+    //         return;
+    //     }
+    //     setIsLoading(true);
+    //     const date = new Date(values.date);
+    //     const meetupData: LCMeetCreate = {
+    //         circle_id: params.circle_id ?? "",
+    //         title: values.title,
+    //         is_report_needed: values.is_proof_required,
+    //         report_description: values.proof_description,
+    //         meet_place: selectedLocation.name,
+    //         coord_x: selectedLocation.lat,
+    //         coord_y: selectedLocation.lon,
+    //         meet_time: date.toISOString(),
+    //         duration: values.duration,
+    //         description: values., 
+    //         meet_link, 
+    //         mode
+    //     };
 
-        scheduleMeetup(meetupData).then(status => {
-            setIsLoading(false);
-            if (status) {
-                navigate(
-                    `/dashboard/learningcircle/dashboard/${params.circle_id}`
-                );
-            }
-        });
-    };
+    //     scheduleMeetup(meetupData).then(status => {
+    //         setIsLoading(false);
+    //         if (status) {
+    //             navigate(
+    //                 `/dashboard/learningcircle/dashboard/${params.circle_id}`
+    //             );
+    //         }
+    //     });
+    // };
     const handleLocationSearch = (location: string) => {
         setLocationLoading(true);
         searchCoordinates(location).then(data => {
@@ -87,11 +90,10 @@ export default function CreateLCMeetup() {
     return (
         <div className={styles.createLCMeetup}>
             <h1>Schedule your next meet</h1>
-            <Formik initialValues={initialValues} onSubmit={onSubmit}>
+            {/* <Formik initialValues={initialValues} onSubmit={onSubmit}>
                 {formik => (
                     <Form className={styles.form}>
                         <div className={styles.formGroup}>
-                            {/* <label htmlFor="title">Title</label> */}
                             <SimpleInput
                                 name="title"
                                 required
@@ -126,9 +128,6 @@ export default function CreateLCMeetup() {
                         </div>
                         {formik.values.is_proof_required ? (
                             <div className={styles.formGroup}>
-                                {/* <label htmlFor="proof_description">
-                                Proof description
-                            </label> */}
                                 <textarea
                                     required={formik.values.is_proof_required}
                                     maxLength={1000}
@@ -254,7 +253,7 @@ export default function CreateLCMeetup() {
                         </PowerfulButton>
                     </Form>
                 )}
-            </Formik>
+            </Formik> */}
         </div>
     );
 }

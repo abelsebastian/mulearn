@@ -14,6 +14,7 @@ interface LearningCircleCreate {
 
 interface LCMeetCreate {
     circle_id: string;
+    description: string;
     coord_x: number;
     coord_y: number;
     meet_time: string;
@@ -22,6 +23,8 @@ interface LCMeetCreate {
     is_report_needed: boolean;
     report_description: string;
     meet_place: string;
+    meet_link: string;
+    mode: string
 }
 
 interface LCMeetup {
@@ -61,7 +64,7 @@ interface LearningCircleInfoBasic {
     next_meetup: LCMeetup;
 }
 
-interface CircleMeetupInfo {
+export interface CircleMeetupInfo {
     id: string;
     title: string;
     is_report_needed: boolean;
@@ -74,8 +77,9 @@ interface CircleMeetupInfo {
     is_approved: boolean;
     is_started: boolean;
     is_ended: boolean;
-    attendee: CircleMeetingAttendee | null;
-}
+    attendee: CircleMeetingAttendee | null; 
+    meet_link: string | null
+​​}
 
 interface CircleMeetingAttendee {
     is_joined: boolean;

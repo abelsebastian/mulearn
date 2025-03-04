@@ -58,6 +58,49 @@ import LCReport from "./modules/Dashboard/modules/LearningCircleV2/pages/LCRepor
 import UserInterest from "./modules/Common/Authentication/pages/Onboarding/UserInterest/UserInterest";
 import PathFinder from "./modules/Common/Authentication/pages/Onboarding/PathFinder/PathFinder";
 import RegisterPage from "./modules/Common/Authentication/pages/Onboarding/Register/Register";
+import LearningPaths from "./modules/Dashboard/modules/LearningPaths/pages/LearningPaths";
+import LearningPathOne from "./modules/Dashboard/modules/LearningPaths/pages/LearningPathOne/LearningPathOne";
+import ComingSoonPage from "./modules/Common/Authentication/pages/ComingSoon";
+import MuLearnLanding from "./modules/Dashboard/modules/landing/pages/LandingPage";
+import CoursesMainPage from "./modules/Dashboard/modules/Courses/Pages/CoursesMainPage";
+import ManagementPage from "./modules/Dashboard/modules/Management/Pages/ManagementPage";
+import ManageUsersPage from "./modules/Dashboard/modules/ManageUsers/ManageUsers";
+import UserRoleVerificationPage from "./modules/Dashboard/modules/UserRoleVerification/UserRoleVerification";
+import AffiliationPage from "./modules/Dashboard/modules/Affiliation/Pages/Affiliation";
+import OrganizationTransferPage from "./modules/Dashboard/modules/OrganizationTransfer/components/organizationTransfer";
+import ManageDepartmentsPage from "./modules/Dashboard/modules/Departments/Departments";
+import OrganizationsPage from "./modules/Dashboard/modules/Organizations/Organizations";
+import LCMeetupVerificationPage from "./modules/Dashboard/modules/LearningCircle/pages/Meetup/LcMeetup";
+import VerifyOrganizationsPage from "./modules/Dashboard/modules/VerifyOrganizations/VerifyOrganizations";
+import CollegeLevelsPage from "./modules/Dashboard/modules/CollegeLevels/CollegeLevels";
+import KarmaVoucherPage from "./modules/Dashboard/modules/KarmaVoucher/KarmaVoucher";
+import ErrorLogPage from "./modules/Dashboard/modules/ErrorLog/ErrorLog";
+import DynamicTypePage from "./modules/Dashboard/modules/DynamicType/DynamicType";
+import ManageRolesPage from "./modules/Dashboard/modules/ManageRoles/ManageRoles";
+import ManageLocationsPage from "./modules/Dashboard/modules/ManageLocation/ManageLocation";
+import ChannelsPage from "./modules/Dashboard/modules/Channels/Pages/Channels";
+import URLShortenerPage from "./modules/Dashboard/modules/UrlShortener/Pages/UrlShortener";
+import DiscordModerationPage from "./modules/Dashboard/modules/DiscordModeration/DiscordModeration";
+
+import MentorSearchPage from "./modules/Dashboard/modules/Mentors/Pages/MentorPage";
+import InterestGroupsPage from "./modules/Dashboard/modules/InterestGroups/pages/InterestGroupsPage";
+import InterestGroupOne from "./modules/Dashboard/modules/InterestGroups/pages/One/InterestGroupOne";
+import SpecialEvents from "./modules/Dashboard/modules/SpecialEvents/pages/SpecialEvents";
+import Leaderboard from "./modules/Dashboard/modules/LeaderBoard/components/Leaderboard";
+import CampusPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
+import MuLeaderboardPage from "./modules/Dashboard/modules/LeaderBoard/pages/MuLeaderboardPage";
+import CampusSearchPage from "./modules/Dashboard/modules/Campus/pages/CampusSearchPage";
+import MuLearnersSearchPage from "./modules/Dashboard/modules/Search/Pages/MulearnersSearchPage";
+import CampusForumPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumPage";
+import CampusForumLandingPage from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusForumLanding";
+import Dashboardpage from "./modules/Dashboard/modules/Dashboard/Pages/Dashboardpage";
+import LevelMap from "./modules/Dashboard/modules/Map/Pages/Map";
+import Dashboard from "./modules/Dashboard/modules/Map/Pages/DashBoard";
+import LearningPathPage from "./modules/Dashboard/modules/LearningPathNew/Pages/LearningPathPage";
+import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
+import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
+import CampusDetails from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
+import LearningPathDetailPage from "./modules/Dashboard/modules/InterestGroups/components/LearningPathDetailPage";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -263,7 +306,7 @@ function App() {
         // Add redirect from '/' to '/login'
         {
             path: "/",
-            element: <Navigate to="/login" replace />
+            element: <MuLearnLanding />
         },
         {
             path: "*",
@@ -297,25 +340,38 @@ function App() {
             path: "trivial-ideas",
             element: <Trivial />
         },
+        { path: "register/:role", element: <RegisterPage /> },
         {
-            path: "/",
-            element: <AuthRoutes />,
+            path: "register/",
             children: [
-                { path: "register/:role", element: <RegisterPage /> },
                 {
-                    path: "register/",
-                    children: [
-                        {
-                            path: "",
-                            element: <RegisterPage />
-                        }
-                    ]
-                },
-                { path: "login", element: <SignIn /> },
-                { path: "forgot-password", element: <ForgetPassword /> },
-                { path: "reset-password", element: <ResetPassword /> }
+                    path: "",
+                    element: <RegisterPage />
+                }
             ]
         },
+        { path: "login", element: <SignIn /> },
+        { path: "forgot-password", element: <ForgetPassword /> },
+        { path: "reset-password", element: <ResetPassword /> },
+        // {
+        //     path: "/",
+        //     element: <AuthRoutes />,
+        //     children: [
+        //         { path: "register/:role", element: <RegisterPage /> },
+        //         {
+        //             path: "register/",
+        //             children: [
+        //                 {
+        //                     path: "",
+        //                     element: <RegisterPage />
+        //                 }
+        //             ]
+        //         },
+        //         { path: "login", element: <SignIn /> },
+        //         { path: "forgot-password", element: <ForgetPassword /> },
+        //         { path: "reset-password", element: <ResetPassword /> }
+        //     ]
+        // },
         {
             path: "/register/interests",
             element: <UserInterest />
@@ -342,6 +398,39 @@ function App() {
         },
         // { path: "register/select-community", element: <CommunityPage /> },
         {
+            path: "/dashboard",
+            element: <DashboardRootLayout />,
+            children: [
+                { path: "learning-paths", element: <LearningPaths /> },
+                {
+                    path: "learning-paths/:id",
+                    element: (
+                        <LearningPathOne/>
+                    )
+                },
+                {
+                    path: "learningcircle",
+                    element: <LearningCircleLanding />
+                },
+                {path: "search", element: <SearchMain />},
+                { path: "mulearners", element: <MuLearnersSearchPage/>},
+                { path: "mentors", element: <MentorSearchPage/> },
+                {path: "campus", element: <CampusSearchPage/>},
+                {path: "campus/:org_id", element: <CampusDetails/>},
+                { path: "interestgroups", element: <InterestGroupsPage /> },
+                { path: "interestgroups/:id", element: <InterestGroupOne /> },
+                // {path: "interestgroups/:id/learning-path", element: <LearningPathDetailPage />},
+                { path: "special-events", element: <SpecialEvents /> },
+                {path: "leaderboard", element: <MuLeaderboardPage />},
+                { path: "bootcamps", element: <ComingSoonPage /> },
+                { path: "learningCircles", element: <ComingSoonPage /> },
+                { path: "courses", element: <CoursesMainPage /> },
+
+                {path: "map", element: <Mappage />},
+
+            ]
+        },
+        {
             path: "/",
             element: <PrivateRoutes />,
             children: [
@@ -349,8 +438,36 @@ function App() {
                     path: "/dashboard",
                     element: <DashboardRootLayout />,
                     children: [
+                        { path: "home", element: <Dashboardpage/> },
+                        { path: "learning-path", element: <LearningPathPage/> },
+                        { path: "learning-path/:id", element: <LearningPathPage/> },
                         { path: "profile", element: <Profile /> },
                         { path: "profileV2", element: <ProfileV2 /> },
+                        { path: "muverse", element: <ComingSoonPage /> },
+                        { path: "interestgroups", element: <ComingSoonPage /> },
+                        { path: "management", element: <ManagementPage /> },
+                        { path: "management/user-management/manage-users", element: <ManageUsersPage /> },
+                        { path: "management/user-management/user-role-verification", element: <UserRoleVerificationPage /> },
+                        { path: "management/organization/affiliation", element: <AffiliationPage /> },
+                        { path: "management/organization/organization-transfer", element: <OrganizationTransferPage /> },
+                        { path: "management/organization/manage-departments", element: <ManageDepartmentsPage /> },
+                        { path: "management/organization/organizations", element: <OrganizationsPage /> },
+                        // { path: "management/task-management", element: <TaskManagementPage /> },
+                        // { path: "management/task-management/tasks", element: <TasksPage /> },
+                        // { path: "management/task-management/task-type", element: <TaskTypePage /> },
+                        // { path: "management/task-management/events", element: <EventsPage /> },
+                        { path: "management/interest-groups", element: <InterestGroupsPage /> },
+                        { path: "management/lc-meetup-verification", element: <LCMeetupVerificationPage /> },
+                        { path: "management/verify-organizations", element: <VerifyOrganizationsPage /> },
+                        { path: "management/college-levels", element: <CollegeLevelsPage /> },
+                        { path: "management/karma-voucher", element: <KarmaVoucherPage /> },
+                        { path: "management/error-log", element: <ErrorLogPage /> },
+                        { path: "management/dynamic-type", element: <DynamicTypePage /> },
+                        { path: "management/manage-roles", element: <ManageRolesPage /> },
+                        { path: "management/manage-locations", element: <ManageLocationsPage /> },
+                        { path: "management/channels", element: <ChannelsPage /> },
+                        { path: "management/url-shortener", element: <URLShortenerPage /> },
+                        { path: "management/discord-moderation", element: <DiscordModerationPage /> },
                         {
                             path: "connect-discord",
                             element: <ConnectDiscord />
@@ -479,6 +596,9 @@ function App() {
                                 />
                             )
                         },
+
+
+
                         {
                             path: "district-dashboard",
                             element: (
@@ -648,6 +768,12 @@ function App() {
                                 />
                             )
                         },
+                        // {
+                        //     path: "learning-paths",
+                        //     element: (
+                        //         <LearningPaths />
+                        //     )
+                        // },
                         {
                             path: "hackathon/edit/:id",
                             element: (
@@ -732,10 +858,6 @@ function App() {
                         //     path: "learning-circle",
                         //     element: <LearningCircleLandingPage />
                         // },
-                        {
-                            path: "learningcircle",
-                            element: <LearningCircleLanding />
-                        },
                         {
                             path: "learningcircle/your-circles",
                             element: <YourLC />

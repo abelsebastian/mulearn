@@ -16,6 +16,7 @@ import {
     getLocalDateTimeObject
 } from "../../../../utils/common";
 import { m } from "framer-motion";
+import { CircleMeetupInfo } from "../../services/LearningCircleInterface";
 
 export default function MoreInfoLC() {
     const navigate = useNavigate();

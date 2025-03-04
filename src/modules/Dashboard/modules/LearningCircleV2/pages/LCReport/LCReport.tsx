@@ -9,24 +9,27 @@ import placeholder from "../../../../assets/images/dpm.webp";
 import { BiCheck, BiLink, BiRefresh, BiX } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { FiChevronLeft } from "react-icons/fi";
-import MuModal from "@/MuLearnComponents/MuModal/MuModal";
-import EditProfilePopUp from "../../../Profile/components/EditProfilePopUp/pages/EditProfilePopUp";
 import toast from "react-hot-toast";
 import { PowerfulButton } from "@/MuLearnComponents/MuButtons/MuButton";
+import { LCReportInfo } from "../../services/LearningCircleInterface";
+
 export default function LCReport() {
-    const [reportInfo, setReportInfo] = useState<LCReportInfo | null>(null);
-    const [report, setReport] = useState("");
-    const [acceptedList, setAcceptedList] = useState<string[]>([]);
-    const [rejectedList, setRejectedList] = useState<string[]>([]);
-    const [reportSubmitted, setReportSubmitted] = useState<boolean>(false);
-    const [selectedAttendee, setSelectedAttendee] = useState<{
+
+    interface attendee{
         user_id: string;
         full_name: string;
         muid: string;
         is_lc_approved: boolean;
         report: string | null;
         report_link: string | null;
-    } | null>(null);
+    }
+
+    const [reportInfo, setReportInfo] = useState<LCReportInfo | null>(null);
+    const [report, setReport] = useState("");
+    const [acceptedList, setAcceptedList] = useState<string[]>([]);
+    const [rejectedList, setRejectedList] = useState<string[]>([]);
+    const [reportSubmitted, setReportSubmitted] = useState<boolean>(false);
+    const [selectedAttendee, setSelectedAttendee] = useState<attendee | null>(null);
     const params = useParams();
     const navigate = useNavigate();
     useEffect(() => {
@@ -178,136 +181,137 @@ export default function LCReport() {
                     </span>
                     <div className={styles.attendees}>
                         {reportInfo
-                            ? reportInfo.attendees.map((attendee, index) => {
-                                  return (
-                                      <div
-                                          className={styles.attendee}
-                                          key={attendee.user_id}
-                                      >
-                                          <div className={styles.content}>
-                                              <span className={styles.counter}>
-                                                  {index + 1}.
-                                              </span>
-                                              <img
-                                                  className={styles.profile}
-                                                  src={placeholder}
-                                              />
-                                              <span className={styles.name}>
-                                                  {attendee.full_name}
-                                              </span>
-                                              {/* <span className={styles.muid}>
+                            ? reportInfo.attendees.map((attendee:attendee, index: number) => {
+                                return (
+                                    <div
+                                        className={styles.attendee}
+                                        key={attendee.user_id}
+                                    >
+                                        <div className={styles.content}>
+                                            <span className={styles.counter}>
+                                                {index + 1}.
+                                            </span>
+                                            <img
+                                                className={styles.profile}
+                                                alt=""
+                                                src={placeholder}
+                                            />
+                                            <span className={styles.name}>
+                                                {attendee.full_name}
+                                            </span>
+                                            {/* <span className={styles.muid}>
                                       {attendee.muid}
                                   </span> */}
-                                          </div>
-                                          {attendee.report != null &&
-                                          attendee.report != "" ? (
-                                              <div className={styles.buttons}>
-                                                  {acceptedList.includes(
-                                                      attendee.user_id
-                                                  ) ? (
-                                                      <span
-                                                          className={
-                                                              styles.accepted
-                                                          }
-                                                      >
-                                                          Accepted
-                                                      </span>
-                                                  ) : rejectedList.includes(
+                                        </div>
+                                        {attendee.report != null &&
+                                            attendee.report != "" ? (
+                                            <div className={styles.buttons}>
+                                                {acceptedList.includes(
+                                                    attendee.user_id
+                                                ) ? (
+                                                    <span
+                                                        className={
+                                                            styles.accepted
+                                                        }
+                                                    >
+                                                        Accepted
+                                                    </span>
+                                                ) : rejectedList.includes(
+                                                    attendee.user_id
+                                                ) ? (
+                                                    <span
+                                                        className={
+                                                            styles.rejected
+                                                        }
+                                                    >
+                                                        Rejected
+                                                    </span>
+                                                ) : null}
+
+                                                {!reportSubmitted &&
+                                                    (acceptedList.includes(
+                                                        attendee.user_id
+                                                    ) ||
+                                                        rejectedList.includes(
+                                                            attendee.user_id
+                                                        )) && (
+                                                        <span
+                                                            className={
+                                                                styles.view
+                                                            }
+                                                            onClick={() => {
+                                                                handleReset(
+                                                                    attendee
+                                                                );
+                                                            }}
+                                                        >
+                                                            <BiRefresh />
+                                                        </span>
+                                                    )}
+
+                                                {reportSubmitted ||
+                                                    (!acceptedList.includes(
+                                                        attendee.user_id
+                                                    ) &&
+                                                        !rejectedList.includes(
+                                                            attendee.user_id
+                                                        )) ? (
+                                                    <span
+                                                        className={
+                                                            styles.view
+                                                        }
+                                                        onClick={() => {
+                                                            handleView(
+                                                                attendee
+                                                            );
+                                                        }}
+                                                    >
+                                                        <BsEye />
+                                                    </span>
+                                                ) : null}
+                                                {!acceptedList.includes(
+                                                    attendee.user_id
+                                                ) &&
+                                                    !rejectedList.includes(
                                                         attendee.user_id
                                                     ) ? (
-                                                      <span
-                                                          className={
-                                                              styles.rejected
-                                                          }
-                                                      >
-                                                          Rejected
-                                                      </span>
-                                                  ) : null}
+                                                    <>
+                                                        <span
+                                                            className={
+                                                                styles.reject
+                                                            }
+                                                            onClick={() => {
+                                                                handleReject(
+                                                                    attendee
+                                                                );
+                                                            }}
+                                                        >
+                                                            <BiX />
+                                                        </span>
 
-                                                  {!reportSubmitted &&
-                                                      (acceptedList.includes(
-                                                          attendee.user_id
-                                                      ) ||
-                                                          rejectedList.includes(
-                                                              attendee.user_id
-                                                          )) && (
-                                                          <span
-                                                              className={
-                                                                  styles.view
-                                                              }
-                                                              onClick={() => {
-                                                                  handleReset(
-                                                                      attendee
-                                                                  );
-                                                              }}
-                                                          >
-                                                              <BiRefresh />
-                                                          </span>
-                                                      )}
-
-                                                  {reportSubmitted ||
-                                                  (!acceptedList.includes(
-                                                      attendee.user_id
-                                                  ) &&
-                                                      !rejectedList.includes(
-                                                          attendee.user_id
-                                                      )) ? (
-                                                      <span
-                                                          className={
-                                                              styles.view
-                                                          }
-                                                          onClick={() => {
-                                                              handleView(
-                                                                  attendee
-                                                              );
-                                                          }}
-                                                      >
-                                                          <BsEye />
-                                                      </span>
-                                                  ) : null}
-                                                  {!acceptedList.includes(
-                                                      attendee.user_id
-                                                  ) &&
-                                                  !rejectedList.includes(
-                                                      attendee.user_id
-                                                  ) ? (
-                                                      <>
-                                                          <span
-                                                              className={
-                                                                  styles.reject
-                                                              }
-                                                              onClick={() => {
-                                                                  handleReject(
-                                                                      attendee
-                                                                  );
-                                                              }}
-                                                          >
-                                                              <BiX />
-                                                          </span>
-
-                                                          <span
-                                                              className={
-                                                                  styles.accept
-                                                              }
-                                                              onClick={() => {
-                                                                  handleAccept(
-                                                                      attendee
-                                                                  );
-                                                              }}
-                                                          >
-                                                              <BiCheck />
-                                                          </span>
-                                                      </>
-                                                  ) : null}
-                                              </div>
-                                          ) : (
-                                              <span className={styles.noreport}>
-                                                  Attendee report not submitted
-                                              </span>
-                                          )}
-                                      </div>
-                                  );
-                              })
+                                                        <span
+                                                            className={
+                                                                styles.accept
+                                                            }
+                                                            onClick={() => {
+                                                                handleAccept(
+                                                                    attendee
+                                                                );
+                                                            }}
+                                                        >
+                                                            <BiCheck />
+                                                        </span>
+                                                    </>
+                                                ) : null}
+                                            </div>
+                                        ) : (
+                                            <span className={styles.noreport}>
+                                                Attendee report not submitted
+                                            </span>
+                                        )}
+                                    </div>
+                                );
+                            })
                             : null}
                     </div>
                     <div className={styles.bottom}>

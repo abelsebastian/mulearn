@@ -24,7 +24,40 @@ type UserInfo = {
     cipher?: string;
     profile_pic?: string;
     interest_selected: string | null;
+    user_domains: string[];
+    user_endgoals: string[];
 };
+
+type User ={
+    full_name: string;
+    muid: string;
+    interest_groups: { id: string; name: string }[];
+    organizations: { id: string; title: string; code: string; org_type: string }[];
+    profile_pic: string | null;
+    karma: string;
+}
+
+type Mentor = {
+    id: number;
+    name: string;
+    role: string;
+    expertise: string[];
+    image: string;
+}
+
+type SpecialEvent = {
+    id: number;
+    title: string;
+    description: string;
+    date: string;
+    recurrence?: string;
+    participants?: number;
+    image: string;
+    link: string;
+    isExpired?: boolean
+    isComingSoon? :boolean
+    isLive: boolean
+}
 
 type ColOrder = { column: string; Label: string; isSortable: boolean };
 

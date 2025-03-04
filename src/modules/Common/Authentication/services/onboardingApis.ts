@@ -313,7 +313,7 @@ export const registerUser = (
                 response.data.response.refreshToken
             );
             getInfo(navigate, () => {
-                navigate("/dashboard/connect-discord");
+                navigate("/dashboard/home");
                 setShowSubmitLoader(false);
             });
         })

@@ -72,8 +72,11 @@ export default function CollegePage() {
         string | null
     >(null);
     const college_types = ["School", "College"];
-    const ruri = window.location.href.split("=")[1];
-
+    let ruri = window.location.href.split("=")[1];
+    
+    if (ruri === "noredirect") {
+        ruri = "dashboard/home";
+    }
     const CustomFilter = (
         { label, value }: { label: string; value: string },
         string: string
@@ -128,7 +131,7 @@ export default function CollegePage() {
                     if (ruri) {
                         navigate(`/${ruri}`);
                     } else {
-                        navigate("/dashboard/connect-discord");
+                        navigate("/dashboard/home");
                     }
                 }
             });
@@ -152,9 +155,9 @@ export default function CollegePage() {
         }).then(res => {
             if (res) {
                 if (ruri) {
-                    navigate(`/${ruri}`);
+                    navigate(`${ruri}`);
                 } else {
-                    navigate("/dashboard/connect-discord");
+                    navigate("/dashboard/home");
                 }
             }
         });
@@ -350,7 +353,7 @@ export default function CollegePage() {
                                                 navigate(`/${ruri}`);
                                             } else {
                                                 navigate(
-                                                    "/dashboard/connect-discord"
+                                                    "/dashboard/home"
                                                 );
                                             }
                                         }}
