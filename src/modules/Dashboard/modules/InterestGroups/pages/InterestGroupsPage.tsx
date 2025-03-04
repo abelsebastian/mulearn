@@ -30,15 +30,16 @@ function InterestGroupsPage() {
   ];
 
   const imageUrls = [
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920",
-    "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1920",
-    "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1920",
-    "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920",
-    "https://images.unsplash.com/photo-1617791160505-6f00504e3519?q=80&w=1920",
-    "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=1920",
-    "https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?q=80&w=1920",
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1920"
+    "/assets/IG/uiux.webp",
+    "/assets/IG/webdev.webp",
+    "/assets/IG/cyber.webp",
+    "/assets/IG/digitalmarketing.webp",
+    "/assets/IG/gamedev.webp",
+    "/assets/IG/cloud.webp",
+    "/assets/IG/productmanagement.webp",
+
+
+
   ];
 
 
@@ -155,7 +156,7 @@ function InterestGroupsPage() {
                   const randomImageUrl = imageUrls[randomIndex];
                   return (
                     <img
-                      src={randomImageUrl}
+                      src={group.title === "UI/UX Design" ? imageUrls[0] : group.title === "Web Development" ? imageUrls[1] : group.title === "Cybersecurity" ? imageUrls[2] : group.title === "Digital Marketing" ? imageUrls[3] : group.title === "Game Development" ? imageUrls[4] : group.title === "Cloud Computing" ? imageUrls[5] : imageUrls[6]}
                       alt="Random"
                       className={styles.GroupImage}
                     />
@@ -165,7 +166,7 @@ function InterestGroupsPage() {
               <div className={styles.GroupOverlay}>
                 <span className={styles.GroupParticipantsBadge}>
                   <Users2 className={styles.GroupParticipantsIcon} />
-                  {group.members || "0"} 
+                  {group.memberCount} 
                 </span>
               </div>
             </div>

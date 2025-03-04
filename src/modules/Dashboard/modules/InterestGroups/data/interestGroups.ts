@@ -121,7 +121,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Welcome to the UI/UX Interest Group! We’re a vibrant community of designers, researchers, and enthusiasts passionate about crafting intuitive and beautiful digital experiences.",
     bannerImage:
-      "https://images.unsplash.com/photo-1495539406979-bf61750d38ad?q=80&w=3540&auto=format&fit=crop",
+      "/assets/IG/uiux.webp",
     memberCount: 2300,
     memberSince: "July 2022",
     isPublic: true,
@@ -590,7 +590,8 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Ever wondered how web applications are built? Everything seems complex until you learn the basics. μLearn Foundation's Web Development Interest Group is designed to help you develop and refine your skills, bringing together people eager to explore emerging web technologies.",
     bannerImage:
-      "https://images.unsplash.com/photo-1555949963-1f3bd3a856de?q=80&w=3540&auto=format&fit=crop",
+    "/assets/IG/webdev.webp",
+
     memberCount: 4200,
     memberSince: "March 2021",
     isPublic: true,
@@ -1079,7 +1080,8 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Curious about protecting the digital world? The Cybersecurity Interest Group by GTech μLearn delves into securing data and networks from potential threats. This group provides essential knowledge on staying safe online, ideal for those passionate about keeping cyberspace secure.",
     bannerImage:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=3540&auto=format&fit=crop",
+    "/assets/IG/cyber.webp",
+
     memberCount: 3000,
     memberSince: "September 2020",
     isPublic: true,
@@ -1547,14 +1549,14 @@ export const interestGroups: InterestGroupData[] = [
       {
         id: "cp-003-1",
         title: "Beagle Security",
-        image: "/assets/IG/Cyber Security/Community Partners/Beagle Security.webp",
-        link: "#", // Replace with actual link if available
+        image: "/assets/IG/Cyber Security/Community partners/Beagle Security.webp",
+        link: "#",
       },
       {
         id: "cp-003-2",
         title: "Zilicon Technologies",
-        image: "/assets/IG/Cyber Security/Community Partners/Zilicon technologies.webp",
-        link: "#", // Replace with actual link if available
+        image: "/assets/IG/Cyber Security/Community partners/Zilicon technologies.webp",
+        link: "#",
       },
     ],
     partnerCompanies: [
@@ -1573,7 +1575,8 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Passionate about creating immersive experiences in gaming? The Game Development Interest Group is your gateway to learning about designing, programming, and storytelling in the world of games. Whether you're into creating captivating visuals, coding mechanics, or crafting narratives, join us to level up your game development skills.",
     bannerImage:
-      "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=3540&auto=format&fit=crop",
+    "/assets/IG/gamedev.webp",
+
     memberCount: 2500,
     memberSince: "January 2022",
     isPublic: true,
@@ -2713,7 +2716,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Excited to explore the dynamic world of digital marketing? The Digital Marketing Interest Group empowers you with practical and theoretical knowledge, covering SEO, email marketing, social media management, and analytics. This group is perfect for anyone passionate about creating impactful campaigns and analyzing audience behaviour.",
     bannerImage:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=3540&auto=format&fit=crop",
+    "/assets/IG/digitalmarketing.webp",
     memberCount: 2700,
     memberSince: "November 2021",
     isPublic: true,
@@ -3320,7 +3323,7 @@ export const interestGroups: InterestGroupData[] = [
   },
   //data science 
   {
-    id: "85fdd535-08d2-4619-9da7-944e21365de9", //TODO : Add ID 
+    id: "85fdd535-08d2-4619-9da7-944e21365de9",
     title: "Data Science",
     description:
       "Excited about uncovering insights from data? The Data Science Interest Group offers an opportunity to explore big data, machine learning, and predictive analysis, perfect for anyone interested in data-driven decision-making. Join us to understand how data can reveal patterns, trends, and solutions.",
@@ -3484,14 +3487,14 @@ export const interestGroups: InterestGroupData[] = [
   },
 //cloud and devops
   {
-    id: "04d29c15-4de4-4b43-ad63-0f4760c62919", // Unique ID for Cloud and DevOps
+    id: "1719d19a-0206-4161-9c6f-0a7dba44d4e5", // Unique ID for Cloud and DevOps
     title: "Cloud and DevOps",
     description:
       "Wonder how applications are deployed and managed in the cloud? Cloud computing and DevOps are the backbone of modern IT infrastructure, ensuring that software is delivered faster, more efficiently, and with higher reliability. The Cloud Computing & DevOps Interest Group at GTech μLearn is here to equip you with the skills needed to master cloud platforms, automation tools, and continuous integration/continuous deployment (CI/CD) practices. Join us to explore, learn, and collaborate on real-world projects, and dive into the future of cloud-native technologies.",
     bannerImage:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=3540&auto=format&fit=crop", // Placeholder image related to cloud/devops
-    memberCount: 2200, // Placeholder value; adjust as needed
-    memberSince: "June 2022", // Placeholder; adjust as needed
+    "/assets/IG/cloud.webp", // Placeholder image related to cloud/devops
+    memberCount: 1057, 
+    memberSince: "March 2023", // Placeholder; adjust as needed
     isPublic: true,
     officeHours: "Wednesday 7PM @ Gathering Field",
     thinkTankMeeting: "Thursday 6:00 PM @ Google Meet",
@@ -3665,8 +3668,8 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Product Management is deciding what to build next”. Are you interested in learning to build the right product and the product right? Join our “Product Management” Interest Group to learn and collaborate with peers.",
     bannerImage:
-      "https://images.unsplash.com/photo-1551288049-b51d5a7480e7?q=80&w=3540&auto=format&fit=crop", // Placeholder image related to product management
-    memberCount: 1450, // Placeholder value; adjust as needed
+      "/assets/IG/productmanagement.webp", // Placeholder image related to product management
+    memberCount: 2199, // Placeholder value; adjust as needed
     memberSince: "March 2023", // Placeholder; adjust as needed
     isPublic: true,
     officeHours: "TBA",

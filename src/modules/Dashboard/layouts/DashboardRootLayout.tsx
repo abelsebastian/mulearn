@@ -155,7 +155,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             roles: [roles.CAMPUS_LEAD, roles.LEAD_ENABLER, roles.ADMIN],
             icon: <i className="fi fi-sr-book-arrow-right"></i>
-        },
+        },    
         // {
         //     url: "/dashboard/zonal-dashboard",
         //     title: "Zonal Dashboard",
