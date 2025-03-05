@@ -16,11 +16,12 @@ const LearningCircleCreateForm = ({ setIsCreateModalOpen, onSuccess }: { setIsCr
     const [meetLink, setMeetLink] = useState('');
     const [location, setLocation] = useState('');
     const [time, setTime] = useState('');
+    const org = useUserStore((state) => state.userProfile.college_id || "028b4fb3-6b24-46ac-b26a-092889c5c44f");
 
 
     const navigate = useNavigate();
 
-    const org = useUserStore((state) => state.userProfile.college_id);
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e && e.preventDefault();

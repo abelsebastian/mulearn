@@ -38,7 +38,7 @@ const InterestGroups: React.FC<InterestGroupsProps> = ({ title, groups }) => {
   
   const selectedDomain = useUserStore((state) => state.userInfo.user_domains[0]);
   const currentIgs = igList.filter(igl => 
-    currentIgsData[selectedDomain].some(ci => igl.id === ci)
+    currentIgsData[selectedDomain]?.some(ci => igl.id === ci)
 );
 
   const navigate = useNavigate();
