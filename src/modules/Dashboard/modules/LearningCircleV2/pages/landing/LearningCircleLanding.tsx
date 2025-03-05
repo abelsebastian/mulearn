@@ -107,13 +107,14 @@ const LearningCircleLanding = () => {
             ) : (
                 <div className={styles.learningCircleLandingPage}>
                     <div className={styles.middleContainer}>
-                        <SelectTab
+                        {/* <SelectTab
                             placeholder={"Select Role"}
                             options={INITIAL_INTERESTS}
                             styles={customReactSelectStyles}
                             value={selectedCategory}
                             onChange={selectionChange}
-                        />
+                        /> */}
+                        <div></div>
                         <div>
                             <PowerfulButton
                                 children="Create"
