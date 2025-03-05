@@ -6,6 +6,7 @@ import levelsDataUIUX from "../modules/LevelsDataUIUX";
 import CardCarousel from "../modules/CardCarousal";
 import IGSelector from "../../InterestGroups/components/IGSelection/IGSelector";
 import { getUserLog, getUserProfile } from "../../Profile/services/api";
+import { useUserStore } from "/src/ZustandProvider";
 
 const dummyUserProfile = {
   full_name: "John Doe",
@@ -200,9 +201,11 @@ const InterestGroupCard: React.FC<InterestGroupCardProps> = ({ data, onClickCTA 
 };
 
 const LearningPathPage: React.FC = () => {
- 
   const dataSource = levelsData;
-
+  
+  // Get userProfile and setter from Zustand store
+  const { userProfile, setUserProfile } = useUserStore();
+  
   const [activeTab, setActiveTab] = useState<"startLearning" | "becomeExpert">("startLearning");
 
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({
@@ -214,8 +217,6 @@ const LearningPathPage: React.FC = () => {
     left: 0,
     width: 0,
   });
-
-
 
   useEffect(() => {
     const activeElement = tabRefs.current[activeTab];
@@ -230,7 +231,7 @@ const LearningPathPage: React.FC = () => {
   const unlockedLevel = 2;
   const [offCanvasOpen, setOffCanvasOpen] = useState(false);
   const [selectedData, setSelectedData] = useState<any | null>(null);
-
+  
   const handleOpenOffCanvas = (data: any) => {
     setSelectedData(data);
     setOffCanvasOpen(true);
@@ -240,7 +241,7 @@ const LearningPathPage: React.FC = () => {
     setOffCanvasOpen(false);
     setSelectedData(null);
   };
-
+  
   const [APILoadStatus, setAPILoadStatus] = useState(0);
   const [profileStatus, setProfileStatus] = useState<boolean>();
   const [userLog, setUserLog] = useState([
@@ -251,32 +252,15 @@ const LearningPathPage: React.FC = () => {
     }
   ]);
   const [selectedIg, setSelectedIg] = useState<InterestGroup>({ id: '', name: "", karma: 0 });
-  const [userProfile, setUserProfile] = useState<IGUserInfo>({
-    full_name: "",
-    college_code: "",
-    college_id: "", 
-    org_district_id: "",
-    interest_groups: [{ id: '', name: "", karma: 0 }],
-    karma_distribution: [{ task_type: "", karma: 0 }],
-    gender: "",
-    id: "",
-    joined: "",
-    karma: 0,
-    rank: 0,
-    muid: "",
-    level: "",
-    profile_pic: "",
-    is_public: false,
-    percentile: 0,
-    roles: []
-  });
 
+
+
+  // Update useEffect to use Zustand setter
   useEffect(() => {
-    getUserProfile(setUserProfile, setAPILoadStatus, setProfileStatus);
+    getUserProfile(setUserProfile, setAPILoadStatus, setProfileStatus); // Use Zustand setter instead of local setter
     getUserLog(setUserLog);
-  }, []);
+  }, [setUserProfile]); // Add setUserProfile to dependency array
 
-  // Filter levels based on active tab.
   const levelsToRender = dataSource.filter((level) => {
     if (activeTab === "startLearning") {
       return level.level >= 1 && level.level <= 3;
@@ -285,8 +269,9 @@ const LearningPathPage: React.FC = () => {
     }
   });
 
-  console.log(levelsToRender)
+  console.log(levelsToRender);
 
+  // Rest of the component remains the same
   return (
     <div className={styles.container}>
       {/* Top Bar */}

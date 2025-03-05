@@ -26,13 +26,13 @@ const KarmaEarners: React.FC<KarmaEarnersProps> = ({
           <div className={styles.earnerTitle}>Highest Karma Earner (Student)</div>
           <div className={styles.earnerDetails}>
             <span className={styles.earnerName}>{highestStudent.user}</span>
-            <span className={styles.earnerName}>{highestCollege.user}</span>
+            <span className={styles.earnerName}>{highestStudent.muid}</span>
             <span className={styles.currentKarma}>{highestStudent.karma}</span>
            
           </div>
         </div>
         <div className={`${styles.earnerItem} ${styles.collegeCard}`}>
-          <div className={styles.earnerTitle}>Highest Karma Earner (College)</div>
+          <div className={styles.earnerTitle}>Highest Karma Earner (College/Organisation)</div>
           <div className={styles.earnerDetails}>
             <span className={styles.earnerName}>{highestCollege.user}</span>
             <span className={styles.currentKarma}>{highestCollege.karma}</span>
