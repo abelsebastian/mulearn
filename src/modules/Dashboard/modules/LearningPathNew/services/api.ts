@@ -203,7 +203,6 @@ export function formatIGTasksData(apiResponse: ApiResponse, userLevel: string, i
         const filteredTasks = igHashtagMap.length === 1
             ? level.tasks.filter(task => task.hashtag.startsWith(igHashtagMap[0].hashtagIdentifier))
             : level.tasks;
-
         const cards: Card[] = filteredTasks.map((task: Task, index: number) => {
             const matchingIG = igHashtagMap.find(ig => task.hashtag.startsWith(ig.hashtagIdentifier));
             return {

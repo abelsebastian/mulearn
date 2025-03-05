@@ -17,13 +17,13 @@ const IntrestGroupForm = forwardRef(
         });
         const interestGroup = [
             { label: "Coder", value: "coder" },
-            { label: "Hardware", value: "hardware" },
-            // {
-            //     label: "Manager",
-            //     value: "manager"
-            // },
+            { label: "Maker", value: "maker" },
+            {
+                label: "Manager",
+                value: "manager"
+            },
             { label: "Creative", value: "creative" },
-            { label: "Others", value: "others" }
+            // { label: "Others", value: "others" }
         ];
 
         const [errors, setErrors] = useState<OrgFormErrors>({});

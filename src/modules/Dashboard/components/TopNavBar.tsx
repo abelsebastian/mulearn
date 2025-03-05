@@ -40,8 +40,11 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
     const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null); 
 
-    const userName = useUserStore((state) => state.userProfile.first_name);
-    const data = useUserStore((state) => state.userProfile);
+    let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
+    if(!userName){
+        const storedUserInfo = localStorage.getItem("userInfo");
+        userName = storedUserInfo ? JSON.parse(storedUserInfo)?.full_name.split(" ")?.[0] : null;
+      }
     const profilePic = userInfo?.profile_pic || null;
 
     useEffect(() => {

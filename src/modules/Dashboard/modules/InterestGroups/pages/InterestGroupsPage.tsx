@@ -25,7 +25,7 @@ function InterestGroupsPage() {
     { id: 'all', name: 'All Categories' },
     { id: 'creative', name: 'Creative' },
     { id: 'software', name: 'Software' },
-    { id: 'hardware', name: 'Hardware' },
+    { id: 'maker', name: 'Maker' },
     { id: 'management', name: 'Management' },
   ];
 

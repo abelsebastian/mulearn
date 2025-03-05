@@ -47,7 +47,7 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
             <h2 className={styles.offCanvasSectionTitle}>Special Pathway</h2>
             <div className={styles.offCanvasSectionContent}>
               <p>Select an interest group to continue levels 4–7:</p>
-              {data.interestGroups.map((ig: any) => (
+              {data.interestGroups?.length &&  data.interestGroups.map((ig: any) => (
                 <div
                   key={ig.id}
                   style={{
@@ -183,27 +183,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
   );
 };
 
-interface InterestGroupCardProps {
-  data: any;
-  onClickCTA: () => void;
-}
-
-const InterestGroupCard: React.FC<InterestGroupCardProps> = ({ data, onClickCTA }) => {
-  return (
-    <div className={styles.card}>
-      <div className={styles.cardIcon}>{data.icon}</div>
-      <ul className={styles.igPreviewList}>
-        <li key={data.id}>
-          <strong>{data.name}</strong> — {data.description}
-        </li>
-      </ul>
-      <button className={styles.viewButton} onClick={onClickCTA}>
-        View
-      </button>
-    </div>
-  );
-};
-
 const HASHTAGSLEVL1TO3 = [
   "#ge-discord-guide",
   "#ge-self-intro",
@@ -285,8 +264,7 @@ const LearningPathPage: React.FC = () => {
   const [userLog, setUserLog] = useState<any[]>([]);
   const [selectedIg, setSelectedIg] = useState<InterestGroup>({ id: '', name: "", karma: 0 });
 
-
-  const unlockedLevel = Number(userProfile.level.replace("lvl", ""));
+  const unlockedLevel = Number(userProfile.level?.replace("lvl", ""));
 
   // Fetch beginner tasks (Levels 1-3)
   useEffect(() => {
@@ -300,29 +278,28 @@ const LearningPathPage: React.FC = () => {
     };
     fetchBasicLevels();
   }, []);
-  console.log(IGHashtagMap.find(item => item.id === selectedIg.id), "selectediggggg");
 
   useEffect(() => {
     setIntermediateLevelData([]);
     const fetchIntermediateLevels = async () => {
-        try {
-            const levels = [4, 5, 6, 7];
+      try {
+        const levels = [4, 5, 6, 7];
 
-            // Filter IGHashtagMap based on selected IG
-            const filteredIGHashtagMap = selectedIg 
-                ? IGHashtagMap.filter(ig => ig.id === selectedIg.id) 
-                : IGHashtagMap;
+        // Filter IGHashtagMap based on selected IG
+        const filteredIGHashtagMap = selectedIg
+          ? IGHashtagMap.filter(ig => ig.id === selectedIg.id)
+          : IGHashtagMap;
 
-            const data = await getIGLevelTasks(levels, filteredIGHashtagMap);
-            setIntermediateLevelData(data);
-        } catch (error) {
-            console.error("Error fetching intermediate levels:", error);
-        }
+        console.log(filteredIGHashtagMap, 'filteredIGHashtagMap', levels);
+        const data = await getIGLevelTasks(levels, filteredIGHashtagMap);
+        setIntermediateLevelData(data);
+      } catch (error) {
+        console.error("Error fetching intermediate levels:", error);
+      }
     };
 
     fetchIntermediateLevels();
-}, [selectedIg]);
-console.log("fetched ig tasks", intermediateLevelData);
+  }, [selectedIg]);
 
   // Fetch user profile and log
   useEffect(() => {
@@ -389,6 +366,17 @@ console.log("fetched ig tasks", intermediateLevelData);
         </div>
       )}
 
+      {/* ✅ LEVEL 0: Connect Discord */}
+      {activeTab === "startLearning" && !userProfile && (
+        <div className={styles.levelSection}>
+          <h2>Level 0</h2>
+          <h4 className={styles.levelSubtitle}>Connect to our Discord server to start your journey!</h4>
+          <button className={styles.connectDiscordButton} onClick={() => window.open("https://discord.com", "_blank")}>
+            Connect Discord
+          </button>
+        </div>
+      )}
+
       {/* Render levels */}
       {levelsToRender.length > 0 ? (
         levelsToRender.map((level) => {
@@ -429,7 +417,7 @@ console.log("fetched ig tasks", intermediateLevelData);
           );
         })
       ) : (
-        <div><MuLoader/></div>
+        <div><MuLoader /></div>
       )}
 
       <OffCanvas isOpen={offCanvasOpen} onClose={handleCloseOffCanvas} data={selectedData} />

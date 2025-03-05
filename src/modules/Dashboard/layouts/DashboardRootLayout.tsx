@@ -49,7 +49,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
               throw new Error('Invalid userInfo data');
             }
     
-            setUserInfo(userInfo);
+            setUserInfo({...userInfo, first_name: userInfo.full_name.split(" ")[0]});
             localStorage.setItem("userInfo", JSON.stringify(userInfo)); 
     
             if ('exist_in_guild' in userInfo) {

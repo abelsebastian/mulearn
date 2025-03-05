@@ -12,7 +12,7 @@ import { useUserStore } from "/src/ZustandProvider";
 // Move static data outside component to prevent recreation
 const DOMAIN_IMAGES = {
   coder: "https://via.placeholder.com/50?text=UIUX",
-  hardware: "https://via.placeholder.com/50?text=Video",
+  maker: "https://via.placeholder.com/50?text=Video",
   manager: "https://via.placeholder.com/50?text=Comics",
   creative: "https://via.placeholder.com/50?text=Writing",
   others: "https://via.placeholder.com/50?text=Others",
@@ -126,7 +126,12 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
   //   const userName = fetchLocalStorage<UserInfo>("userInfo")?.full_name || "";
-  const userName = useUserStore((state) => state.userProfile.first_name);
+  let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
+  if(!userName){
+    const storedUserInfo = localStorage.getItem("userInfo");
+    userName = storedUserInfo ? JSON.parse(storedUserInfo)?.full_name.split(" ")?.[0] : null;
+  }
+  console.log(userName,'userName')
   const [karmaFeed, setKarmaFeed] = useState<KarmaFeedItem[]>([]);
   const userDomains: string[] =
     fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];
@@ -209,7 +214,6 @@ const DashboardPage = () => {
     src: "/assets/landing/others.png",
     alt: "General illustration",
   };
-
   const { src, alt } = imageMap[userDomains[0]] || defaultImage;
 
   return (
