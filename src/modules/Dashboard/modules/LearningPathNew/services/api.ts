@@ -75,6 +75,12 @@ interface LevelMetadata {
     subtitle: string;
 }
 
+interface IGHashtagMap {
+    id: string;
+    igName: string;
+    hashtagIdentifier: string;
+}
+
 const levelMetadata: Record<string, LevelMetadata> = {
     "lvl1": { title: "Level 1", subtitle: "Fundamentals and OnBoarding" },
     "lvl2": { title: "Level 2", subtitle: "Practice GRIT and Keep Going" },
@@ -183,3 +189,68 @@ export function getLevelProgress(levels: FormattedLevel[], levelNum: number): Le
         totalTasks: 0
     };
 }
+
+
+export function formatIGTasksData(apiResponse: ApiResponse, userLevel: string, igHashtagMap: IGHashtagMap[]): FormattedLevel[] {
+    const levelProgress = calculateLevelProgress(apiResponse.response);
+    const currentLevelNum = parseInt(userLevel.replace("Level ", "")) || 1;
+
+    return apiResponse.response.map((level: Level) => {
+        const levelNum = parseInt(level.name.replace("lvl", ""));
+        const progress = levelProgress.find(p => p.level === levelNum)!;
+
+        // Filter tasks based on whether a specific IG is selected
+        const filteredTasks = igHashtagMap.length === 1
+            ? level.tasks.filter(task => task.hashtag.startsWith(igHashtagMap[0].hashtagIdentifier))
+            : level.tasks;
+
+        const cards: Card[] = filteredTasks.map((task: Task, index: number) => {
+            const matchingIG = igHashtagMap.find(ig => task.hashtag.startsWith(ig.hashtagIdentifier));
+            return {
+                id: `${levelNum}-${index + 1}`,
+                title: task.task_name,
+                desc: `Earn ${task.karma} Karma Points`,
+                brief: `Complete the ${task.task_name} task and share your progress with ${task.hashtag} to earn ${task.karma} Karma Points.`,
+                hashtag: task.hashtag,
+                ig: matchingIG ? matchingIG.igName : "General Task",
+                icon: "",
+                skills: ["Skill Development"],
+                publishedBy: "Community",
+                publishedWhen: "3/02/25, 12:00 PM",
+                prerequisites: ["Basic knowledge"],
+                resources: task.discord_link ? [task.discord_link] : [],
+                igID: matchingIG ? matchingIG.id : undefined,
+                igName: matchingIG ? matchingIG.igName : undefined
+            };
+        });
+
+        return {
+            level: levelNum,
+            title: `Level ${levelNum}`,
+            subtitle: `Level ${levelNum} Tasks`,
+            cards: cards,
+            progress: progress,
+            isUnlocked: levelNum <= currentLevelNum 
+        };
+    });
+}
+
+export const getIGLevelTasks = async (levels: number[], igHashtagMap: IGHashtagMap[]): Promise<FormattedLevel[]> => {
+    try {
+        const response: AxiosResponse<ApiResponse> = await privateGateway.get(dashboardRoutes.getUserLevels);
+        const apiData: ApiResponse = response.data;
+
+        const filteredResponse = {
+            ...apiData,
+            response: apiData.response.filter(level => {
+                const levelNum = parseInt(level.name.replace("lvl", ""));
+                return levels.includes(levelNum); 
+            })
+        };
+
+        return formatIGTasksData(filteredResponse, "Level 4", igHashtagMap);
+    } catch (error) {
+        console.log(error);
+        throw error as ApiError;
+    }
+};
