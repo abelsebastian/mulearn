@@ -4,6 +4,7 @@ import { createLearningCircle, scheduleMeetup } from "../../../LearningCircleV2/
 import { useNavigate } from "react-router-dom";
 import ReactSelect from "react-select";
 import { getInterests } from "../../../ManageUsers/apis";
+import { useUserStore } from "/src/ZustandProvider";
 
 
 const LearningCircleCreateForm = ({ setIsCreateModalOpen, onSuccess }: { setIsCreateModalOpen: (type: boolean) => void, onSuccess: () => void }) => {
@@ -16,8 +17,10 @@ const LearningCircleCreateForm = ({ setIsCreateModalOpen, onSuccess }: { setIsCr
     const [location, setLocation] = useState('');
     const [time, setTime] = useState('');
 
+
     const navigate = useNavigate();
 
+    const org = useUserStore((state) => state.userProfile.college_id);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e && e.preventDefault();
@@ -30,8 +33,8 @@ const LearningCircleCreateForm = ({ setIsCreateModalOpen, onSuccess }: { setIsCr
             meetLink,
             location,
             time,
-            org: import.meta.env.VITE_ORG_ID,
-            ig: ig,
+            org,
+            ig,
             is_recurring: false,
             recurrence_type: "weekly",
             recurrence: 1,
