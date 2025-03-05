@@ -40,25 +40,18 @@ function InterestGroupsPage() {
   ];
 
 
-  // const response = await publicGateway.get(onboardingRoutes.interestGroups);
   useEffect(() => {
     if (firstFetch.current) {
       getInterestGroupsList(
         setData,
+        setIsLoading,
         1,
         perPage,
-        setIsLoading,
-        setTotalPages,
         "",
-        ""
       );
     }
     firstFetch.current = false;
   }, []);
-
-  // useEffect(() => {
-  //   setData(interestGroups);
-  // }, [interestGroups]);
 
   const mappedData:InterestGroupData[] = interestGroups.filter(e => 
     data.some(d => d.id === e.id)

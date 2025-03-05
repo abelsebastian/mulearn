@@ -35,14 +35,13 @@ export const getInterestGroups = async (
 
 export const getInterestGroupsList = async (
     setData: UseStateFunc<any>,
-    page: number,
-    selectedValue: number,
-    setIsLoading: UseStateFunc<boolean>,
-    setTotalPages?: UseStateFunc<any>,
+    setIsLoading?: UseStateFunc<boolean>,
+    page?: number,
+    selectedValue?: number,
     search?: string,
     sortID?: string
 ) => {
-    setIsLoading(true);
+    setIsLoading && setIsLoading(true);
     try {
         const response = await privateGateway.get(onboardingRoutes.interestGroups, {
             params: {
@@ -54,7 +53,7 @@ export const getInterestGroupsList = async (
         });
         const interestGroups: any = response?.data?.response.interestGroup;
         setData(interestGroups);
-        setIsLoading(false);
+        setIsLoading && setIsLoading(false);
     } catch (err: unknown) {
         const error = err as AxiosError;
     }
