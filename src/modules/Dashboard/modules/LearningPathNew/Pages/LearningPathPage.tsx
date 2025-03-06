@@ -6,6 +6,7 @@ import levelsDataUIUX from "../modules/LevelsDataUIUX";
 import CardCarousel from "../modules/CardCarousal";
 import IGSelector from "../../InterestGroups/components/IGSelection/IGSelector";
 import { getUserLog, getUserProfile } from "../../Profile/services/api";
+import { SiDiscord } from "react-icons/si";
 
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 
@@ -243,8 +244,7 @@ const IGHashtagMap = [
 
 
 const LearningPathPage: React.FC = () => {
-  const { userProfile, setUserProfile } = useUserStore();
-  const userInfo = useUserStore((state) => state.userInfo);
+  const { userProfile, userInfo, setUserProfile } = useUserStore();
   const [activeTab, setActiveTab] = useState<"startLearning" | "becomeExpert">("startLearning");
   const [basicLevelData, setBasicLevelData] = useState<any[]>([]);
   const [intermediateLevelData, setIntermediateLevelData] = useState<any[]>([]);
@@ -329,6 +329,11 @@ const LearningPathPage: React.FC = () => {
     setOffCanvasOpen(false);
     setSelectedData(null);
   };
+
+  const handleDiscordRedirect = () => {
+    window.location.href = import.meta.env.VITE_DISCORD_AUTH_URL;
+};
+
 
   // Determine which levels to render based on active tab
   const levelsToRender = activeTab === "startLearning" ? basicLevelData : intermediateLevelData;
