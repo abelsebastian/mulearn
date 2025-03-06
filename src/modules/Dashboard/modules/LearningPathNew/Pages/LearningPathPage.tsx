@@ -11,6 +11,7 @@ import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 
 import { useUserStore } from "/src/ZustandProvider";
 import { getFilteredUserTasks, getIGLevelTasks } from "../services/api";
+import ConnectDiscord from "../../ConnectDiscord/pages/ConnectDiscord";
 
 const dummyUserProfile = {
   full_name: "John Doe",
@@ -243,6 +244,7 @@ const IGHashtagMap = [
 
 const LearningPathPage: React.FC = () => {
   const { userProfile, setUserProfile } = useUserStore();
+  const userInfo = useUserStore((state) => state.userInfo);
   const [activeTab, setActiveTab] = useState<"startLearning" | "becomeExpert">("startLearning");
   const [basicLevelData, setBasicLevelData] = useState<any[]>([]);
   const [intermediateLevelData, setIntermediateLevelData] = useState<any[]>([]);
@@ -367,13 +369,14 @@ const LearningPathPage: React.FC = () => {
       )}
 
       {/* ✅ LEVEL 0: Connect Discord */}
-      {activeTab === "startLearning" && !userProfile && (
+      {activeTab === "startLearning" && !userInfo.exist_in_guild && (
         <div className={styles.levelSection}>
           <h2>Level 0</h2>
           <h4 className={styles.levelSubtitle}>Connect to our Discord server to start your journey!</h4>
-          <button className={styles.connectDiscordButton} onClick={() => window.open("https://discord.com", "_blank")}>
+          {/* <button className={styles.connectDiscordButton} onClick={() => window.open("https://discord.com/invite/Jt7sv3chZP", "_blank")}>
             Connect Discord
-          </button>
+          </button> */}
+          <ConnectDiscord/>
         </div>
       )}
 
