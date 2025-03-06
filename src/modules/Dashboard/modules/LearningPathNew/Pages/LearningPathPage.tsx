@@ -25,6 +25,7 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
   if (!data) return null;
 
   const isSpecialLevel = data.interestGroups;
+  console.log(data, "data");
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -119,7 +120,7 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
             </div>
 
             <div className={styles.offCanvasSection}>
-              <button className={styles.proofOfWorkButton}><a href={"https://discord.gg/Vg5a9RY4"}> Submit proof work</a></button>
+              <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof work</a></button>
             </div>
           </>
         )}

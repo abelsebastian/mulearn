@@ -1,5 +1,6 @@
 import { privateGateway } from "@/MuLearnServices/apiGateways";
 import { dashboardRoutes } from "@/MuLearnServices/urls";
+import channelmap from "../data/channelmap"
 
 interface AxiosResponse<T> {
     data: T;
@@ -75,6 +76,7 @@ export interface Card {
     publishedWhen: string;
     prerequisites: string[];
     resources: string[];
+    discord_link?: string;
     completed?: boolean;
     karma?: number;
 }
@@ -161,13 +163,14 @@ export async function formatTasksData(apiResponse: ApiResponse, userLevel: strin
             hashtag: task.hashtag,
             ig: "General Task",
             icon: "",
+            discord_link: channelmap["taskdrop-box"] || "https://discord.com/channels/771670169691881483/",
             skills: ["Skill Development"],
             publishedBy: "Community",
             publishedWhen: "3/02/25, 12:00 PM",
             prerequisites: ["Basic knowledge"],
             resources: task.discord_link ? [task.discord_link] : [],
             completed: hashtagCompletedMap[task.hashtag] || false,
-            karma: task.karma, // Store karma for progress calculation
+            karma: task.karma, 
         }));
 
         return {
@@ -264,6 +267,7 @@ export async function formatIGTasksDataTest(
                 hashtag: task.hashtag || "#unknown",
                 ig: task.ig || "General Task",
                 icon: "",
+                discord_link: channelmap[task.ig as keyof typeof channelmap] || "https://discord.com/channels/771670169691881483/",
                 skills: ["Skill Development"],
                 publishedBy: "µLearn Foundation",
                 publishedWhen: "",
@@ -320,14 +324,13 @@ export const getUserIGFormattedTasks = async (
             })
         );
 
-        console.log(taskObject);
 
         const formattedTasks: Record<string, FormattedLevel[]> = {};
         for (const igId of Object.keys(taskObject)) {
             formattedTasks[igId] = await formatIGTasksDataTest({ [igId]: taskObject[igId] }, userLevel, includeLevelNull);
         }
 
-        console.log(formattedTasks);
+        console.log(formattedTasks, "formatted-tasks");
         return formattedTasks;
     } catch (error) {
         console.error(error);
