@@ -12,7 +12,7 @@ import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { IoIosRocket } from "react-icons/io";
 import { dashboardRoutes } from "@/MuLearnServices/urls";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
-import { useUserStore } from "/src/ZustandProvider";
+import { UserProfile, useUserStore } from "/src/ZustandProvider";
 
 
 
@@ -30,15 +30,30 @@ declare global {
 const DashboardRootLayout = (props: { component?: any }) => {
     const navigate = useNavigate();
     const Management: ManagementTypes[] = Object.values(managementTypes).slice(2);
-    const { setUserInfo, updateUserInfo } = useUserStore();
+    const { setUserInfo, updateUserInfo, userProfile, setUserProfile } = useUserStore();
   const [isLoading, setIsLoading] = useState(true);
   const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const intializeUserProfile = async () => {
+      const response = await privateGateway.get(dashboardRoutes.getUserProfile);
+      if (!response || !response.data) {
+        throw new Error('Invalid API response');
+      }
+      const userProfile: UserProfile = response.data.response;
+      if (!userProfile || typeof userProfile !== 'object') {
+        throw new Error('Invalid userProfile data');
+      }
+      setUserProfile(userProfile);
+      
+    }
+    intializeUserProfile();
+  }, []);
 
     useEffect(() => {
         const initializeUserInfo = async () => {
           try {
-            const response = await privateGateway.get(dashboardRoutes.getInfo);
-            
+            const response = await privateGateway.get(dashboardRoutes.getInfo);            
             if (!response || !response.data) {
               throw new Error('Invalid API response');
             }
@@ -94,8 +109,8 @@ const DashboardRootLayout = (props: { component?: any }) => {
             icon: <i className="fi fi-sr-clipboard-user"></i>
         },
         {
-            url: "/dashboard/learning-path",
-            title: "Learning Paths",
+            url: "/dashboard/mujourney",
+            title: "µJounrey",
             hasView: true,
             icon: <FaMapLocationDot />
         },

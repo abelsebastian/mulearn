@@ -439,7 +439,7 @@ function App() {
                     element: <DashboardRootLayout />,
                     children: [
                         { path: "home", element: <Dashboardpage/> },
-                        { path: "learning-path", element: <LearningPathPage/> },
+                        { path: "mujourney", element: <LearningPathPage/> },
                         { path: "learning-path/:id", element: <LearningPathPage/> },
                         { path: "profile", element: <Profile /> },
                         { path: "muverse", element: <ComingSoonPage /> },
