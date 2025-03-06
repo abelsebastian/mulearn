@@ -8,7 +8,6 @@ import { getUsers } from "../services/api";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import UserCard from "../../../components/UserCard";
 import { useNavigate } from "react-router-dom";
-import ModalProfile from "../../ProfileV2/pages/ModalProfile";
 
 interface User {
   full_name: string;
@@ -204,19 +203,14 @@ const MuLearnersSearchPage: React.FC = () => {
   const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleUserSelect = (user: User) => {
-    console.log("User selected:", user);
     setSelectedUser(user);
-    setIsModalOpen(true);
-  };
+    console.log("Selected user:", user);
+    // window.open(`/profile/${user.muid}`, "_blank");
+};
 
-  const handleModalClose = () => {
-    console.log("Closing modal");
-    setIsModalOpen(false);
-    setSelectedUser(null);
-  };
+
 
   return (
     <div className={styles.pageContainer}>
@@ -267,13 +261,7 @@ const MuLearnersSearchPage: React.FC = () => {
         <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
 
-      {selectedUser && (
-        <ModalProfile
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-          userId={selectedUser.muid} 
-        />
-      )}
+      
     </div>
   );
 };

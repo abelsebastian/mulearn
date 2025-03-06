@@ -60,8 +60,9 @@ const UserCard: React.FC<UserCardProps> = ({ data, onSelect }) => {
         <div className={styles.userHeader}>
           <h2 className={styles.userName}>{data.name.trim() || "Unknown"}</h2>
           {isRegularUser && data.muid && <h3 className={styles.userMUID}>{data.muid}</h3>}
+
           {/* <h3 className={styles.userRole}>{getPrimaryOrganization()}</h3> */}
-          {isRegularUser && data.karma && (
+          {data.karma && (
             <p className={styles.userKarma}>Karma: {formatKarma(data.karma)}</p>
           )}
         </div>
