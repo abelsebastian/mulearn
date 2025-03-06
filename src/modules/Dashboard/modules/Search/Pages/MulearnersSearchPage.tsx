@@ -227,7 +227,7 @@ const MuLearnersSearchPage: React.FC = () => {
         <FiSearch className={styles.searchIcon} />
         <input
           type="text"
-          placeholder={`Search by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
+          placeholder={`Search public profiles by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

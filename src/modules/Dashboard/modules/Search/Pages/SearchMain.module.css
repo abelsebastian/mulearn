@@ -2,6 +2,7 @@
     width: 100%;
     height: 100vh;
     position: relative;
+    
   }
   
   .tabs {
@@ -28,13 +29,13 @@
     cursor: pointer;
     padding: 0.5rem 1rem;
     font-weight: 500;
-    color: #4b5563;
+    color: #858e9b;
     transition: all 0.3s ease;
     border-radius: 9999px;
   }
   
   .tabItem:hover {
-    background-color: #f3f4f6;
+    background-color: #474747;
   }
   
   .active {
