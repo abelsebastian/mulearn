@@ -19,12 +19,19 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+
 }
 
 .sidebar {
   width: 100%;
   max-width: 100%;
+  padding: 0 clamp(8px, 2vw, 24px);
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  justify-content: start;
 }
 
 @media screen and (min-width: 768px) {
@@ -277,8 +284,8 @@
 }
 
 .officeHoursCard {
-  margin-top: 30px;
-
+  /* margin-top: 30px; */
+  margin: 30px auto;
   background-color: #456ff6;
   color: #f7f7f7;
   border-radius: 8px;
@@ -459,8 +466,10 @@
 .sidebarList {
   display: flex;
   flex-direction: column;
-  
-  gap: clamp(4px, 1vw, 16px);
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  /* gap: clamp(4px, 1vw, 16px); */
   width: 100%;
   overflow-x: hidden;
 }
@@ -489,6 +498,7 @@
   height: clamp(24px, 5vw, 40px); */
   object-fit: contain;
   border-radius: 8px;
+  margin: 0 auto;
   /* max-width: 100%; */
   width: 200px !important;
   height: 50px !important;

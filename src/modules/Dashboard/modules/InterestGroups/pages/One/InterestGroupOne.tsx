@@ -102,7 +102,7 @@ const CommunityForum = () => {
             <div className={styles.communityInfo}>
               <h1 className={styles.forumTitle}>{groupData.title}</h1>
               <div className={styles.forumSubInfo}>
-                <span><span></span>{groupData.isPublic ? "Public" : "Private"} Community</span>
+                {/* <span><span></span>{groupData.isPublic ? "Public" : "Private"} Community</span> */}
               
                 <span><span>• </span>{(groupData.memberCount / 1000).toFixed(1)}k members</span>
                 
