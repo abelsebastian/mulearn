@@ -106,6 +106,12 @@ const LearningCircleLanding = () => {
                 </div>
             ) : (
                 <div className={styles.learningCircleLandingPage}>
+                    <div className={styles.Banner}>
+                        <div className={styles.BannerContent}>
+                            <h1 className={styles.BannerTitle}>Discover Learning Circles</h1>
+                            <p className={styles.BannerSubtitle}>Join circles that share your interests and upgrade your skills.</p>
+                        </div>
+                    </div>
                     <div className={styles.middleContainer}>
                         {/* <SelectTab
                             placeholder={"Select Role"}
