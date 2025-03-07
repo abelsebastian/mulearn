@@ -153,7 +153,7 @@
   display: flex;
   align-items: center;
   gap: clamp(2px, 1vw, 8px);
-  font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+  font-size: clamp(0.825rem, 1.5vw, 1rem);
   color: #6b7280;
   flex-wrap: wrap;
 }

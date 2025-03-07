@@ -14,6 +14,7 @@ import top100coders from "../../SpecialEvents/assets/top-100.webp";
 import launchpad from "../../SpecialEvents/assets/launchpad.webp";
 import trivialideas from "../../SpecialEvents/assets/trivialideas.webp";
 import SpecialEventCardLanding from "../components/SpecialEventCardLanding/SpecialEventCardLanding";
+import illustration from "../assets/illustration.webp"
 
 // Data remains the same
 const data = [
@@ -254,6 +255,15 @@ const MuLearnLanding = () => {
             >
               Explore Learning Paths
             </button>
+          </motion.div>
+          <motion.div
+            className={styles.ctaButtons}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={textVariant}
+          >
+            <img src={illustration} alt="Illustration" />
           </motion.div>
         </div>
 
@@ -585,7 +595,7 @@ const MuLearnLanding = () => {
             Learn and Grow <span className={styles.highlight}>Together</span> as a{" "}
             <span className={styles.highlight}>Community</span>
           </h1>
-          <h6>
+          <h6 className={styles.communityDescription}>
             Are you ready to learn, grow, and upskill yourself to the next level? Come, be a part of the community, and let’s start learning in a new, better way. Call your friends as well because things are going to change once you experience it, and it is more effective when done in a group.
           </h6>
           <button>
@@ -595,7 +605,7 @@ const MuLearnLanding = () => {
           </button>
         </motion.div>
         <motion.div variants={fadeInUp} className={styles.joinCommunity}>
-          <img src="https://mulearn.org/assets/home/join.webp" alt="Join community" width="400px" />
+          <img src="https://mulearn.org/assets/home/join.webp" alt="Join community" width="350px" />
         </motion.div>
       </motion.section>
 
