@@ -58,7 +58,6 @@ function InterestGroupsPage() {
   );
 
 
-  // Filter groups based on search and category
   const filteredGroups = mappedData.filter(group => {
     const matchesSearch = group.title?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || group.category === selectedCategory;

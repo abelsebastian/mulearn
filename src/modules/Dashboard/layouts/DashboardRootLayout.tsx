@@ -188,7 +188,10 @@ const DashboardRootLayout = (props: { component?: any }) => {
     ];
 
     if (isLoading) {
-        return <MuLoader />;
+      
+        return <div className={styles.loader}>
+          <MuLoader />
+          </div>
     }
 
     return (

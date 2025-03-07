@@ -5,15 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import dpm from "../assets/images/dpm.webp";
 import { IoMdLogIn } from "react-icons/io";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
-import {
-    Popover,
-    PopoverTrigger,
-    Button,
-    PopoverContent
-} from "@chakra-ui/react";
-import { Notification as NotificationProps, getNotifications } from "./api";
-import NotificationTab from "./Notification";
-import { SiDiscord } from "react-icons/si";
 import { MuButtonLight } from "@/MuLearnComponents/MuButtons/MuButton";
 import MuLogOut from "../assets/svg/MuLogOut";
 import toast from "react-hot-toast";
@@ -146,7 +137,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
                             <div className={styles.modeContainer}>
-                                <span className={styles.modeText}>Mode:</span>
+                                <span className={styles.modeText}>Mode</span>
                                 <span
                                     className={styles.userDomain}
                                     onClick={() => setSwitchDomainModal(true)}

@@ -122,7 +122,7 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
             </div>
 
             <div className={styles.offCanvasSection}>
-              <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof work</a></button>
+              <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof of work</a></button>
             </div>
           </>
         )}
@@ -241,13 +241,11 @@ const LearningPathPage: React.FC = () => {
     const currentLevel = Number(useUserStore.getState().userProfile.level?.replace("lvl", "")) || 0;
 
     try {
-        // If user is below level 4, no need to fetch IGs as they won't exist
         if (currentLevel < 4) {
-            userIGsData = []; // Ensure it's empty since IGs are only for level 4+
+            userIGsData = []; 
             setIsLoading(false);
             return userIGsData;
         } else if (!userIGsData.length) {
-            // Only fetch if user is level 4+ and no IGs are in store
             const response = await privateGateway.get(dashboardRoutes.getUserProfile);
             console.log("Fetched user profile response:", response.data);
             setUserProfile(response.data.response);
@@ -270,9 +268,8 @@ const LearningPathPage: React.FC = () => {
 
   const fetchIntermediateTasks = useCallback(async () => {
     setIsLoading(true);
-    const currentLevel = unlockedLevel; // Already derived from userProfile
+    const currentLevel = unlockedLevel; 
 
-    // If user is below level 4, return a message indicating they need to reach level 4
     if (currentLevel < 4 || !userIGIDs.length) {
         setIntermediateLevelData([{
             level: 4,
@@ -495,8 +492,8 @@ useEffect(() => {
       )}
 
       {isLoading ? (
-        <div>
-          <MuLoader />
+        <div >
+        <MuLoader />
         </div>
       ) : levelsToRender.length > 0 && (
         levelsToRender.map((level) => {
