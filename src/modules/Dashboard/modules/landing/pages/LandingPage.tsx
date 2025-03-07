@@ -195,7 +195,10 @@ const MuLearnLanding = () => {
             className={styles.hamburger}
             onClick={() => setIsMenuOpen(true)}
           >
-            ☰
+            <div></div>
+            <div></div>
+            <div></div>
+
           </div>
         </div>
       </motion.nav>
@@ -257,7 +260,7 @@ const MuLearnLanding = () => {
             </button>
           </motion.div>
           <motion.div
-            className={styles.ctaButtons}
+            className={styles.heroImage}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -494,7 +497,7 @@ const MuLearnLanding = () => {
       >
         <motion.div className={styles.oppurtunitiesTitle} variants={fadeInUp}>
           <h1>At The End Of a μLearners Journey</h1>
-          <h6>They are offered</h6>
+          <h6>You are offered</h6>
         </motion.div>
         <motion.div
           className={styles.oppurtunities}

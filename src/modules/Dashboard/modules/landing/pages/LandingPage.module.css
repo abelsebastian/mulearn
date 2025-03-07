@@ -135,15 +135,20 @@
   padding: 10px 20px;
   font-weight: 700;
   font-size: 0.9rem;
-  margin-left: 0.6rem;
+  /* margin-left: 0.6rem; */
 }
 
 .ctaButtons {
   margin-top: 1rem;
+  display: flex;
+
+  gap: 1rem;
+
 }
 
 .ctaButtons button {
   margin-top: 1rem;
+
 }
 
 .featureCard {
@@ -827,12 +832,13 @@
     position: absolute;
     top: 1rem;
     right: 2rem;
-    font-size: 24px;
+    font-size: 30px;
     background: none;
     border: none;
     cursor: pointer;
     color: black;
     z-index: 1001;
+
   }
 
   .navLinks {
@@ -1081,6 +1087,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: .5rem;
   }
 
   .ctaButtons button {
