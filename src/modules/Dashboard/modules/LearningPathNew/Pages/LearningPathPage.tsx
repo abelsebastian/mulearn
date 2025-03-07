@@ -9,6 +9,8 @@ import { FormattedLevel, getFilteredUserTasks, getUserIGFormattedTasks,  } from 
 import ConnectDiscord from "../../ConnectDiscord/pages/ConnectDiscord";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
 import { dashboardRoutes } from "@/MuLearnServices/urls";
+import { isEqual } from 'lodash';
+import toast from "react-hot-toast";
 
 
 interface OffCanvasProps {
@@ -212,9 +214,9 @@ const HASHTAGSLEVL1TO3 = [
 const LearningPathPage: React.FC = () => {
   const { userProfile, userInfo, setUserProfile } = useUserStore();
   const [activeTab, setActiveTab] = useState<"startLearning" | "becomeExpert">("startLearning");
-  const [basicLevelData, setBasicLevelData] = useState<FormattedLevel[]>([]);
-  const [intermediateLevelData, setIntermediateLevelData] = useState<FormattedLevel[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [basicLevelData, setBasicLevelData] = useState<FormattedLevel[] | null>(null);
+  const [intermediateLevelData, setIntermediateLevelData] = useState<FormattedLevel[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({
     startLearning: null,
@@ -234,130 +236,181 @@ const LearningPathPage: React.FC = () => {
   const userIGIDs = React.useMemo(() => userIGs.map((ig) => ig.id), [userIGs]);
 
   const fetchUserIGs = useCallback(async () => {
+    setIsLoading(true);
     let userIGsData = useUserStore.getState().userProfile.interest_groups || [];
-    if (!userIGsData.length) {
-      setIsLoading(true);
-      try {
-        const response = await privateGateway.get(dashboardRoutes.getUserProfile);
-        console.log("Fetched user profile response:", response.data);
-        setUserProfile(response.data.response);
-        userIGsData = response.data.response.interest_groups || [];
-      } catch (error) {
+    const currentLevel = Number(useUserStore.getState().userProfile.level?.replace("lvl", "")) || 0;
+
+    try {
+        // If user is below level 4, no need to fetch IGs as they won't exist
+        if (currentLevel < 4) {
+            userIGsData = []; // Ensure it's empty since IGs are only for level 4+
+            setIsLoading(false);
+            return userIGsData;
+        } else if (!userIGsData.length) {
+            // Only fetch if user is level 4+ and no IGs are in store
+            const response = await privateGateway.get(dashboardRoutes.getUserProfile);
+            console.log("Fetched user profile response:", response.data);
+            setUserProfile(response.data.response);
+            userIGsData = response.data.response.interest_groups || [];
+            if (!userIGsData.length) {
+                console.error("User has no interest groups");
+            }
+        }
+    } catch (error) {
         console.error("Failed to refetch user profile:", error);
         userIGsData = [];
-      } finally {
+    } finally {
         setIsLoading(false);
-      }
     }
+
     return userIGsData;
-  }, [setUserProfile]);
+}, [setUserProfile]);
 
   const unlockedLevel = Number(userProfile.level?.replace("lvl", "")) || 0;
 
   const fetchIntermediateTasks = useCallback(async () => {
-    if (!userIGIDs.length) return;
-
     setIsLoading(true);
-    try {
-      const response = await getUserIGFormattedTasks(userIGIDs, unlockedLevel);
+    const currentLevel = unlockedLevel; // Already derived from userProfile
 
-      let processedLevels: FormattedLevel[] = [];
-
-      if (selectedIg.id) {
-        processedLevels = response[selectedIg.id] || [];
-      } else {
-        const levelMap: Record<number, FormattedLevel> = {
-          4: {
+    // If user is below level 4, return a message indicating they need to reach level 4
+    if (currentLevel < 4 || !userIGIDs.length) {
+        setIntermediateLevelData([{
             level: 4,
             title: "Level 4",
-            subtitle: "Level 4 Tasks",
+            subtitle: "You need to reach Level 4 to access these tasks and join Interest Groups",
             cards: [],
-            progress: { level: 4, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
-            isUnlocked: 4 <= unlockedLevel,
-          },
-          5: {
-            level: 5,
-            title: "Level 5",
-            subtitle: "Level 5 Tasks",
-            cards: [],
-            progress: { level: 5, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
-            isUnlocked: 5 <= unlockedLevel,
-          },
-          6: {
-            level: 6,
-            title: "Level 6",
-            subtitle: "Level 6 Tasks",
-            cards: [],
-            progress: { level: 6, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
-            isUnlocked: 6 <= unlockedLevel,
-          },
-          7: {
-            level: 7,
-            title: "Level 7",
-            subtitle: "Level 7 Tasks",
-            cards: [],
-            progress: { level: 7, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
-            isUnlocked: 7 <= unlockedLevel,
-          },
-        };
-
-        Object.values(response).forEach((igLevels) => {
-          igLevels.forEach((level) => {
-            if (levelMap[level.level]) {
-              levelMap[level.level].cards = [...levelMap[level.level].cards, ...level.cards];
-              levelMap[level.level].progress.totalTasks = levelMap[level.level].cards.length;
-              levelMap[level.level].progress.completedTasks = levelMap[level.level].cards.filter(
-                (card) => card.completed
-              ).length;
-              levelMap[level.level].progress.earnedKarma = levelMap[level.level].cards
-                .filter((card) => card.completed)
-                .reduce((sum, card) => sum + (card.karma || 0), 0);
-            }
-          });
-        });
-
-        processedLevels = Object.values(levelMap)
-          .filter((level) => level.cards.length > 0)
-          .sort((a, b) => a.level - b.level);
-      }
-
-      setIntermediateLevelData(processedLevels);
-    } catch (error) {
-      console.error("Error fetching intermediate tasks:", error);
-      setIntermediateLevelData([]);
-    } finally {
-      setIsLoading(false);
+            progress: { 
+                level: 4, 
+                completedTasks: 0, 
+                totalTasks: 0, 
+                requiredKarma: 0, 
+                earnedKarma: 0 
+            },
+            isUnlocked: false
+        }]);
+        setIsLoading(false);
+        return;
     }
-  }, [userIGIDs, selectedIg, unlockedLevel]);
+    if (unlockedLevel >= 4 && userIGIDs.length === 0) {
+      toast.error("You need to join an interest group to access these tasks");
+      setIntermediateLevelData([]); 
+      setIsLoading(false);
+      return;
+  }
+
+    try {
+        const response = await getUserIGFormattedTasks(userIGIDs, unlockedLevel);
+        let processedLevels: FormattedLevel[] = [];
+
+        if (selectedIg.id) {
+            processedLevels = response[selectedIg.id] || [];
+        } else {
+            const levelMap: Record<number, FormattedLevel> = {
+                4: {
+                    level: 4,
+                    title: "Level 4",
+                    subtitle: "Level 4 Tasks",
+                    cards: [],
+                    progress: { level: 4, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
+                    isUnlocked: 4 <= unlockedLevel,
+                },
+                5: {
+                    level: 5,
+                    title: "Level 5",
+                    subtitle: "Level 5 Tasks",
+                    cards: [],
+                    progress: { level: 5, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
+                    isUnlocked: 5 <= unlockedLevel,
+                },
+                6: {
+                    level: 6,
+                    title: "Level 6",
+                    subtitle: "Level 6 Tasks",
+                    cards: [],
+                    progress: { level: 6, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
+                    isUnlocked: 6 <= unlockedLevel,
+                },
+                7: {
+                    level: 7,
+                    title: "Level 7",
+                    subtitle: "Level 7 Tasks",
+                    cards: [],
+                    progress: { level: 7, completedTasks: 0, totalTasks: 0, requiredKarma: 0, earnedKarma: 0 },
+                    isUnlocked: 7 <= unlockedLevel,
+                },
+            };
+
+            Object.values(response).forEach((igLevels) => {
+                igLevels.forEach((level) => {
+                    if (levelMap[level.level]) {
+                        levelMap[level.level].cards = [...levelMap[level.level].cards, ...level.cards];
+                        levelMap[level.level].progress.totalTasks = levelMap[level.level].cards.length;
+                        levelMap[level.level].progress.completedTasks = levelMap[level.level].cards.filter(
+                            (card) => card.completed
+                        ).length;
+                        levelMap[level.level].progress.earnedKarma = levelMap[level.level].cards
+                            .filter((card) => card.completed)
+                            .reduce((sum, card) => sum + (card.karma || 0), 0);
+                    }
+                });
+            });
+
+            processedLevels = Object.values(levelMap)
+                .filter((level) => level.cards.length > 0)
+                .sort((a, b) => a.level - b.level);
+        }
+
+        setIntermediateLevelData(processedLevels);
+    } catch (error) {
+        console.error("Error fetching intermediate tasks:", error);
+        setIntermediateLevelData([]);
+    } finally {
+        setIsLoading(false);
+    }
+}, [userIGIDs, selectedIg, unlockedLevel]);
 
   useEffect(() => {
     fetchIntermediateTasks();
   }, [fetchIntermediateTasks]);
 
-  useEffect(() => {
-    const fetchBasicLevels = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getFilteredUserTasks(HASHTAGSLEVL1TO3);
-        setBasicLevelData(
-          response.map((level) => ({
-            ...level,
-            isUnlocked: level.level <= unlockedLevel,
-          }))
-        );
-      } catch (error) {
-        console.error("Error fetching basic levels:", error);
-        setBasicLevelData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchBasicLevels();
-  }, [unlockedLevel]);
+ 
+
+useEffect(() => {
+  setIsLoading(true);
+  const fetchBasicLevels = async () => {
+    try {
+      const response = await getFilteredUserTasks(HASHTAGSLEVL1TO3);
+      const newData = response.map((level) => ({
+        ...level,
+        isUnlocked: level.level <= unlockedLevel,
+      }));
+
+      setBasicLevelData((prev) => {
+        if (!prev) return newData;
+
+        const prevCompleted = prev.map((level) => ({
+          id: level.level,
+          completed: level.cards?.map((card) => card.completed) || [],
+        }));
+        const newCompleted = newData.map((level) => ({
+          id: level.level,
+          completed: level.cards?.map((card) => card.completed) || [],
+        }));
+        return isEqual(prevCompleted, newCompleted) ? prev : newData;
+      });
+    } catch (error) {
+      console.error("Error fetching basic levels:", error);
+      setBasicLevelData([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  fetchBasicLevels();
+}, [unlockedLevel]);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUserData = async () => {
-      setIsLoading(true);
       try {
         await Promise.all([
           getUserProfile(setUserProfile, () => {}, () => {}),
@@ -394,6 +447,10 @@ const LearningPathPage: React.FC = () => {
   };
 
   const levelsToRender = activeTab === "startLearning" ? basicLevelData : intermediateLevelData;
+
+  if (levelsToRender === null) {
+    return <MuLoader />;
+  }
 
   return (
     <div className={styles.container}>
@@ -441,7 +498,7 @@ const LearningPathPage: React.FC = () => {
         <div>
           <MuLoader />
         </div>
-      ) : levelsToRender.length > 0 ? (
+      ) : levelsToRender.length > 0 && (
         levelsToRender.map((level) => {
           const isLocked = level.level > unlockedLevel;
           return (
@@ -475,8 +532,9 @@ const LearningPathPage: React.FC = () => {
             </div>
           );
         })
-      ) : (
-        <div>No tasks available</div>
+      )}
+      {levelsToRender.length === 0 && (
+        <div className="text-center">No tasks available</div>
       )}
 
       <OffCanvas isOpen={offCanvasOpen} onClose={handleCloseOffCanvas} data={selectedData} />

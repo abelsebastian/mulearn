@@ -126,13 +126,19 @@
   /* Optional hover effect */
   /* background-color: #e0e0e0; */
 }
+/* 
+.disabledButton {
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+} */
 
-/* The sliding indicator */
 .indicator {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
+  min-width: 130px; 
   background-color: #456ff6;
   border-radius: 24px;
   transition: left 0.3s ease, width 0.3s ease;
