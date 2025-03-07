@@ -510,7 +510,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/rafiki.svg"}
-                  width={"120px"}
+                  width={"400px"}
                   alt="Job"
                 />
               ),
@@ -521,7 +521,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/Mentors-cuate.svg"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Freelance"
                 />
               ),
@@ -532,7 +532,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/cuate.svg"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Research"
                 />
               ),
@@ -543,7 +543,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"/assets/landing/College Project Concept Illustration.png"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Entrepreneurship"
                 />
               ),
@@ -585,7 +585,6 @@ const MuLearnLanding = () => {
         </motion.div>
       </motion.section>
 
-      {/* Community Section */}
       <motion.section
         className={`${styles.leftRightGrid} ${styles.leftRightGridCustom}`}
         variants={fadeInUp}
