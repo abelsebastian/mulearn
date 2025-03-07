@@ -224,7 +224,7 @@
 }
 
 .storyTitle p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-align: left;
   max-width: 35rem;
   font-weight: 500;
@@ -414,7 +414,7 @@
 
 .oppurtunities {
   display: grid;
-  grid-template-columns: repeat(4, minmax(20rem, 2fr));
+  grid-template-columns: repeat(4, minmax(15rem, 2fr));
   margin-top: 1rem;
   gap: 2rem; /* Increased gap for better spacing */
   justify-content: center;
@@ -476,7 +476,7 @@
 .dataGrid {
   display: grid;
   padding: 2rem 10rem;
-  grid-template-columns: repeat(4, minmax(20rem, 2fr));
+  grid-template-columns: repeat(4, minmax(15rem, 2fr));
   gap: 1.5rem;
 }
 
@@ -733,7 +733,7 @@
   }
 
   .heroLeft p {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .heroImage img {
@@ -886,7 +886,7 @@
   }
 
   .heroLeft p {
-    font-size: 0.7rem;
+    font-size: 1rem;
   }
 
   .heroImage img {
@@ -928,7 +928,7 @@
   }
 
   .storyTitle p {
-    font-size: 0.6rem;
+    font-size: 1rem;
   }
 
   .camparison h1 {
