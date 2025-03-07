@@ -27,6 +27,7 @@ import Socials from "../components/Socials/pages/Socials";
 import ShareProfilePopUp from "../components/ShareProfilePopUp/pages/ShareProfilePopUp";
 import HelmetMetaTags from "../components/HelmetMetaTags/HelmetMetaTags";
 import { isDev } from "@/MuLearnServices/common_functions";
+import { ProjectCards } from "../components/Projects/project-cards";
 
 //TODO: Verify the relevance of profile page image
 const Profile = () => {
@@ -202,10 +203,9 @@ const Profile = () => {
                                                         src={
                                                             userProfile.profile_pic
                                                                 ? userProfile.profile_pic +
-                                                                  `?${
-                                                                      Math.random() *
-                                                                      1000
-                                                                  }`
+                                                                `?${Math.random() *
+                                                                1000
+                                                                }`
                                                                 : dpm
                                                         }
                                                         alt={
@@ -214,26 +214,24 @@ const Profile = () => {
                                                         style={
                                                             !id
                                                                 ? {
-                                                                      outlineColor:
-                                                                          !profileStatus
-                                                                              ? "#456FF6"
-                                                                              : "#2dce89"
-                                                                  }
+                                                                    outlineColor:
+                                                                        !profileStatus
+                                                                            ? "#456FF6"
+                                                                            : "#2dce89"
+                                                                }
                                                                 : {}
                                                         }
                                                     />
                                                     {!id && (
                                                         <span>
                                                             <i
-                                                                className={`${
-                                                                    !profileStatus
+                                                                className={`${!profileStatus
                                                                         ? "fi fi-sr-shield-exclamation"
                                                                         : "fi fi-sr-shield-check"
-                                                                }  ${
-                                                                    !profileStatus
+                                                                    }  ${!profileStatus
                                                                         ? styles.private
                                                                         : styles.public
-                                                                }`}
+                                                                    }`}
                                                             ></i>
                                                             <div
                                                                 className={
@@ -252,8 +250,8 @@ const Profile = () => {
                                                         {userProfile.full_name}
                                                         {userProfile.college_code
                                                             ? " (" +
-                                                              userProfile.college_code +
-                                                              ")"
+                                                            userProfile.college_code +
+                                                            ")"
                                                             : null}
                                                     </h1>
                                                     <p
@@ -271,9 +269,9 @@ const Profile = () => {
                                                         LEVEL{"     "}
                                                         {userProfile.level
                                                             ? userProfile?.level?.slice(
-                                                                  3,
-                                                                  4
-                                                              )
+                                                                3,
+                                                                4
+                                                            )
                                                             : 1}
                                                     </p>
                                                 </div>
@@ -323,26 +321,26 @@ const Profile = () => {
                                             <p
                                                 style={
                                                     profileList ===
-                                                    "basic-details"
+                                                        "basic-details"
                                                         ? {
-                                                              marginLeft: "0px",
-                                                              width: "6.1rem"
-                                                          }
+                                                            marginLeft: "0px",
+                                                            width: "6.1rem"
+                                                        }
                                                         : profileList ===
                                                             "karma-history"
-                                                          ? {
+                                                            ? {
                                                                 marginLeft:
                                                                     "125px",
                                                                 width: "6.7rem"
                                                             }
-                                                          : profileList ===
-                                                              "mu-voyage"
-                                                            ? {
-                                                                  marginLeft:
-                                                                      "250px",
-                                                                  width: "5.3rem"
-                                                              }
-                                                            : {}
+                                                            : profileList ===
+                                                                "mu-voyage"
+                                                                ? {
+                                                                    marginLeft:
+                                                                        "250px",
+                                                                    width: "5.3rem"
+                                                                }
+                                                                : {}
                                                 }
                                                 className={styles.underline}
                                             ></p>
@@ -354,11 +352,11 @@ const Profile = () => {
                                                 }
                                                 style={
                                                     profileList ===
-                                                    "basic-details"
+                                                        "basic-details"
                                                         ? {
-                                                              fontSize: "600",
-                                                              color: "#000"
-                                                          }
+                                                            fontSize: "600",
+                                                            color: "#000"
+                                                        }
                                                         : {}
                                                 }
                                             >
@@ -372,11 +370,11 @@ const Profile = () => {
                                                 }
                                                 style={
                                                     profileList ===
-                                                    "karma-history"
+                                                        "karma-history"
                                                         ? {
-                                                              fontSize: "600",
-                                                              color: "#000"
-                                                          }
+                                                            fontSize: "600",
+                                                            color: "#000"
+                                                        }
                                                         : {}
                                                 }
                                             >
@@ -389,14 +387,29 @@ const Profile = () => {
                                                 style={
                                                     profileList === "mu-voyage"
                                                         ? {
-                                                              fontSize: "600",
-                                                              color: "#000"
-                                                          }
+                                                            fontSize: "600",
+                                                            color: "#000"
+                                                        }
                                                         : {}
                                                 }
                                             >
                                                 Mu Voyage
                                             </li>
+                                            {/* <li
+                                                onClick={() =>
+                                                    setProfileList("projects")
+                                                }
+                                                style={
+                                                    profileList === "projects"
+                                                        ? {
+                                                            fontSize: "600",
+                                                            color: "#000"
+                                                        }
+                                                        : {}
+                                                }
+                                            >
+                                                Projects
+                                            </li> */}
                                         </div>
 
                                         <div className={styles.pointsList}>
@@ -409,11 +422,11 @@ const Profile = () => {
                                                             userProfile.karma
                                                         ) > 1000
                                                             ? (
-                                                                  parseInt(
-                                                                      userProfile.karma
-                                                                  ) / 1000
-                                                              ).toPrecision(3) +
-                                                              "K"
+                                                                parseInt(
+                                                                    userProfile.karma
+                                                                ) / 1000
+                                                            ).toPrecision(3) +
+                                                            "K"
                                                             : userProfile.karma}
                                                     </h1>
                                                 </div>
@@ -428,33 +441,33 @@ const Profile = () => {
                                                         ) /
                                                             monthDifference >
                                                             1000 &&
-                                                        monthDifference !== 0
+                                                            monthDifference !== 0
                                                             ? (
-                                                                  parseInt(
-                                                                      userProfile.karma
-                                                                  ) /
-                                                                  monthDifference /
-                                                                  1000
-                                                              ).toPrecision(4) +
-                                                              "K"
+                                                                parseInt(
+                                                                    userProfile.karma
+                                                                ) /
+                                                                monthDifference /
+                                                                1000
+                                                            ).toPrecision(4) +
+                                                            "K"
                                                             : isNaN(
-                                                                    parseInt(
-                                                                        userProfile.karma
-                                                                    ) /
-                                                                        monthDifference
-                                                                )
-                                                              ? "0"
-                                                              : monthDifference ===
-                                                                  0
+                                                                parseInt(
+                                                                    userProfile.karma
+                                                                ) /
+                                                                monthDifference
+                                                            )
                                                                 ? "0"
-                                                                : (
-                                                                      parseInt(
-                                                                          userProfile.karma
-                                                                      ) /
-                                                                      monthDifference
-                                                                  ).toPrecision(
-                                                                      3
-                                                                  )}
+                                                                : monthDifference ===
+                                                                    0
+                                                                    ? "0"
+                                                                    : (
+                                                                        parseInt(
+                                                                            userProfile.karma
+                                                                        ) /
+                                                                        monthDifference
+                                                                    ).toPrecision(
+                                                                        3
+                                                                    )}
                                                     </h1>
                                                 </div>
                                             </div>
@@ -489,20 +502,24 @@ const Profile = () => {
                                             userLog={userLog}
                                         />
                                     ) : (
-                                        profileList === "mu-voyage" && (
+                                        profileList === "mu-voyage" ? (
                                             <MuVoyage
                                                 userLevelData={userLevelData}
                                                 userLevel={
                                                     userProfile.level !== null
                                                         ? parseInt(
-                                                              userProfile.level?.slice(
-                                                                  3,
-                                                                  4
-                                                              )
-                                                          )
+                                                            userProfile.level?.slice(
+                                                                3,
+                                                                4
+                                                            )
+                                                        )
                                                         : 1
                                                 }
                                             />
+                                        ) : (
+                                            profileList === "projects" && (
+                                                <ProjectCards/>
+                                            )
                                         )
                                     )}
                                 </div>
