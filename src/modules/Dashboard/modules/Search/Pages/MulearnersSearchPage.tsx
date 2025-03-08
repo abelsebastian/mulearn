@@ -216,10 +216,11 @@ const MuLearnersSearchPage: React.FC = () => {
       <div className={styles.Banner}>
         <div className={styles.BannerContent}>
           <h1 className={styles.BannerTitle}>Find & Connect</h1>
-          <p className={styles.BannerSubtitle}>
+          {/* <p className={styles.BannerSubtitle}>
             Explore a curated network of individuals based on interest groups, names, or colleges.
             Navigate technology, management, and creativity with clarity and purpose.
-          </p>
+          </p> */}
+          <span className={styles.BannerDisclaimer}>*Only <b>public</b> profiles will be displayed here</span>
         </div>
       </div>
 

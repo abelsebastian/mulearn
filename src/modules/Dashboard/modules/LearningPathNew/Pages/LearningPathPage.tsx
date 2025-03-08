@@ -458,7 +458,7 @@ useEffect(() => {
           className={`${styles.topBarButton} ${activeTab === "startLearning" ? styles.activeTab : ""}`}
           onClick={() => setActiveTab("startLearning")}
         >
-          Start Learning
+          Start Journey
         </button>
         <button
           ref={(el) => (tabRefs.current.becomeExpert = el)}
