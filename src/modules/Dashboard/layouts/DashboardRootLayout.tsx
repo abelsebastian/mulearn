@@ -144,12 +144,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <i className="fi fi-sr-building"></i>
         },
-        {
-            url: "/dashboard/muVerse",
-            title: "μVerse",
-            hasView: true,
-            icon: <IoIosRocket />
-        },
+        // {
+        //     url: "/dashboard/muVerse",
+        //     title: "μVerse",
+        //     hasView: true,
+        //     icon: <IoIosRocket />
+        // },
         // {
         //     url: "/dashboard/profile",
         //     title: "Profile",
