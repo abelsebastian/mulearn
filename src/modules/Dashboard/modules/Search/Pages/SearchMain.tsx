@@ -1,17 +1,33 @@
-import { useEffect, useState } from "react"
-import styles from "./SearchMain.module.css"
-import MuLearnersSearchPage from "./MulearnersSearchPage"
-import MentorSearchPage from "../../Mentors/Pages/MentorPage"
-import CampusSearchPage from "../../Campus/pages/CampusSearchPage"
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import styles from "./SearchMain.module.css";
+import MuLearnersSearchPage from "./MulearnersSearchPage";
+import MentorSearchPage from "../../Mentors/Pages/MentorPage";
+import CampusSearchPage from "../../Campus/pages/CampusSearchPage";
 
 const SearchMain = () => {
-  const [activeTab, setActiveTab] = useState<string>(() => {
-    // Check if there's a history state on initial load
-    const state = window.history.state;
-    return state?.activeTab && ["mulearners", "mentors", "campuses"].includes(state.activeTab)
-      ? state.activeTab
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramTab = useParams<{ tab?: string }>().tab;
+
+  const getActiveTab = (): string => {
+    const queryParams = new URLSearchParams(location.search);
+    const queryTab = queryParams.get("activetab");
+
+    return queryTab && ["mulearners", "mentors", "campuses"].includes(queryTab)
+      ? queryTab
+      : paramTab && ["mulearners", "mentors", "campuses"].includes(paramTab)
+      ? paramTab
       : "mulearners";
-  });
+  };
+
+  console.log("paramTab", paramTab);
+
+  const [activeTab, setActiveTab] = useState<string>(getActiveTab);
+
+  useEffect(() => {
+    setActiveTab(getActiveTab());
+  }, [location.search, paramTab]);
 
   const tabs = [
     { name: "µlearners", value: "mulearners" },
@@ -21,22 +37,8 @@ const SearchMain = () => {
 
   const handleTab = (tab: string) => {
     setActiveTab(tab);
-    // Push new history state without changing URL
-    window.history.pushState({ activeTab: tab }, "", "/dashboard/search");
+    navigate(`/dashboard/search?activetab=${tab}`, { replace: true });
   };
-
-  // Listen for back/forward navigation
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      const tabFromState = event.state?.activeTab;
-      if (tabFromState && tabFromState !== activeTab) {
-        setActiveTab(tabFromState);
-      }
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, [activeTab]);
 
   return (
     <div className={styles.searchMain}>
@@ -59,8 +61,7 @@ const SearchMain = () => {
         {activeTab === "campuses" && <CampusSearchPage />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SearchMain
-
+export default SearchMain;

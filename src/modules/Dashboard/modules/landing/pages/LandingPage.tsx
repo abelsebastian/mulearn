@@ -104,8 +104,8 @@ const MuLearnLanding = () => {
     return (
       <>
         <li onClick={() => navigate("/dashboard/home")}>Home</li>
-        <li onClick={() => navigate("/dashboard/mentors")}>Mentorship</li>
-        <li onClick={() => navigate("/dashboard/learning-paths")}>Learning Paths</li>
+        <li onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
+        <li onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
         <li onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
         <li> <a href="https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be" target="_blank" rel="noopener noreferrer">
         Why μLearn
@@ -254,7 +254,7 @@ const MuLearnLanding = () => {
             </button>
             <button
               className={styles.downloadBtn}
-              onClick={() => navigate("/dashboard/learning-path")}
+              onClick={() => navigate("/dashboard/mujourney")}
             >
               Explore Learning Paths
             </button>
