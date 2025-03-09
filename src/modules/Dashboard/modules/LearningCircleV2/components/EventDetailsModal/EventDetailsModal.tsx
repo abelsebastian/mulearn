@@ -81,7 +81,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
         )}
 
         <div className={styles.buttonContainer}>
-          {
+          {/* {
             meetup.created_by === currentUser && (
               <>
                 <button className={styles.editButton} onClick={() => onEdit(meetup)}>
@@ -92,7 +92,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                 </button>
               </>
             )
-          }
+          } */}
           <button className={styles.doneButton} onClick={onClose}>
             Done
           </button>
