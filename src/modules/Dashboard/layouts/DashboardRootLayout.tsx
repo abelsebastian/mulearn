@@ -4,7 +4,7 @@ import SideNavBar from "../components/SideNavBar";
 import TopNavBar from "../components/TopNavBar";
 import { Suspense, useEffect, useState } from "react";
 import { FaUserFriends } from "react-icons/fa";
-import { FaMagnifyingGlass, FaMapLocationDot, FaWandMagicSparkles } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaMapLocationDot,FaHouse } from "react-icons/fa6";
 import { IoGlobeOutline } from "react-icons/io5";
 import { roles, managementTypes } from "@/MuLearnServices/types";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
@@ -106,11 +106,11 @@ const DashboardRootLayout = (props: { component?: any }) => {
             url: "/dashboard/home",
             title: "Home",
             hasView: true,
-            icon: <i className="fi fi-sr-clipboard-user"></i>
+            icon: <FaHouse />
         },
         {
             url: "/dashboard/mujourney",
-            title: "µJounrey",
+            title: "µJourney",
             hasView: true,
             icon: <FaMapLocationDot />
         },
