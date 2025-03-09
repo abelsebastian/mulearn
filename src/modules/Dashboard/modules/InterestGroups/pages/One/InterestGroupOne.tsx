@@ -6,6 +6,7 @@ import SidebarBannerSlider from '../../components/SideBannerSlider/SideBannerSli
 import IGActionSection from '../../components/ActionSection/IGActionSection';
 import { InterestGroupData, interestGroups } from '../../data/interestGroups';
 import ComingSoonPage from '/src/modules/Common/Authentication/pages/ComingSoon';
+import { FiArrowLeft } from 'react-icons/fi';
 
 
 const interestGroupsObject = Object.fromEntries(
@@ -83,6 +84,7 @@ const CommunityForum = () => {
       <div className={styles.mainGrid}>
         <div className={styles.mainContent}>
           <div className={styles.forumCard}>
+        <button className={styles.backButton} onClick={() => window.history.back()}> <FiArrowLeft/> </button>
             <div className={styles.bannerWrapper}>
               <img
                 src={groupData.bannerImage}

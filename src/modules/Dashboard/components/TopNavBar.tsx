@@ -137,7 +137,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <b className={styles.greetings}><i>Hello</i>, <b>{userName}</b> 👋</b>
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
-                            {userInfo && (
+                            {refreshToken && (
                             <div className={styles.modeContainer}>
                                 <span className={styles.modeText}>Mode</span>
                                 <span
@@ -148,9 +148,10 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                 </span>
                             </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                            {/* <div > */}
+                    {refreshToken &&(
 
                                 <GameProgressBar levelData={userLevelData} userLevel={userLevel} />
+                    )}
                             </div>
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>
