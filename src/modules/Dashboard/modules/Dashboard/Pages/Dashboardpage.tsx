@@ -122,6 +122,9 @@ interface ApiInterestGroup {
   created_at: string;
 }
 
+
+
+
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
@@ -135,29 +138,33 @@ const DashboardPage = () => {
   const userDomains: string[] =
     fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];
 
-  useEffect(() => {
-    const fetchInterestGroups = async () => {
-      try {
-        const response = await getDomainBasedInterestGroups(userDomains[0]);
-        if (response) {
-          const newGroups = response.map((group) => ({
-            title: group.name,
-            id: group.id,
-            link: `interestgroups/${group.id}`,
-            image: "https://via.placeholder.com/50?text=Writing",
-          }));
-          setInterestGroups((prev) =>
-            JSON.stringify(prev) === JSON.stringify(newGroups)
-              ? prev
-              : newGroups.slice(0, 5)
-          );
+    useEffect(() => {
+      const fetchInterestGroups = async () => {
+        try {
+          const response = await getDomainBasedInterestGroups(userDomains[0]);
+          console.log("groups", response);
+          if (response) {
+            const newGroups = response.map((group) => ({
+              title: group.name,
+              id: group.id,
+              link: `interestgroups/${group.id}`,
+              image: "/assets/IG/mobile_dev.jpg",
+            }));
+    
+            setInterestGroups((prev) =>
+              JSON.stringify(prev) === JSON.stringify(newGroups)
+                ? prev
+                : newGroups.slice(0, 5)
+            );
+          }
+        } catch (error) {
+          console.error("Failed to fetch interest groups:", error);
         }
-      } catch (error) {
-        console.error("Failed to fetch interest groups:", error);
-      }
-    };
-    fetchInterestGroups();
-  }, [userDomains[0]]);
+      };
+    
+      fetchInterestGroups();
+    }, [userDomains[0]]);
+    
 
   const handleStartLearning = useCallback(() => {
     navigate('/dashboard/learning-path');

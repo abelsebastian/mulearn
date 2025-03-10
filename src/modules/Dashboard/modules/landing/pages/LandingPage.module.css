@@ -388,19 +388,16 @@
   justify-content: center;
   padding: 3rem 2rem; /* Increased padding for larger cards */
   background-color: #f7f7f7;
-  border-right: 0.2px solid gray;
+  /* border-right: 0.2px solid gray; */
   transition: background 0.5s ease, box-shadow 0.3s ease;
   cursor: pointer;
   min-height: 250px; /* Increased minimum height */
 }
 
-.cards:hover {
+/* .cards:hover {
   background-color: #e2e2e3;
-}
+} */
 
-.cards:last-child {
-  border-right: 0;
-}
 
 .cards h6 {
   font-size: 1.6rem; /* Increased font size */
@@ -428,10 +425,11 @@
 
 .oppurtunities {
   display: grid;
-  grid-template-columns: repeat(4, minmax(15rem, 2fr));
+  grid-template-columns: repeat(5, minmax(15rem, 2fr));
   margin-top: 1rem;
   gap: 2rem; /* Increased gap for better spacing */
   justify-content: center;
+  border:none;
 }
 
 .community h1 {
@@ -651,7 +649,7 @@
   }
 
   .oppurtunities {
-    grid-template-columns: repeat(2, minmax(20rem, 2fr));
+    grid-template-columns: repeat(3, minmax(15rem, 2fr));
   }
 
   .cards {
@@ -762,7 +760,7 @@
 
   .oppurtunities {
     grid-template-columns: 1fr;
-    grid-template-columns: repeat(2, minmax(20rem, 1fr));
+    grid-template-columns: repeat(3, minmax(15rem, 1fr));
 
   }
 

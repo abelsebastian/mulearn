@@ -546,6 +546,17 @@ const MuLearnLanding = () => {
                 />
               ),
             },
+            {
+              id: 5,
+              name: "Social Cause",
+              icon: (
+                <img
+                  src={"/assets/landing/social-growth.webp"}
+                  width={"400px"}
+                  alt="Social Cause"
+                />
+              ),
+            },
           ].map((e) => (
             <motion.div key={e.id} className={styles.cards} variants={fadeInUp}>
               <span>{e.icon}</span>
@@ -623,14 +634,14 @@ const MuLearnLanding = () => {
             <ul>
               <li><a href="https://mulearn.org/careers">Career Labs</a></li>
               <li><a href="https://gtechmulearn.medium.com/">Blog</a></li>
-              <li><a href="https://mulearn.org/privacypolicy">Interest Groups</a></li>
+              <li><a href="http://app.mulearn.org/dashboard/interestgroups">Interest Groups</a></li>
             </ul>
           </div>
           <div className={styles.footerSection}>
             <h3>Legal</h3>
             <ul>
               <li><a href="https://mulearn.org/termsandconditions">Terms and Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="https://mulearn.org/privacypolicy">Privacy Policy</a></li>
             </ul>
           </div>
           <div className={styles.footerSection}>
