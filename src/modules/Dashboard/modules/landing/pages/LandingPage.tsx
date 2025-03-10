@@ -103,18 +103,16 @@ const MuLearnLanding = () => {
   function NavLinks() {
     return (
       <>
-        <li onClick={() => navigate("/dashboard/home")}>Home</li>
-        <li onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
-        <li onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
-        <li onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
-        <li> <a href="https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be" target="_blank" rel="noopener noreferrer">
-        Why μLearn
-    </a></li>
-    <li>
-    <a href="https://mulearn.org" target="_blank" rel="noopener noreferrer">
-        Visit the Old Site
-    </a>
-</li>
+        <li className="cursor-pointer" onClick={() => navigate("/")}>Home</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
+        <li className="cursor-pointer" onClick={() => window.open("https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be", "_blank")}>
+          Why μLearn
+        </li>
+        <li className="cursor-pointer" onClick={() => window.open("https://mulearn.org", "_blank")}>
+          Visit the Old Site
+        </li>
       </>
     );
   }

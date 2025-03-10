@@ -75,6 +75,20 @@
   font-size: 0.9rem;
 }
 
+
+.joinBtn:hover,
+.loginBtn:hover {
+  background-color: #005ec3;
+  transition: all 0.3s ease;
+
+}
+
+.downloadBtn:hover {
+  background-color: #e6e3e3;
+  transition: all 0.3s ease;
+
+}
+
 .heroSection {
   display: flex;
   flex-direction: column;
@@ -590,6 +604,8 @@
   .navButtons .loginBtn {
     font-size: 0.8rem;
   }
+
+
 
   .dataGrid {
     grid-template-columns: repeat(3, minmax(15rem, 2fr));
