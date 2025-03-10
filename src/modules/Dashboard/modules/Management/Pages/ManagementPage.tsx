@@ -8,7 +8,7 @@ const subcategories = [
     icon: '👤',
     title: 'Manage Users',
     description: 'Add, edit, and delete user accounts.',
-    path: "management/user-management/manage-users"
+    path: "management/user-management/manage-users",
   },
   {
     icon: '🔐',
@@ -142,12 +142,12 @@ const subcategories = [
     description: 'Configure dynamic content types.',
     path: "management/dynamic-type"
   },
-  {
-    icon: '🔗',
-    title: 'System: URL Shortener',
-    description: 'Create and manage shortened URLs.',
-    path: "management/url-shortener"
-  }
+  // {
+  //   icon: '🔗',
+  //   title: 'System: URL Shortener',
+  //   description: 'Create and manage shortened URLs.',
+  //   path: "management/url-shortener"
+  // }
 ];
 
 const ManagementPage: React.FC = () => {

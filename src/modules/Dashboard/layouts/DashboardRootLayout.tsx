@@ -160,7 +160,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
             url: "/dashboard/management",
             title: "Management",
             hasView: true,
-            roles: [roles.ADMIN, roles.FELLOW, roles.ASSOCIATE],
+            roles: [roles.ADMIN],
             icon: <i className="fi fi-sr-layout-fluid"></i>,
             dynamicType: Management
         },
@@ -171,6 +171,13 @@ const DashboardRootLayout = (props: { component?: any }) => {
             roles: [roles.CAMPUS_LEAD, roles.LEAD_ENABLER, roles.ADMIN],
             icon: <i className="fi fi-sr-book-arrow-right"></i>
         },    
+        {
+          url: "/dashboard/url-shortener",
+          title: "URL Shortner",
+          hasView: true,
+          roles: [roles.ADMIN, roles.ASSOCIATE],
+          icon: <i className="fi fi-sr-link"></i>
+        }
         // {
         //     url: "/dashboard/zonal-dashboard",
         //     title: "Zonal Dashboard",
