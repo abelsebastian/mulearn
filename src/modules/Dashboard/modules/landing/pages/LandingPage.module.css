@@ -52,17 +52,27 @@
 .featuresGrid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-  margin-top: 30px;
+  gap: 0px;
+  margin-top: 50px;
 }
 
 .featureCard {
   padding: 15px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.featuresGrid .featureCard:first-child{
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.featuresGrid .featureCard:last-child{
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .joinBtn,
@@ -188,10 +198,10 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.featureCard:hover {
+/* .featureCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
+} */
 
 .featureCard h3 {
   font-size: 1.1rem;
