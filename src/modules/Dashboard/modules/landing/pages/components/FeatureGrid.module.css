@@ -60,8 +60,39 @@
     object-fit: contain;
     transition: transform 0.3s ease;
 }
+@media (max-width: 1320px) {
+    .featuresGrid {
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
 
-/* Media query for responsive design */
+    .featureCard {
+        width: calc(33% - 30px) !important;
+        border: 2px solid #EEE !important;
+    }
+}
+
+/* Media query for tablets */
+@media (max-width: 1024px) {
+    .featuresGrid {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .featureCard {
+        width: calc(50% - 20px) !important;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+    }
+
+    .featureCard:first-child,
+    .featureCard:last-child {
+        border-radius: 10px;
+    }
+}
+
+/* Media query for mobile devices */
 @media (max-width: 768px) {
     .featuresGrid {
         flex-direction: column;

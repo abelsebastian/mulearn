@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import styles from './FeatureGrid.module.css';
 
 const FeatureGrid = () => {
   const [expandedIndex, setExpandedIndex] = useState(0); // Start with the first card expanded
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1320);
+
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 1320);
+    if (window.innerWidth < 1320) {
+      setIsHovering(false)
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const features = [
     {
@@ -62,7 +76,12 @@ const FeatureGrid = () => {
 
   // Determine if a card is active (expanded)
   const isCardActive = (index: any) => {
+    if(isMobile){
+      return false
+    }
+    else { 
     return isHovering ? expandedIndex === index : index === 0;
+    }
   };
 
   return (
