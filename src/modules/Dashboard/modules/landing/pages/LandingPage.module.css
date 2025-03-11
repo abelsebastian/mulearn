@@ -106,6 +106,15 @@
   align-items: center;
 }
 
+.heroSection h1{
+  margin-top: 50px;
+}
+
+.heroSection h1 span{
+  color: #007bff;
+  font-weight: bold;
+}
+
 .heroLeft {
   width: 100%;
   display: flex;

@@ -269,6 +269,7 @@ const MuLearnLanding = () => {
           </motion.div>
         </div>
 
+        <h1>What <span>µLearn</span> offers</h1>
         <FeatureGrid/>
       </motion.header>
 
@@ -421,7 +422,6 @@ const MuLearnLanding = () => {
       >
         <motion.div className={styles.oppurtunitiesTitle} variants={fadeInUp}>
           <h1>At The End Of a μLearners Journey</h1>
-          <h6>You are offered</h6>
         </motion.div>
         <motion.div
           className={styles.oppurtunities}
