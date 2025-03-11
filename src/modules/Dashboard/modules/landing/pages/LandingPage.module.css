@@ -432,6 +432,10 @@
   border:none;
 }
 
+.oppurtunities span img {
+  height: 100px;
+}
+
 .community h1 {
   font-size: 3.5rem;
   font-weight: 700;
