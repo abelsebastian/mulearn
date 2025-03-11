@@ -1,9 +1,14 @@
 "use client";
-
 import { motion } from "framer-motion";
 import { Img } from "@chakra-ui/react";
 import style from "./GameProgressBar.module.css";
-import karmaIcon from "../assets/karma-icon.png";
+import Level1 from "../../Profile/components/MuVoyage/assets/images/Level1.webp";
+import Level2 from "../../Profile/components/MuVoyage/assets/images/Level2.webp";
+import Level3 from "../../Profile/components/MuVoyage/assets/images/Level3.webp";
+import Level4 from "../../Profile/components/MuVoyage/assets/images/Level4.webp";
+import Level5 from "../../Profile/components/MuVoyage/assets/images/Level5.webp";
+import Level6 from "../../Profile/components/MuVoyage/assets/images/Level6.webp";
+import Level7 from "../../Profile/components/MuVoyage/assets/images/Level7.webp";
 
 interface Task {
   completed: boolean;
@@ -23,12 +28,22 @@ interface LevelDataResult {
   progress?: number;
 }
 
-export default function GameProgressBar({ 
-  levelData = [], 
-  userLevel 
-}: { 
-  levelData: Level[], 
-  userLevel?: string 
+const ImageMap = [
+  { level: 1, image: Level1 },
+  { level: 2, image: Level2 },
+  { level: 3, image: Level3 },
+  { level: 4, image: Level4 },
+  { level: 5, image: Level5 },
+  { level: 6, image: Level6 },
+  { level: 7, image: Level7 },
+];
+
+export default function GameProgressBar({
+  levelData = [],
+  userLevel
+}: {
+  levelData: Level[],
+  userLevel?: string
 }) {
   function transformToLevelData(levelData: Level[], userLevel: string = "lvl1"): LevelDataResult | string {
     const cleanedUserLevel = (userLevel || "lvl1").replace("lvl", "");
@@ -44,16 +59,14 @@ export default function GameProgressBar({
 
     for (const level of levelData) {
       if (!level.name || level.name.replace("lvl", "") !== cleanedUserLevel) {
-        console.log("User Leveled: ", level.name?.replace("lvl", ""));
-        console.log("User Level: ", cleanedUserLevel);
         continue;
       }
-      
+
       const currentLevel = Number(cleanedUserLevel) || 1;
       if (currentLevel === 7) {
         return "You've Made it!";
       }
-      
+
       const karmaRequired = level.karma;
       const currentLevelKarma = level.tasks
         ?.filter(task => task.completed === true)
@@ -74,7 +87,6 @@ export default function GameProgressBar({
     };
   }
 
-  // If userLevel is not yet available, show a loading state
   if (!userLevel) {
     return (
       <div className="w-full">
@@ -84,7 +96,7 @@ export default function GameProgressBar({
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             aria-hidden="true"
           >
-            <Img src={karmaIcon} className="w-6 h-6 !m-0" />
+            <Img src={ImageMap[0].image} className="w-6 h-6 !m-0" />
           </motion.div>
           <div className="flex flex-col flex-grow items-start justify-center !z-0">
             <div className="text-white text-[.5rem] md:text-xs font-bold bg-blue-500 !px-6 py-1 rounded-tr-sm">
@@ -118,7 +130,7 @@ export default function GameProgressBar({
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             aria-hidden="true"
           >
-            <Img src={karmaIcon} className="w-6 h-6 !m-0" />
+            <Img src={ImageMap[6].image} className="w-6 h-6 !m-0" />
           </motion.div>
           <div className="flex flex-col flex-grow items-start justify-center !z-0">
             <div className="text-white text-[.5rem] md:text-xs font-bold bg-blue-500 !px-6 py-1 rounded-tr-sm">
@@ -126,7 +138,6 @@ export default function GameProgressBar({
             </div>
             <div
               className="relative h-4 md:h-6 w-24 md:w-36 rounded-full overflow-hidden mt-1 flex items-center justify-center bg-green-500"
-              
             >
               <span className="text-white font-medium text-[.7rem] md:text-xs">
                 You've Made it!
@@ -140,7 +151,9 @@ export default function GameProgressBar({
   }
 
   if (levelData && levelData.length > 0) {
+
     const { currentLevel, currentPoints, karmaRequired, progress } = result;
+    const imageIndex = Math.min(Math.max(currentLevel - 1, 0), 6);
 
     return (
       <div className="w-full">
@@ -150,7 +163,8 @@ export default function GameProgressBar({
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             aria-hidden="true"
           >
-            <Img src={karmaIcon} className="w-6 h-6 !m-0" />
+            <Img src={ImageMap[imageIndex].image} className="w-6 h-6 !m-0" />
+
           </motion.div>
           <div className="flex flex-col flex-grow items-start justify-center !z-0">
             <div className="text-white text-[.5rem] md:text-xs font-bold bg-blue-500 !px-6 py-1 rounded-tr-sm">
