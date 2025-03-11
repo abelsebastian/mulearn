@@ -15,8 +15,8 @@
   padding: 1rem 0;
 }
 
-.joinCommunity{
- display: flex;
+.joinCommunity {
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -351,6 +351,7 @@
     box-shadow: inset 0px 0px 10px 2px rgba(0, 255, 182, 0.5),
       0px 0px 5px 2px rgba(0, 255, 135, 0.3);
   }
+
   100% {
     background: rgba(255, 255, 255, 1);
     box-shadow: inset 0px 0px 10px 2px rgba(0, 255, 182, 0.5),
@@ -386,12 +387,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem; /* Increased padding for larger cards */
+  padding: 3rem 2rem;
+  /* Increased padding for larger cards */
   background-color: #f7f7f7;
   /* border-right: 0.2px solid gray; */
   transition: background 0.5s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  min-height: 250px; /* Increased minimum height */
+  min-height: 250px;
+  /* Increased minimum height */
 }
 
 /* .cards:hover {
@@ -400,7 +403,8 @@
 
 
 .cards h6 {
-  font-size: 1.6rem; /* Increased font size */
+  font-size: 1.6rem;
+  /* Increased font size */
   margin-top: 1.5rem;
   font-weight: 600;
   text-align: center;
@@ -408,7 +412,8 @@
 
 .cards span img {
   width: 100%;
-  max-width: 150px; /* Increased max width for images */
+  max-width: 150px;
+  /* Increased max width for images */
   height: auto;
 }
 
@@ -427,9 +432,10 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(15rem, 2fr));
   margin-top: 1rem;
-  gap: 2rem; /* Increased gap for better spacing */
+  gap: 2rem;
+  /* Increased gap for better spacing */
   justify-content: center;
-  border:none;
+  border: none;
 }
 
 .oppurtunities span img {
@@ -676,7 +682,8 @@
   }
 
   .navLinks {
-    display: none; /* Hide desktop nav links on smaller screens */
+    display: none;
+    /* Hide desktop nav links on smaller screens */
   }
 
   .mobileNavLinks li {
@@ -873,6 +880,7 @@
   .landingContainer {
     padding: 1rem 1rem;
   }
+
   .leftRightGrid {
     grid-template-columns: 1fr;
     align-items: center;
@@ -976,8 +984,10 @@
     font-size: 0.9rem;
   }
 
-  .cards span img {
-    max-width: 80px;
+  .cards span img, .cards span {
+    height: auto;
+    width: 140px;
+    max-width: 140px;
   }
 
   .impact h1 {
@@ -1034,13 +1044,16 @@
 .iframeContainer {
   width: 100%;
   height: 100%;
-  aspect-ratio: 16/9; /* Maintains aspect ratio for responsiveness */
+  aspect-ratio: 16/9;
+  /* Maintains aspect ratio for responsiveness */
   overflow: hidden;
-  border: none; /* Remove default iframe border */
+  border: none;
+  /* Remove default iframe border */
 }
 
 .iframeContainer iframe {
   width: 100%;
   height: 100%;
-  border: none; /* Ensure no border on the iframe itself */
+  border: none;
+  /* Ensure no border on the iframe itself */
 }
