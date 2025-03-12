@@ -107,6 +107,10 @@ const LearningCircleLanding = () => {
             <EventDetailsModal
                 isOpen={isModalOpen}
                 onClose={handleModalClose}
+                onCloseRefresh={()=> {
+                    handleModalClose();
+                    handleUpdateLC();
+                }}
                 meetup={selectedMeetup}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
