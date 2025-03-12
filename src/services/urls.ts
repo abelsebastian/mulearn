@@ -308,5 +308,8 @@ export const qseverseRoutes = {
     getAllConnectedUsers: "api/app/connected-users",
     getConnectedUsers: "api/app/connected-users/search",
     getCredentials: "api/user/credentials",
-
+    getAchievements: "api/v1/integrations/qseverse/achievements",
+    createAchievements: "api/v1/integrations/qseverse/achievements",
+    updateAchievements: "api/v1/integrations/qseverse/achievements",
+    deleteAchievements: "api/v1/integrations/qseverse/achievements/",
 }
