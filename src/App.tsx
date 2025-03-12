@@ -101,6 +101,7 @@ import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
 import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
 import CampusDetails from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
 import LearningPathDetailPage from "./modules/Dashboard/modules/InterestGroups/components/LearningPathDetailPage";
+import ManageAchievements from "./modules/Dashboard/modules/ManageAchievements/ManageAchievements";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -445,6 +446,7 @@ function App() {
                         { path: "muverse", element: <ComingSoonPage /> },
                         { path: "interestgroups", element: <ComingSoonPage /> },
                         { path: "management", element: <AuthChecker roles={[roles.ADMIN]} children={<ManagementPage />} /> },
+                        { path: "management/manage-achievements", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageAchievements />} /> },
                         { path: "management/user-management/manage-users", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageUsersPage />} /> },
                         { path: "management/user-management/user-role-verification", element: <AuthChecker roles={[roles.ADMIN]} children={<UserRoleVerificationPage />} /> },
                         { path: "management/organization/affiliation", element: <AuthChecker roles={[roles.ADMIN]} children={<AffiliationPage />} /> },

@@ -23,6 +23,12 @@ const subcategories = [
     path: "management/manage-roles"
   },
   {
+    icon: '🏆',
+    title: 'Manage Achievements',
+    description: 'Create, edit, and configure user achievements.',
+    path: "management/manage-achievements"
+  },
+  {
 
     icon: '👤',
     title: 'Tasks',
