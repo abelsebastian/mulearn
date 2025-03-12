@@ -100,6 +100,7 @@ function ManageAchievements() {
 
     const handleDelete = (id: string | undefined) => {
         setData(prev => prev.filter(item => item.id !== id));
+
         navigate("/dashboard/management/manage-achievements");
     };
 
@@ -126,6 +127,7 @@ function ManageAchievements() {
 
     const handleCreateSubmit = () => {
         CreateAchievementFormRef.current?.handleSubmitExternally();
+        
     };
 
     return (

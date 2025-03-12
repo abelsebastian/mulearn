@@ -11,6 +11,7 @@ import {
     getLearningCircleInfo,
     scheduleMeetup
 } from "src/modules/Dashboard/modules/LearningCircleV2/services/LearningCircleAPIs";
+import { getConnectedUsers } from "../modules/Dashboard/modules/Profile/services/api";
 
 export const onboardingRoutes = {
     countryList: "/api/v1/register/country/list/",
@@ -301,3 +302,15 @@ export const donationRoutes = {
     order: "api/v1/donate/order/",
     verify: "api/v1/donate/verify/"
 };
+
+
+export const qseverseRoutes = {
+    issueVerifiableCredentials: "api/qseverse/issue-vc",
+    getAllConnectedUsers: "api/app/connected-users",
+    getConnectedUsers: "api/app/connected-users/search",
+    getCredentials: "api/user/credentials",
+    getAchievements: "api/v1/integrations/qseverse/achievements",
+    createAchievements: "api/v1/integrations/qseverse/achievements",
+    updateAchievements: "api/v1/integrations/qseverse/achievements",
+    deleteAchievements: "api/v1/integrations/qseverse/achievements/",
+}
