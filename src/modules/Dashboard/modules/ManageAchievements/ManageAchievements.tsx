@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Blank } from "@/MuLearnComponents/Table/Blank";
 import MuModal from "@/MuLearnComponents/MuModal/MuModal";
 import AchievementForm from "./AchievementForm";
+import CreateAchievementForm from "./CreateAchievementForm"; // Import the new form
 
 function ManageAchievements() {
     const [data, setData] = useState<any[]>([]);
@@ -20,33 +21,30 @@ function ManageAchievements() {
     const navigate = useNavigate();
     const firstFetch = useRef(true);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Renamed for clarity
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // New state for create modal
     const [id, setId] = useState("");
     const AchievementFormRef = useRef<any>(null);
+    const CreateAchievementFormRef = useRef<any>(null); // Ref for create form
 
     const columnOrder = [
-        { column: "si", Label: "SI", isSortable: true },
         { column: "title", Label: "Title", isSortable: true },
         { column: "levelBased", Label: "Level Based", isSortable: true },
         { column: "description", Label: "Description", isSortable: false },
-        { column: "icon", Label: "Icon", isSortable: false },
         { column: "vcToken", Label: "VC Token", isSortable: true },
         { column: "tags", Label: "Tags", isSortable: false },
         { column: "type", Label: "Type", isSortable: true },
         { column: "created_at", Label: "Created On", isSortable: true }
     ];
 
-    // Hardcoded data for now
     useEffect(() => {
         if (firstFetch.current) {
             setData([
                 {
                     id: "ach1",
-                    si: 1,
                     title: "First Step",
                     levelBased: false,
                     description: "Complete your first task",
-                    icon: "🏆",
                     vcToken: true,
                     tags: ["beginner", "welcome"],
                     type: "Individual",
@@ -54,11 +52,9 @@ function ManageAchievements() {
                 },
                 {
                     id: "ach2",
-                    si: 2,
                     title: "Level Master",
                     levelBased: true,
                     description: "Reach level 5",
-                    icon: "⭐",
                     vcToken: false,
                     tags: ["progress", "milestone"],
                     type: "Progress",
@@ -81,8 +77,7 @@ function ManageAchievements() {
 
     const handleSearch = (search: string) => {
         setCurrentPage(1);
-        // Filter hardcoded data based on search
-        const filteredData = data.filter(item => 
+        const filteredData = data.filter(item =>
             item.title.toLowerCase().includes(search.toLowerCase()) ||
             item.description.toLowerCase().includes(search.toLowerCase())
         );
@@ -91,12 +86,12 @@ function ManageAchievements() {
 
     const handleEdit = (id: string | number | boolean) => {
         setId(id as string);
-        setIsModalOpen(true);
+        setIsEditModalOpen(true);
     };
 
     const handleDelete = (id: string | undefined) => {
         setData(prev => prev.filter(item => item.id !== id));
-        navigate("/dashboard/manage-achievements");
+        navigate("/dashboard/management/manage-achievements");
     };
 
     const handlePerPageNumber = (selectedValue: number) => {
@@ -116,6 +111,16 @@ function ManageAchievements() {
         setData(sortedData);
     };
 
+    const handleCreateAchievement = () => {
+        setIsCreateModalOpen(true);
+    };
+
+    const handleCreateSubmit = () => {
+        CreateAchievementFormRef.current?.handleSubmitExternally();
+        // Note: Actual data addition to state would typically happen in CreateAchievementForm
+        // after successful submission, but you could add it here if needed
+    };
+
     return (
         <>
             {data && (
@@ -124,21 +129,41 @@ function ManageAchievements() {
                         onSearchText={handleSearch}
                         onPerPageNumber={handlePerPageNumber}
                         // CSV={dashboardRoutes.getAchievementsList}
+                        extraButtons={[
+                            {
+                                text: "Create Achievement",
+                                onClick: handleCreateAchievement,
+                                style: { marginRight: "5px", padding: "5px 10px", background: '#556ff1', borderRadius: 10, color: '#FFFFFF' }
+                            }
+                        ]}
                     />
                     <MuModal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
                         title="Edit Achievement"
                         type="success"
                         body="Enter the details of the achievement."
-                        onDone={() => 
+                        onDone={() =>
                             AchievementFormRef.current?.handleSubmitExternally()
                         }
                     >
                         <AchievementForm
                             ref={AchievementFormRef}
                             id={id}
-                            closeModal={() => setIsModalOpen(false)}
+                            closeModal={() => setIsEditModalOpen(false)}
+                        />
+                    </MuModal>
+                    <MuModal
+                        isOpen={isCreateModalOpen}
+                        onClose={() => setIsCreateModalOpen(false)}
+                        title="Create Achievement"
+                        type="success"
+                        body="Enter the details for the new achievement."
+                        onDone={handleCreateSubmit}
+                    >
+                        <CreateAchievementForm
+                            ref={CreateAchievementFormRef}
+                            closeModal={() => setIsCreateModalOpen(false)}
                         />
                     </MuModal>
                     <Table

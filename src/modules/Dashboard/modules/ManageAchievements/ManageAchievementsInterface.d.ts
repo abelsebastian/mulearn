@@ -1,11 +1,9 @@
 // ManageAchievementsInterface.d.ts
 interface AchievementData {
     id: string;
-    si: number; // Serial Index
     title: string;
     levelBased: boolean;
     description: string;
-    icon: string;
     vcToken: boolean;
     tags: string[];
     type: string;
@@ -13,11 +11,9 @@ interface AchievementData {
 
 interface AchievementDataFromBackend {
     id: string;
-    si: number;
     title: string;
     levelBased: boolean;
     description: string;
-    icon: string;
     vcToken: boolean;
     tags: string[];
     type: string;
@@ -30,11 +26,9 @@ const sampleAchievementResponse = {
         data: [
             {
                 id: "ach1",
-                si: 1,
                 title: "First Step",
                 levelBased: false,
                 description: "Complete your first task",
-                icon: "🏆",
                 vcToken: true,
                 tags: ["beginner", "welcome"],
                 type: "Individual",
@@ -42,11 +36,9 @@ const sampleAchievementResponse = {
             },
             {
                 id: "ach2",
-                si: 2,
                 title: "Level Master",
                 levelBased: true,
                 description: "Reach level 5",
-                icon: "⭐",
                 vcToken: false,
                 tags: ["progress", "milestone"],
                 type: "Progress",

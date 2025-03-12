@@ -1,12 +1,12 @@
-// AchievementForm.tsx
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+// CreateAchievementForm.tsx
+import { forwardRef, useImperativeHandle, useState } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import { customReactSelectStyles } from "../../utils/common";
 import { Switch } from "@chakra-ui/react";
 
-type Props = { id: string; closeModal: () => void };
+type Props = { closeModal: () => void };
 
 const achievementTypes = [
     { value: "Individual", label: "Individual" },
@@ -22,7 +22,7 @@ const tagsOptions = [
     { value: "milestone", label: "Milestone" }
 ];
 
-const AchievementForm = forwardRef((props: Props, ref: any) => {
+const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
     const [data, setData] = useState<AchievementData>({
         id: "",
         title: "",
@@ -34,22 +34,6 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
     });
     const [errors, setErrors] = useState<any>({});
 
-    useEffect(() => {
-        // Simulate fetching achievement data
-        const sampleData = {
-            id: props.id,
-            si: props.id === "ach1" ? 1 : 2,
-            title: props.id === "ach1" ? "First Step" : "Level Master",
-            levelBased: props.id === "ach1" ? false : true,
-            description: props.id === "ach1" ? "Complete your first task" : "Reach level 5",
-            icon: props.id === "ach1" ? "🏆" : "⭐",
-            vcToken: props.id === "ach1" ? true : false,
-            tags: props.id === "ach1" ? ["beginner", "welcome"] : ["progress", "milestone"],
-            type: props.id === "ach1" ? "Individual" : "Progress"
-        };
-        setData(sampleData);
-    }, [props.id]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setData(prev => ({ ...prev, [name]: value }));
@@ -60,7 +44,7 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
     };
 
     const handleTagsChange = (selectedOptions: any) => {
-        const tags = selectedOptions.map((opt: any) => opt.value);
+        const tags = selectedOptions ? selectedOptions.map((opt: any) => opt.value) : [];
         setData(prev => ({ ...prev, tags }));
     };
 
@@ -73,23 +57,27 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
     }));
 
     const handleSubmit = () => {
-        const requiredFields = ["si", "title", "description", "type"];
+        const requiredFields = ["title", "description", "type"];
         let isValid = true;
+        const newErrors: any = {};
 
         requiredFields.forEach(field => {
             if (!data[field as keyof AchievementData]) {
                 isValid = false;
-                setErrors((prev: any) => ({
-                    ...prev,
-                    [field]: `${field.charAt(0).toUpperCase() + field.slice(1)} is required`
-                }));
+                newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
             }
         });
 
+        setErrors(newErrors);
+
         if (isValid) {
-            toast.success("Achievement updated successfully");
+            toast.success("Achievement created successfully");
             props.closeModal();
-            console.log("Updated achievement:", data);
+            console.log("New achievement:", {
+                ...data,
+                id: `ach_${Date.now()}`, // Generate a simple unique ID
+                si: 1 // Starting sequence/index number
+            });
         }
     };
 
@@ -165,4 +153,4 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
     );
 });
 
-export default AchievementForm;
+export default CreateAchievementForm;

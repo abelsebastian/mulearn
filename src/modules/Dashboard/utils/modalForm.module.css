@@ -28,6 +28,23 @@
     color: black;
 }
 
+.inputContainer > label {
+    border-radius: 8px;
+    background-color: #f3f3f4;
+    padding: 10px;
+    width: 300px;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.inputContainer > label > label{
+    margin-bottom: 0px;
+}
+
 /* .inputContainer input::placeholder {
     color: black;
 } */
