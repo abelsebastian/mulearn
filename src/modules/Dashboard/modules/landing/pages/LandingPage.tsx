@@ -15,6 +15,7 @@ import launchpad from "../../SpecialEvents/assets/launchpad.webp";
 import trivialideas from "../../SpecialEvents/assets/trivialideas.webp";
 import SpecialEventCardLanding from "../components/SpecialEventCardLanding/SpecialEventCardLanding";
 import illustration from "../assets/illustration.webp"
+import FeatureGrid from "./components/FeatureGrid";
 
 // Data remains the same
 const data = [
@@ -268,82 +269,8 @@ const MuLearnLanding = () => {
           </motion.div>
         </div>
 
-        <motion.div
-          className={styles.featuresGrid}
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {[
-            {
-              title: "Community",
-              description: "Join 40,000+ learners & innovators.",
-              image: "/assets/landing/College Project Concept Illustration.png",
-              bgColor: "rgb(220 250 230)",
-            },
-            {
-              title: "Mentors",
-              description: "Learn from those ahead of you, mentor those behind you.",
-              image: "/assets/landing/searching.png",
-              bgColor: "rgb(235 200 205)",
-            },
-            {
-              title: "Interest Groups",
-              description: "Connect with like-minded people who share your interests",
-              image: "/assets/landing/Content Team Concept Illustration.png",
-              bgColor: "rgb(255 200 205)",
-            },
-            {
-              title: "Roadmaps",
-              description: "Structured learning paths for skill mastery.",
-              image: "/assets/landing/Roadmap.png",
-              bgColor: "rgb(155 138 228)",
-            },
-            {
-              title: "Challenges",
-              description: "Engage in real-world problem-solving.",
-              image: "/assets/landing/collab.png",
-              bgColor: "rgb(215 225 255)",
-            },
-            {
-              title: "Opportunities",
-              description: "Discover Gigs, Jobs, and best opportunities around you",
-              image: "https://www.propeers.in/images/cuate.svg",
-              bgColor: "rgb(180 190 200)",
-            },
-          ].map((feature, i) => (
-            <motion.div
-              className={styles.featureCard}
-              key={i}
-              style={{ backgroundColor: feature.bgColor }}
-              variants={fadeInUp}
-              custom={i}
-            >
-              <div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </div>
-              <img
-                src={feature.image}
-                width={
-                  feature.title === "Community"
-                    ? "140px"
-                    : feature.title === "Mentors"
-                      ? "120px"
-                      : feature.title === "Interest Groups"
-                        ? "90px"
-                        : feature.title === "Roadmaps"
-                          ? "110px"
-                          : feature.title === "Challenges"
-                            ? "130px"
-                            : "90px"
-                }
-                alt={feature.title}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        <h1>What <span>µLearn</span> offers</h1>
+        <FeatureGrid/>
       </motion.header>
 
       {/* Structured Learning Paths Section */}
@@ -495,7 +422,6 @@ const MuLearnLanding = () => {
       >
         <motion.div className={styles.oppurtunitiesTitle} variants={fadeInUp}>
           <h1>At The End Of a μLearners Journey</h1>
-          <h6>You are offered</h6>
         </motion.div>
         <motion.div
           className={styles.oppurtunities}
