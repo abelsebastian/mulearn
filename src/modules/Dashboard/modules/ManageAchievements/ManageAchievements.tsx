@@ -1,0 +1,185 @@
+// ManageAchievements.tsx
+import Pagination from "@/MuLearnComponents/Pagination/Pagination";
+import THead from "@/MuLearnComponents/Table/THead";
+import Table from "@/MuLearnComponents/Table/Table";
+import TableTop from "@/MuLearnComponents/TableTop/TableTop";
+import { dashboardRoutes } from "@/MuLearnServices/urls";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Blank } from "@/MuLearnComponents/Table/Blank";
+import MuModal from "@/MuLearnComponents/MuModal/MuModal";
+import AchievementForm from "./AchievementForm";
+
+function ManageAchievements() {
+    const [data, setData] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [perPage, setPerPage] = useState(20);
+    const [sort, setSort] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const firstFetch = useRef(true);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [id, setId] = useState("");
+    const AchievementFormRef = useRef<any>(null);
+
+    const columnOrder = [
+        { column: "si", Label: "SI", isSortable: true },
+        { column: "title", Label: "Title", isSortable: true },
+        { column: "levelBased", Label: "Level Based", isSortable: true },
+        { column: "description", Label: "Description", isSortable: false },
+        { column: "icon", Label: "Icon", isSortable: false },
+        { column: "vcToken", Label: "VC Token", isSortable: true },
+        { column: "tags", Label: "Tags", isSortable: false },
+        { column: "type", Label: "Type", isSortable: true },
+        { column: "created_at", Label: "Created On", isSortable: true }
+    ];
+
+    // Hardcoded data for now
+    useEffect(() => {
+        if (firstFetch.current) {
+            setData([
+                {
+                    id: "ach1",
+                    si: 1,
+                    title: "First Step",
+                    levelBased: false,
+                    description: "Complete your first task",
+                    icon: "🏆",
+                    vcToken: true,
+                    tags: ["beginner", "welcome"],
+                    type: "Individual",
+                    created_at: "2025-01-01T10:00:00Z"
+                },
+                {
+                    id: "ach2",
+                    si: 2,
+                    title: "Level Master",
+                    levelBased: true,
+                    description: "Reach level 5",
+                    icon: "⭐",
+                    vcToken: false,
+                    tags: ["progress", "milestone"],
+                    type: "Progress",
+                    created_at: "2025-01-02T14:00:00Z"
+                }
+            ]);
+            setTotalPages(1);
+            setIsLoading(false);
+        }
+        firstFetch.current = false;
+    }, []);
+
+    const handleNextClick = () => {
+        setCurrentPage(prev => prev + 1);
+    };
+
+    const handlePreviousClick = () => {
+        setCurrentPage(prev => prev - 1);
+    };
+
+    const handleSearch = (search: string) => {
+        setCurrentPage(1);
+        // Filter hardcoded data based on search
+        const filteredData = data.filter(item => 
+            item.title.toLowerCase().includes(search.toLowerCase()) ||
+            item.description.toLowerCase().includes(search.toLowerCase())
+        );
+        setData(filteredData);
+    };
+
+    const handleEdit = (id: string | number | boolean) => {
+        setId(id as string);
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = (id: string | undefined) => {
+        setData(prev => prev.filter(item => item.id !== id));
+        navigate("/dashboard/manage-achievements");
+    };
+
+    const handlePerPageNumber = (selectedValue: number) => {
+        setPerPage(selectedValue);
+        setCurrentPage(1);
+    };
+
+    const handleIconClick = (column: string) => {
+        const newSort = sort === column ? `-${column}` : column;
+        setSort(newSort);
+        const sortedData = [...data].sort((a, b) => {
+            if (newSort.startsWith("-")) {
+                return b[newSort.slice(1)] > a[newSort.slice(1)] ? 1 : -1;
+            }
+            return a[column] > b[column] ? 1 : -1;
+        });
+        setData(sortedData);
+    };
+
+    return (
+        <>
+            {data && (
+                <>
+                    <TableTop
+                        onSearchText={handleSearch}
+                        onPerPageNumber={handlePerPageNumber}
+                        // CSV={dashboardRoutes.getAchievementsList}
+                    />
+                    <MuModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        title="Edit Achievement"
+                        type="success"
+                        body="Enter the details of the achievement."
+                        onDone={() => 
+                            AchievementFormRef.current?.handleSubmitExternally()
+                        }
+                    >
+                        <AchievementForm
+                            ref={AchievementFormRef}
+                            id={id}
+                            closeModal={() => setIsModalOpen(false)}
+                        />
+                    </MuModal>
+                    <Table
+                        rows={data}
+                        isloading={isLoading}
+                        page={currentPage}
+                        perPage={perPage}
+                        columnOrder={columnOrder}
+                        id={["id"]}
+                        onEditClick={handleEdit}
+                        onDeleteClick={handleDelete}
+                        modalDeleteHeading="Delete Achievement"
+                        modalTypeContent="error"
+                        modalDeleteContent="Are you sure you want to delete this achievement?"
+                    >
+                        <THead
+                            columnOrder={columnOrder}
+                            onIconClick={handleIconClick}
+                            action={true}
+                        />
+                        <div>
+                            {!isLoading && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    margin="10px 0"
+                                    handleNextClick={handleNextClick}
+                                    handlePreviousClick={handlePreviousClick}
+                                    onSearchText={handleSearch}
+                                    onPerPageNumber={handlePerPageNumber}
+                                    perPage={perPage}
+                                    setPerPage={setPerPage}
+                                />
+                            )}
+                        </div>
+                        <Blank />
+                    </Table>
+                </>
+            )}
+        </>
+    );
+}
+
+export default ManageAchievements;
