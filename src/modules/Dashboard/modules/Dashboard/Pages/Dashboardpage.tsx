@@ -167,7 +167,7 @@ const DashboardPage = () => {
     
 
   const handleStartLearning = useCallback(() => {
-    navigate('/dashboard/learning-path');
+    navigate('/dashboard/mujourney');
   }, [navigate]);
 
   const handleJoinLearning = useCallback(() => {
@@ -267,7 +267,6 @@ const DashboardPage = () => {
               />
             </div>
           </section>
-
           <LearningCirclesSection />
         </div>
         <aside className={styles.rightWrapper}>

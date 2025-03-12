@@ -6,9 +6,13 @@ import MulearnBrand from "../assets/svg/MulearnBrand";
 import Rank from "../assets/svg/Rank";
 import { PieChart } from "../components/Piechart/PieChart";
 import {
+
+    getAllConnectedUsers,
+    getConnectedUsers,
     getPublicUserLevels,
     getPublicUserLog,
     getPublicUserProfile,
+    getQSCredentials,
     getUserLevels,
     getUserLog,
     getUserProfile,
@@ -27,17 +31,188 @@ import Socials from "../components/Socials/pages/Socials";
 import ShareProfilePopUp from "../components/ShareProfilePopUp/pages/ShareProfilePopUp";
 import HelmetMetaTags from "../components/HelmetMetaTags/HelmetMetaTags";
 import { isDev } from "@/MuLearnServices/common_functions";
-import { Switch } from "@chakra-ui/react";
+import { SimpleGrid, Switch } from "@chakra-ui/react";
+import AchievementCard from "../components/Achievements/AchievementCard";
+import { useUserStore } from "/src/ZustandProvider";
 
-//TODO: Verify the relevance of profile page image
+
+const achievements = [
+    
+    {
+        id: 1,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Top 100 Coders",
+            description: "Ranked among the top 100 coders in the community. Keep pushing forward!",
+            "completed_date": "2024-04-23", 
+
+        },
+        template_id: "bbd38679-c114-423c-be83-4f2854f33026",
+        buttonText: "Issue Credentials",
+        icon: "👨‍💻",
+    },
+    {
+        id: 2,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Bug Bounty Hunter",
+            tags: ["Security", "Bug Bounty", "Ethical Hacking"],
+            description: "Successfully identified and fixed critical bugs. Security matters!",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Claim Reward",
+        icon: "🔍",
+    },
+    {
+        id: 3,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Open Source Contributor",
+            tags: ["Open Source", "Collaboration", "Development"],
+            description: "Contributed to open-source projects and made the tech world better!",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Get Verified",
+        icon: "🌍",
+    },
+    {
+        id: 4,
+        subject_info: {
+            type: "Certificate",
+        },
+        credential_info: {
+            course_name: "AI Innovator",
+            tags: ["Artificial Intelligence", "Machine Learning", "Innovation"],
+            description: "Built innovative AI models that solve real-world problems.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Issue Certificate",
+        icon: "🤖",
+    },
+    {
+        id: 5,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Hackathon Winner",
+            tags: ["Hackathon", "Innovation", "Teamwork"],
+            description: "Won a coding hackathon by building a groundbreaking solution.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Show Badge",
+        icon: "🏆",
+    },
+    {
+        id: 6,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Cloud Expert",
+            tags: ["Cloud Computing", "AWS", "GCP"],
+            description: "Mastered cloud computing concepts and deployments on AWS & GCP.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Verify Skills",
+        icon: "☁️",
+    },
+    {
+        id: 7,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Cybersecurity Enthusiast",
+            tags: ["Cybersecurity", "Ethical Hacking", "Security"],
+            description: "Excelled in cybersecurity and ethical hacking challenges.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Claim Badge",
+        icon: "🛡️",
+    },
+    {
+        id: 8,
+        subject_info: {
+            type: "Certificate",
+        },
+        credential_info: {
+            course_name: "Full-Stack Developer",
+            tags: ["Full-Stack", "Web Development", "React", "Node.js"],
+            description: "Developed full-stack applications with modern frameworks.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Issue Credentials",
+        icon: "💻",
+    },
+    {
+        id: 9,
+        subject_info: {
+            type: "Certificate",
+        },
+        credential_info: {
+            course_name: "Data Science Guru",
+            tags: ["Data Science", "Analytics", "Machine Learning"],
+            description: "Analyzed and visualized large datasets to gain insights.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Get Verified",
+        icon: "📊",
+    },
+    {
+        id: 10,
+        subject_info: {
+            type: "Recognition",
+        },
+        credential_info: {
+            course_name: "Community Leader",
+            tags: ["Community", "Leadership", "Networking"],
+            description: "Organized and led tech meetups to foster a developer community.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Claim Recognition",
+        icon: "👥",
+    },
+    {
+        id: 11,
+        subject_info: {
+            type: "Badge",
+        },
+        credential_info: {
+            course_name: "Level 4 Achievement",
+            tags: ["μLearn", "Level 4", "Achievement"],
+            description: "Successfully reached Level 4 in μLearn, demonstrating consistent learning and skill growth.",
+        },
+        template_id: "5adfde9e-7278-4a60-8972-ff270b74a69d",
+        buttonText: "Issue Level 4 Badge",
+        icon: "🎖️",
+    },
+];
+
+
+
+
 const Profile = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+
+
+    const key = 'email';
+    const value = useUserStore(state => state.userInfo.email);
+    const [userDID, setUserDID] = useState<string | null>(null);
+
 
     const [APILoadStatus, setAPILoadStatus] = useState(0);
     const [profileList, setProfileList] = useState("basic-details");
     const [popUP, setPopUP] = useState(false);
     const [editPopUp, setEditPopUp] = useState(false);
+    const [achievementModalOpen, setAchievementModalOpen] = useState(false);
     const [userProfile, setUserProfile] = useState({
         full_name: "",
         college_code: "",
@@ -127,6 +302,52 @@ const Profile = () => {
         setProfileStatus(userProfile.is_public);
     }, [id, userProfile.is_public]);
     // console.log(userLevelData);
+
+    const handleAchievementModal = () => {
+        setAchievementModalOpen(!achievementModalOpen);
+    }
+
+
+    useEffect(() => {
+        async function fetchConnectedUsers() {
+            try {
+                const response = await getConnectedUsers(key, value);
+                if (response) {
+                    setUserDID(response);
+                }
+            } catch (error) {
+                console.error(error);
+                
+            }
+        }
+        fetchConnectedUsers();
+    }, []);
+
+    useEffect(() => {
+       async function fetchCredentials() {
+        try {
+            const response = await getQSCredentials();
+            console.log("credentials", response);
+        } catch (error) {
+            console.error(error);
+            
+        }
+       }
+         fetchCredentials();
+    }, [])
+
+    // useEffect(() => {
+    //     async function fetchConnectedUsers() {
+    //      try {
+    //          const response = await getAllConnectedUsers();
+    //          console.log("credentials", response);
+    //      } catch (error) {
+    //          console.error(error);
+    //      }
+    //     }
+    //     fetchConnectedUsers();
+    //  }, [])
+    
 
     return (
         <>
@@ -340,7 +561,10 @@ const Profile = () => {
                                                                         "250px",
                                                                     width: "5.3rem"
                                                                 }
-                                                                : {}
+                                                                : profileList == 'achievements' ? {
+                                                                    marginLeft: "375px",
+                                                                    width: "6.8rem"
+                                                                } : {}
                                                 }
                                                 className={styles.underline}
                                             ></p>
@@ -394,6 +618,21 @@ const Profile = () => {
                                                 }
                                             >
                                                 Mu Voyage
+                                            </li>
+                                            <li
+                                                onClick={() =>
+                                                    setProfileList("achievements")
+                                                }
+                                                style={
+                                                    profileList === "achievements"
+                                                        ? {
+                                                            fontSize: "600",
+                                                            color: "#000"
+                                                        }
+                                                        : {}
+                                                }
+                                            >
+                                                Achievements
                                             </li>
                                         </div>
 
@@ -477,32 +716,43 @@ const Profile = () => {
                                         </div>
                                     </div>
                                     {profileList === "basic-details" ? (
-                                        <BasicDetails
-                                            userProfile={userProfile}
-                                            userLog={userLog}
-                                        />
+                                        <BasicDetails userProfile={userProfile} userLog={userLog} />
                                     ) : profileList === "karma-history" ? (
-                                        <KarmaHistory
-                                            userProfile={userProfile}
-                                            userLog={userLog}
+                                        <KarmaHistory userProfile={userProfile} userLog={userLog} />
+                                    ) : profileList === "mu-voyage" ? (
+                                        <MuVoyage
+                                            userLevelData={userLevelData}
+                                            userLevel={
+                                                userProfile.level !== null
+                                                    ? parseInt(userProfile.level?.slice(3, 4))
+                                                    : 1
+                                            }
                                         />
-                                    ) : (
-                                        profileList === "mu-voyage" && (
-                                            <MuVoyage
-                                                userLevelData={userLevelData}
-                                                userLevel={
-                                                    userProfile.level !== null
-                                                        ? parseInt(
-                                                            userProfile.level?.slice(
-                                                                3,
-                                                                4
-                                                            )
-                                                        )
-                                                        : 1
-                                                }
-                                            />
-                                        )
-                                    )}
+                                    ) : profileList === "achievements" ? (
+                                        <div className="bg-white rounded-xl w-full !p-4 ">
+                                            <h2 className="!mb-8">Eligible Achievements</h2>
+
+                                            <SimpleGrid
+                                                columns={[1, 2, 3]}
+                                                spacing={6}
+                                                justifyContent="center"  // Centers items horizontally
+                                                alignItems="center"      // Centers items vertically
+                                            >
+                                                {/* {achievements.map((achievement) => (
+                                                    <AchievementCard
+                                                    key={achievement.id}
+                                                    id={achievement.id}
+                                                    subject_info={achievement.subject_info}
+                                                    credential_info={achievement.credential_info}
+                                                    template_id={achievement.template_id}
+                                                    buttonText={achievement.buttonText}
+                                                    icon={achievement.icon}
+                                                />
+                                                ))} */}
+                                            </SimpleGrid>
+                                        </div>
+                                    ) : null}
+
                                 </div>
 
                                 <div className={styles.notification}>
