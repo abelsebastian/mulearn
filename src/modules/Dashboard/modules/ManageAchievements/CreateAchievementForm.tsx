@@ -1,5 +1,5 @@
 // CreateAchievementForm.tsx
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useState, useRef } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
 import Select from "react-select";
@@ -34,6 +34,11 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
     });
     const [errors, setErrors] = useState<any>({});
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setData(prev => ({ ...prev, [name]: value }));
@@ -51,6 +56,28 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
     const handleTypeChange = (selectedOption: any) => {
         setData(prev => ({ ...prev, type: selectedOption?.value || "" }));
     };
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setSelectedFile(file);
+
+            // Create preview URL
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+
+            // Update data state with file info
+            setData(prev => ({ ...prev, iconFile: file }));
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
+    };
+
 
     useImperativeHandle(ref, () => ({
         handleSubmitExternally: handleSubmit
@@ -117,7 +144,7 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
 
                 <div className={styles.inputContainer}>
                     <label>
-                        VC Token
+                        Has VC?
                         <Switch
                             isChecked={data.vcToken}
                             onChange={() => handleSwitchChange("vcToken")}
@@ -147,6 +174,33 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         isClearable
                     />
                     {errors.type && <div style={{ color: "red" }}>{errors.type}</div>}
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <div className={styles.fileUploadContainer}>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileSelect}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                        />
+                        <button
+                            type="button"
+                            onClick={triggerFileInput}
+                            className={styles.fileUploadButton}
+                        >
+                            Choose Icon
+                        </button>
+                        <span className={styles.fileName}>
+                            {selectedFile ? selectedFile.name : "No file selected"}
+                        </span>
+                    </div>
+                    {previewUrl && (
+                        <div className={styles.iconPreview}>
+                            <img src={previewUrl} alt="Icon preview" />
+                        </div>
+                    )}
                 </div>
             </form>
         </div>

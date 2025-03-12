@@ -11,6 +11,31 @@ import MuModal from "@/MuLearnComponents/MuModal/MuModal";
 import AchievementForm from "./AchievementForm";
 import CreateAchievementForm from "./CreateAchievementForm"; // Import the new form
 
+const sampleAchievement = [
+    {
+        id: "ach1",
+        title: "First Step",
+        levelBased: false,
+        description: "Complete your first task",
+        vcToken: true,
+        tags: ["beginner", "welcome"],
+        type: "Individual",
+        icon: "https://www.svgrepo.com/show/422992/trophy-prize-medal-2.svg",
+        created_at: "2025-01-01T10:00:00Z"
+    },
+    {
+        id: "ach2",
+        title: "Level Master",
+        levelBased: true,
+        description: "Reach level 5",
+        vcToken: false,
+        tags: ["progress", "milestone"],
+        type: "Progress",
+        icon: "https://www.svgrepo.com/show/422993/medal-badge-prize.svg",
+        created_at: "2025-01-02T14:00:00Z"
+    }
+];
+
 function ManageAchievements() {
     const [data, setData] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +53,7 @@ function ManageAchievements() {
     const CreateAchievementFormRef = useRef<any>(null); // Ref for create form
 
     const columnOrder = [
+        { column: "icon", Label: "Icon", isSortable: false }, // Add icon column
         { column: "title", Label: "Title", isSortable: true },
         { column: "levelBased", Label: "Level Based", isSortable: true },
         { column: "description", Label: "Description", isSortable: false },
@@ -39,28 +65,7 @@ function ManageAchievements() {
 
     useEffect(() => {
         if (firstFetch.current) {
-            setData([
-                {
-                    id: "ach1",
-                    title: "First Step",
-                    levelBased: false,
-                    description: "Complete your first task",
-                    vcToken: true,
-                    tags: ["beginner", "welcome"],
-                    type: "Individual",
-                    created_at: "2025-01-01T10:00:00Z"
-                },
-                {
-                    id: "ach2",
-                    title: "Level Master",
-                    levelBased: true,
-                    description: "Reach level 5",
-                    vcToken: false,
-                    tags: ["progress", "milestone"],
-                    type: "Progress",
-                    created_at: "2025-01-02T14:00:00Z"
-                }
-            ]);
+            setData(sampleAchievement);
             setTotalPages(1);
             setIsLoading(false);
         }
@@ -117,8 +122,6 @@ function ManageAchievements() {
 
     const handleCreateSubmit = () => {
         CreateAchievementFormRef.current?.handleSubmitExternally();
-        // Note: Actual data addition to state would typically happen in CreateAchievementForm
-        // after successful submission, but you could add it here if needed
     };
 
     return (
@@ -128,7 +131,6 @@ function ManageAchievements() {
                     <TableTop
                         onSearchText={handleSearch}
                         onPerPageNumber={handlePerPageNumber}
-                        // CSV={dashboardRoutes.getAchievementsList}
                         extraButtons={[
                             {
                                 text: "Create Achievement",
@@ -178,6 +180,24 @@ function ManageAchievements() {
                         modalDeleteHeading="Delete Achievement"
                         modalTypeContent="error"
                         modalDeleteContent="Are you sure you want to delete this achievement?"
+                        customCellRender={(column: any, row: any) => {
+                            if (column === "icon") {
+                                return (
+                                    <div style={{ width: "50px", height: "50px" }}>
+                                        {row.icon.startsWith("http") ? (
+                                            <img
+                                                src={row.icon}
+                                                alt="Achievement Icon"
+                                                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                            />
+                                        ) : (
+                                            <span style={{ fontSize: "24px" }}>{row.icon}</span>
+                                        )}
+                                    </div>
+                                );
+                            }
+                            return null;
+                        }}
                     >
                         <THead
                             columnOrder={columnOrder}

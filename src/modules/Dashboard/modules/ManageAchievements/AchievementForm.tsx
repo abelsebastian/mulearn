@@ -1,5 +1,5 @@
 // AchievementForm.tsx
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState, useRef } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
 import Select from "react-select";
@@ -30,9 +30,14 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
         description: "",
         vcToken: false,
         tags: [],
-        type: ""
+        type: "",
+        iconFile: null
     });
     const [errors, setErrors] = useState<any>({});
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         // Simulate fetching achievement data
@@ -42,12 +47,14 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
             title: props.id === "ach1" ? "First Step" : "Level Master",
             levelBased: props.id === "ach1" ? false : true,
             description: props.id === "ach1" ? "Complete your first task" : "Reach level 5",
-            icon: props.id === "ach1" ? "🏆" : "⭐",
+            icon: props.id === "ach1" ? "https://www.svgrepo.com/show/422992/trophy-prize-medal-2.svg" : "https://www.svgrepo.com/show/422993/medal-badge-prize.svg",
             vcToken: props.id === "ach1" ? true : false,
             tags: props.id === "ach1" ? ["beginner", "welcome"] : ["progress", "milestone"],
-            type: props.id === "ach1" ? "Individual" : "Progress"
+            type: props.id === "ach1" ? "Individual" : "Progress",
+            iconFile: null
         };
         setData(sampleData);
+        setPreviewUrl(sampleData.icon); // Set initial preview URL if icon is a URL
     }, [props.id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -66,6 +73,27 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
 
     const handleTypeChange = (selectedOption: any) => {
         setData(prev => ({ ...prev, type: selectedOption?.value || "" }));
+    };
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setSelectedFile(file);
+
+            // Create preview URL
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+
+            // Update data state with file info
+            setData(prev => ({ ...prev, iconFile: file }));
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
     };
 
     useImperativeHandle(ref, () => ({
@@ -129,7 +157,7 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
 
                 <div className={styles.inputContainer}>
                     <label>
-                        VC Token
+                        Has VC?
                         <Switch
                             isChecked={data.vcToken}
                             onChange={() => handleSwitchChange("vcToken")}
@@ -159,6 +187,33 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
                         isClearable
                     />
                     {errors.type && <div style={{ color: "red" }}>{errors.type}</div>}
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <div className={styles.fileUploadContainer}>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileSelect}
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                        />
+                        <button
+                            type="button"
+                            onClick={triggerFileInput}
+                            className={styles.fileUploadButton}
+                        >
+                            Choose Icon
+                        </button>
+                        <span className={styles.fileName}>
+                            {selectedFile ? selectedFile.name : "No file selected"}
+                        </span>
+                    </div>
+                    {previewUrl && (
+                        <div className={styles.iconPreview}>
+                            <img src={previewUrl} alt="Icon preview" />
+                        </div>
+                    )}
                 </div>
             </form>
         </div>
