@@ -46,14 +46,14 @@ function ManageAchievements() {
     const navigate = useNavigate();
     const firstFetch = useRef(true);
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Renamed for clarity
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // New state for create modal
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [id, setId] = useState("");
     const AchievementFormRef = useRef<any>(null);
-    const CreateAchievementFormRef = useRef<any>(null); // Ref for create form
+    const CreateAchievementFormRef = useRef<any>(null);
 
     const columnOrder = [
-        { column: "icon", Label: "Icon", isSortable: false }, // Add icon column
+        { column: "icon", Label: "Icon", isSortable: false },
         { column: "title", Label: "Title", isSortable: true },
         { column: "levelBased", Label: "Level Based", isSortable: true },
         { column: "description", Label: "Description", isSortable: false },
@@ -82,11 +82,15 @@ function ManageAchievements() {
 
     const handleSearch = (search: string) => {
         setCurrentPage(1);
-        const filteredData = data.filter(item =>
-            item.title.toLowerCase().includes(search.toLowerCase()) ||
-            item.description.toLowerCase().includes(search.toLowerCase())
-        );
-        setData(filteredData);
+        if (search.trim() === "") {
+            setData(sampleAchievement);
+        } else {
+            const filteredData = sampleAchievement.filter(item =>
+                item.title.toLowerCase().includes(search.toLowerCase()) ||
+                item.description.toLowerCase().includes(search.toLowerCase())
+            );
+            setData(filteredData);
+        }
     };
 
     const handleEdit = (id: string | number | boolean) => {
