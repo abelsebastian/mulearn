@@ -229,15 +229,16 @@ const MuLearnLanding = () => {
           >
             {" "}
           </motion.span>
-          <motion.p
+          <motion.h6
             custom={3}
             variants={textVariant}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className={styles.heroDescription}
           >
             An open community for learners, makers, and innovators
-          </motion.p>
+          </motion.h6>
           <motion.div
             className={styles.ctaButtons}
             initial="hidden"
@@ -270,6 +271,10 @@ const MuLearnLanding = () => {
         </div>
 
         <h1>What <span>µLearn</span> offers</h1>
+        <h6 className={styles.heroDescription}>
+          µLearn offers a wide range of features and opportunities that help you learn, grow, and upskill yourself
+          in a fun and engaging way. Here are some of the key features that µLearn offers.
+        </h6>
         <FeatureGrid/>
       </motion.header>
 
@@ -325,9 +330,9 @@ const MuLearnLanding = () => {
           <h1>
             Understand μLearn with a <span className={styles.highlight}>Story</span>
           </h1>
-          <p>
+          <h6>
             Meet Aami, an eager learner hungry for growth! Join her voyage through the captivating µVerse, where she seizes opportunities, builds learning circles, and immerses herself in events, emerging industry-ready with newfound skills and confidence.
-          </p>
+          </h6>
         </motion.div>
         <motion.div
           className={styles.iframeContainer}
@@ -422,6 +427,9 @@ const MuLearnLanding = () => {
       >
         <motion.div className={styles.oppurtunitiesTitle} variants={fadeInUp}>
           <h1>At The End Of a μLearners Journey</h1>
+          <h6>
+            At the end of a μLearner's journey, they are equipped with a plethora of opportunities to choose from. They can choose to work in a job, freelance, research, start their own venture, or work for a social cause.
+          </h6>
         </motion.div>
         <motion.div
           className={styles.oppurtunities}
@@ -506,9 +514,9 @@ const MuLearnLanding = () => {
           <h1>
             The Impact of <span className={styles.highlight}>μLearn</span>
           </h1>
-          <p>
+          <h6>
             Over the last year, we as a community have made an impact on a significant number of students, mentors, and facilitators, enabling them to gain more knowledge about the ecosystem of learning and upskill themselves.
-          </p>
+          </h6>
         </motion.div>
         <motion.div className={styles.dataGrid} variants={fadeInUp}>
           {data.map((d, i) => (
