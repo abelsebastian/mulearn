@@ -61,7 +61,8 @@ export const learningCircleRoutes = {
         "/api/v1/dashboard/learningcircle/meeting/attendee-report/",
     getMeetups: "/api/v1/dashboard/learningcircle/meeting/list/",
     joinMeetup: "/api/v1/dashboard/learningcircle/meeting/join/",
-    getLcReportInfo: "/api/v1/dashboard/learningcircle/meeting/report/"
+    getLcReportInfo: "/api/v1/dashboard/learningcircle/meeting/report/",
+    confirmRSVP: "/api/v1/dashboard/learningcircle/meeting/rsvp/"
 };
 export const dashboardRoutes = {
     forgetPassword: "/api/v1/dashboard/user/forgot-password/",

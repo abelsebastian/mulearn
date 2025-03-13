@@ -87,7 +87,7 @@ export const joinMeetup = async (
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Joined learning circle successfully"
+                    "Joined learning circle successfully"
                 ][0]
             );
             return true;
@@ -119,7 +119,7 @@ export const unsaveMeetup = async (meetId: string): Promise<boolean> => {
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Unsaved learning circle successfully"
+                    "Unsaved learning circle successfully"
                 ][0]
             );
             return true;
@@ -244,7 +244,7 @@ export const getLearningCircleInfo = async (
 
 export const createLearningCircle = async (
     params: LearningCircleCreate
-): Promise<string |boolean> => {
+): Promise<string | boolean> => {
     try {
         const response = await privateGateway.post(
             learningCircleRoutes.createLearningCircle,
@@ -257,7 +257,7 @@ export const createLearningCircle = async (
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Learning circle created successfully"
+                    "Learning circle created successfully"
                 ][0]
             );
             return true;
@@ -287,7 +287,7 @@ export const scheduleMeetup = async (
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Meetup scheduled successfully"
+                    "Meetup scheduled successfully"
                 ][0]
             );
             return true;
@@ -317,7 +317,7 @@ export const editScheduleMeetup = async (
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Meetup Edited successfully"
+                    "Meetup Edited successfully"
                 ][0]
             );
             return true;
@@ -336,7 +336,7 @@ export const editScheduleMeetup = async (
 };
 
 export const deleteScheduleMeetup = async (
-    params: {meetId: string}
+    params: { meetId: string }
 ): Promise<boolean> => {
     try {
         const response = await privateGateway.post(
@@ -346,7 +346,7 @@ export const deleteScheduleMeetup = async (
             toast.success(
                 [
                     response.data?.message?.general ??
-                        "Meetup Deleted successfully"
+                    "Meetup Deleted successfully"
                 ][0]
             );
             return true;
@@ -377,5 +377,53 @@ export const getInterestGroups = async () => {
         if (error?.response) {
             throw error;
         }
+    }
+};
+
+export const submitRSVP = async (
+    learningCircleId: string
+): Promise<boolean> => {
+    try {
+        const response = await privateGateway.post(
+            learningCircleRoutes.confirmRSVP + learningCircleId
+        );
+
+        if (response.status === 200) {
+            toast.success("RSVP submitted successfully.");
+            return true;
+        }
+
+        toast.error(
+            (response.data?.message?.general ?? ["Unable to submit RSVP."])[0]
+        );
+        return false;
+    } catch (err) {
+        const error = err as AxiosError;
+        console.log(error);
+        return false;
+    }
+};
+
+export const deleteMeeting = async (
+    meetupId: string
+): Promise<boolean> => {
+    try {
+        const response = await privateGateway.delete(
+            learningCircleRoutes.deleteScheduledMeetup + meetupId
+        );
+
+        if (response.status === 200) {
+            toast.success("Meeting deleted successfully.");
+            return true;
+        }
+
+        toast.error(
+            (response.data?.message?.general ?? ["Unable to delete meeting."])[0]
+        );
+        return false;
+    } catch (err) {
+        const error = err as AxiosError;
+        console.log(error);
+        return false;
     }
 };
