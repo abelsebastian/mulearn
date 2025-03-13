@@ -201,7 +201,11 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
             {switchDomainModal && (
                 <ModeSwitchModal
                     isOpen={switchDomainModal}
-                    onClose={() => setSwitchDomainModal(false)}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setSwitchDomainModal(false)
+                        }, 300);
+                    }}
                     onSubmit={handleOnSubmit}
                 />
             )}
