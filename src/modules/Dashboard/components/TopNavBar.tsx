@@ -137,7 +137,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <b className={styles.greetings}><i>Hello</i>, <b>{userName}</b> 👋</b>
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
-                            {refreshToken && (
+                            {refreshToken && userInfo?.user_domains && (
                             <div className={styles.modeContainer}>
                                 <span className={styles.modeText}>Mode</span>
                                 <span

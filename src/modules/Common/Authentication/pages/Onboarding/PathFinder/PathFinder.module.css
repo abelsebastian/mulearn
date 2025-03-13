@@ -147,7 +147,7 @@ h1 {
 }
 
 .itemsContainer .itemsCard .content p {
-  transform: translateY(-90%);
+  transform: translateY(-0%);
 }
 
 .itemsContainer .itemsCard .checkmark {
