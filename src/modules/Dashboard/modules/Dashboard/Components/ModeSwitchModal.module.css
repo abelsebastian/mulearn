@@ -48,7 +48,7 @@
   border-radius: 8px;
   padding: 16px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* transition: transform 0.2s ease, box-shadow 0.2s ease; */
   text-align: center;
   position: relative;
 }
@@ -91,7 +91,11 @@
   color: #333;
 }
 
-.subdomainsList {
+.card, .card:hover {
+  transition: all .3s linear;
+}
+
+.subdomainsList, .subdomainsListActive {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -99,6 +103,35 @@
   padding: 0;
   list-style: none;
   justify-content: center;
+}
+
+.card{
+  height: 320px;
+}
+
+.card .subdomainsList{
+  display: none;
+}
+
+.card > .cardLabel{
+  font-size: 40px;
+  transition: all .5s ease;
+}
+
+.card:hover > .cardLabel{
+  font-size: 25px;
+}
+
+.cardLabelActive {
+  font-size: 25px !important;
+}
+
+.card .subdomainsListActive{
+  display: flex;
+}
+
+.card:hover > .subdomainsList{
+  display: flex;
 }
 
 .subdomainItem {
@@ -176,7 +209,7 @@
     margin-bottom: 6px;
   }
   
-  .subdomainsList {
+  .subdomainsList, .subdomainsListActive {
     gap: 6px;
   }
   
@@ -213,7 +246,7 @@
     margin-bottom: 4px;
   }
   
-  .subdomainsList {
+  .subdomainsList, .subdomainsListActive {
     gap: 4px;
   }
   

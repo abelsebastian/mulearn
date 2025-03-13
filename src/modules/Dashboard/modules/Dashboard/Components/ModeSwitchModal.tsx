@@ -93,16 +93,14 @@ const ModeSwitchModal: React.FC<ModeSwitchModalProps> = ({
                 alt={imageMap[mode.id].alt}
                 className={styles.cardImage}
               />
-              <div className={styles.cardLabel}>{mode.label}</div>
-              {selectedMode === mode.id && (
-                <ul className={styles.subdomainsList}>
+              <div className={`${styles.cardLabel} ${selectedMode === mode.id ? styles.cardLabelActive : ''}`}>{mode.label}</div>
+                <ul className={`${styles.subdomainsList} ${selectedMode === mode.id ? styles.subdomainsListActive : ''}`}>
                   {mode.subdomains.map((sub) => (
                     <li key={sub} className={styles.subdomainItem}>
                       {sub}
                     </li>
                   ))}
                 </ul>
-              )}
             </div>
           ))}
         </div>
