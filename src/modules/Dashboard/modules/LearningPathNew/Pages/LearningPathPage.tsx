@@ -464,38 +464,53 @@ const LearningPathPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
-        <div className={styles.indicator} style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
-        <button
-          ref={(el) => (tabRefs.current.startLearning = el)}
-          className={`${styles.topBarButton} ${activeTab === "startLearning" ? styles.activeTab : ""}`}
-          onClick={() => setActiveTab("startLearning")}
-        >
-          Start Journey
-        </button>
-        <button
-          ref={(el) => (tabRefs.current.becomeExpert = el)}
-          className={`${styles.topBarButton} ${activeTab === "becomeExpert" ? styles.activeTab : ""}`}
-          onClick={() => setActiveTab("becomeExpert")}
-        >
-          Become Expert
-        </button>
-      </div>
+        <div className={styles.topBarPart}>
 
-      {(
-        <div className={styles.filterContainer}>
-          <label htmlFor="filter">Filter by:</label>
-          <select
-            id="filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as "all" | "completed" | "incomplete")}
-            className={styles.filterSelect}
+          <div className={styles.indicator} style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
+          <button
+            ref={(el) => (tabRefs.current.startLearning = el)}
+            className={`${styles.topBarButton} ${activeTab === "startLearning" ? styles.activeTab : ""}`}
+            onClick={() => setActiveTab("startLearning")}
           >
-            <option value="all">All</option>
-            <option value="completed">Completed</option>
-            <option value="incomplete">Incomplete</option>
-          </select>
+            Start Journey
+          </button>
+          <button
+            ref={(el) => (tabRefs.current.becomeExpert = el)}
+            className={`${styles.topBarButton} ${activeTab === "becomeExpert" ? styles.activeTab : ""}`}
+            onClick={() => {
+              if (unlockedLevel < 4) {
+                alert("You need to be level 4 or greater to access")
+              }
+              else {
+                setActiveTab("becomeExpert")
+              }
+            }
+            }
+          >
+            Become Expert
+          </button>
         </div>
-      )}
+
+
+
+        {(
+          <div className={styles.filterContainer}>
+            <label htmlFor="filter">Filter by:</label>
+            <select
+              id="filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value as "all" | "completed" | "incomplete")}
+              className={styles.filterSelect}
+            >
+              <option value="all">All</option>
+              <option value="completed">Completed</option>
+              <option value="incomplete">Incomplete</option>
+            </select>
+          </div>
+        )}
+
+
+      </div>
 
       {activeTab === "becomeExpert" && (
         <div style={{ marginBottom: "2rem", marginTop: "2rem" }}>
