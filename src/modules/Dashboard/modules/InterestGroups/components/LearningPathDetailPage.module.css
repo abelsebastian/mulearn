@@ -1,14 +1,15 @@
 /* src/components/LearningPathDetailPage.module.css */
 .container {
-  
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
   }
   
   .header {
-    text-align: center;
-    margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
   }
   
   .header h1 {
@@ -22,16 +23,19 @@
   }
   
   .content {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    text-align: left;
+    text-align: justify;
   }
   
   .description,
   .whatYouWillLearn,
   .challenges {
     margin-bottom: 20px;
+  }
+
+  .challenges{
+    overflow-x: scroll;
+    
   }
   
   .description h2,
@@ -43,7 +47,6 @@
   }
   
   .description p {
-    line-height: 1.6;
     color: #333;
   }
   
