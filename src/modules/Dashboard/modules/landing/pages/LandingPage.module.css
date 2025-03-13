@@ -188,6 +188,14 @@
   font-size: 0.9rem;
 }
 
+.heroDescription{
+  font-weight: 400;
+  max-width: 800px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
 .ctaButtons {
   margin-top: 1rem;
   display: flex;
@@ -256,12 +264,13 @@
   margin-top: 20px;
 }
 
-.storyTitle p {
-  font-size: 1rem;
+.storyTitle h6 {
+  font-weight: 400;
+  margin-bottom: 4rem;
+  max-width: 800px;
   text-align: left;
-  max-width: 35rem;
-  font-weight: 500;
-  color: gray;
+  font-size: 1.2rem;
+  color: #666;
   margin: 16px 0px;
   margin-bottom: 32px;
 }
@@ -315,12 +324,13 @@
 }
 
 .specialEventsSection .specialEvents h6 {
-  font-size: 1rem;
   font-weight: 400;
-  color: gray;
   margin-bottom: 4rem;
   max-width: 800px;
   text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
 }
 
 .specialEventsSection .specialEvents .specialEventsCards {
@@ -442,9 +452,13 @@
 }
 
 .oppurtunitiesTitle h6 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #007bff;
+  font-weight: 400;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
 }
 
 .oppurtunities {
@@ -471,9 +485,13 @@
 }
 
 .community h6 {
-  font-size: 1rem;
-  max-width: 40rem;
+  font-weight: 400;
+  margin-bottom: 4rem;
+  max-width: 800px;
   text-align: left;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
 }
 
 .community {
@@ -500,10 +518,14 @@
   gap: 30px;
 }
 
-.impact p {
-  max-width: 50rem;
-  text-align: left;
-  font-weight: 500;
+.impact h6 {
+  font-weight: 400;
+  margin-bottom: 4rem;
+  max-width: 800px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  /* margin-top: 10px; */
 }
 
 .impact h1 {

@@ -112,7 +112,8 @@ const FeatureGrid = () => {
           <div className={styles.content}>
             <h3 style={{ 
               fontSize: isCardActive(i) ? '1.5rem' : '1.2rem',
-              transition: 'font-size 0.3s ease'
+              transition: 'font-size 0.3s ease',
+              fontWeight: 600
             }}>
               {feature.title}
             </h3>

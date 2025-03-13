@@ -119,10 +119,10 @@ const DashboardPage = () => {
   }, []);
 
   const imageMap: { [key: string]: { src: string; alt: string } } = {
-    coder: { src: "/assets/landing/coder2.png", alt: "Coding illustration" },
-    maker: { src: "/assets/landing/maker.png", alt: "Maker illustration" },
-    creative: { src: "/assets/landing/creative.png", alt: "Designer illustration" },
-    manager: { src: "/assets/landing/manager.png", alt: "Manager illustration" },
+    coder: { src: "/assets/landing/coder2.webp", alt: "Coding illustration" },
+    maker: { src: "/assets/landing/maker.webp", alt: "Maker illustration" },
+    creative: { src: "/assets/landing/creative.webp", alt: "Designer illustration" },
+    manager: { src: "/assets/landing/manager.webp", alt: "Manager illustration" },
   };
   const defaultImage = { src: "/assets/landing/others.png", alt: "General illustration" };
   const { src, alt } = imageMap[userDomains[0]] || defaultImage;

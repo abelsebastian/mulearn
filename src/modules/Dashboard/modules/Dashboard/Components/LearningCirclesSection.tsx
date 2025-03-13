@@ -73,6 +73,7 @@ const LearningCirclesSection: React.FC = () => {
         meetup={selectedMeetup}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onCloseRefresh={() => setSelectedMeetup(undefined)}
       />
 
       <div className={styles.container}>

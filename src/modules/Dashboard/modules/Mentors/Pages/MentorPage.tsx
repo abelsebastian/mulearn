@@ -7,6 +7,7 @@ import debounce from "lodash/debounce";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import { getUsers } from "../../Search/services/api";
 import UserCard from "../../../components/UserCard";
+import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
 
 interface User {
   full_name: string;
@@ -69,8 +70,8 @@ const MentorList: React.FC<{
       try {
         const role =
           searchType === "enabler" ? "enabler" :
-          searchType === "mentor" ? "mentor" :
-          "mentor";
+            searchType === "mentor" ? "mentor" :
+              "mentor";
 
         const response = await getUsers({
           search: searchType === "name" ? searchTerm : "",
@@ -176,7 +177,7 @@ const MentorList: React.FC<{
       <div className={styles.mentorGrid}>
         {displayUsers.length > 0 ? (
           displayUsers.map((user, index) => (
-            <UserCard 
+            <UserCard
               key={`${user.muid}-${index}`}
               data={{
                 id: index + 1,
@@ -208,16 +209,17 @@ const MentorList: React.FC<{
 };
 
 const MentorSearchPage: React.FC = () => {
+  const Stack = useBreakpointValue({ base: VStack, md: HStack }) || VStack;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchType, setSearchType] = useState<"name" | "college" | "expertise" | "enabler" | "mentor">("name");
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
- 
-   const handleUserSelect = (user: User) => {
-     setSelectedUser(user);
-     window.open(`/profile/${user.muid}`, "_blank");
-   };
- 
+
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    window.open(`/profile/${user.muid}`, "_blank");
+  };
+
   const getDisplayOrganization = (user: User) => {
     const hasCompany = user.organizations.some(org => org.org_type === "Company");
     if (hasCompany) {
@@ -227,7 +229,6 @@ const MentorSearchPage: React.FC = () => {
     const firstCollege = user.organizations.find(org => org.org_type === "College");
     return firstCollege ? firstCollege.title : "N/A";
   };
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.Banner}>
@@ -236,101 +237,58 @@ const MentorSearchPage: React.FC = () => {
           <p className={styles.BannerSubtitle}>
             Search for experienced mentors by expertise, name, or institution. Connect with the right guidance to navigate technology, management, and creativity with confidence.
           </p>
+          <span className={styles.BannerDisclaimer}>*Only <b>public</b> profiles will be displayed here</span>
+
         </div>
       </div>
-      <div className={styles.searchContainer}>
-        <FiSearch className={styles.searchIcon} />
-        <input
-          type="text"
-          placeholder={`Search public profiles by ${searchType === "name" ? "name" : searchType === "college" ? "college" : searchType === "expertise" ? "expertise" : searchType === "enabler" ? "enabler" : "mentor"}`}
-          className={styles.searchInput}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className={styles.searchTypeButtons}>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""}`}
-          onClick={() => setSearchType("name")}
-        >
-          Name
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""}`}
-          onClick={() => setSearchType("college")}
-        >
-          College
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "expertise" ? styles.active : ""}`}
-          onClick={() => setSearchType("expertise")}
-        >
-          Expertise
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "enabler" ? styles.active : ""}`}
-          onClick={() => setSearchType("enabler")}
-        >
-          Role Enabler
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${searchType === "mentor" ? styles.active : ""}`}
-          onClick={() => setSearchType("mentor")}
-        >
-          Role Mentor
-        </button>
-      </div>
+      <Stack align="center" justify="start" width="100%">
+        <div className={styles.searchContainer}>
+          <FiSearch className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder={`Search public profiles by ${searchType === "name" ? "name" : searchType === "college" ? "college" : searchType === "expertise" ? "expertise" : searchType === "enabler" ? "enabler" : "mentor"}`}
+            className={styles.searchInput}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className={styles.searchTypeButtons}>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""}`}
+            onClick={() => setSearchType("name")}
+          >
+            Name
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""}`}
+            onClick={() => setSearchType("college")}
+          >
+            College
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "expertise" ? styles.active : ""}`}
+            onClick={() => setSearchType("expertise")}
+          >
+            Expertise
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "enabler" ? styles.active : ""}`}
+            onClick={() => setSearchType("enabler")}
+          >
+            Role Enabler
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "mentor" ? styles.active : ""}`}
+            onClick={() => setSearchType("mentor")}
+          >
+            Role Mentor
+          </button>
+        </div>
+      </Stack>
       {error && <p className={styles.errorText}>{error}</p>}
       <Suspense fallback={<MuLoader />}>
         <MentorList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
-      {/* <AsideDetails isOpen={isAsideOpen} handleClose={handleAsideClose}>
-        {selectedMentor && (
-          <div className={styles.profileContainer}>
-            <div className={styles.profileHeader}>
-              <div className={styles.profileImageContainer}>
-                <img
-                  src={selectedMentor.profile_pic || dpm}
-                  alt={selectedMentor.full_name}
-                  className={styles.profileImage}
-                />
-              </div>
-              <div className={styles.memberSince}>Member since 2023</div>
-              <button className={styles.connectBtn}>Connect</button>
-            </div>
-            <div className={styles.profileInfo}>
-              <h2 className={styles.profileName}>{selectedMentor.full_name}</h2>
-              <p className={styles.profileUsername}>{selectedMentor.muid}</p>
-              <p className={styles.profileCollegeName}>
-                {getDisplayOrganization(selectedMentor)}
-              </p>
-              <p className={styles.profileLevel}>LEVEL 5</p>
-            </div>
-            <div className={styles.statsGrid}>
-              <div className={styles.statsCard}>
-                <Karma />
-                <p className={styles.statsLabel}>Karma</p>
-                <p className={styles.statsValue}>{selectedMentor.karma}</p>
-              </div>
-              <div className={styles.statsCard}>
-                <AvgKarma />
-                <p className={styles.statsLabel}>Avg.Karma/Month</p>
-                <p className={styles.statsValue}>1.156K</p>
-              </div>
-              <div className={styles.statsCard}>
-                <Rank />
-                <p className={styles.statsLabel}>Rank</p>
-                <p className={styles.statsValue}>1</p>
-              </div>
-              <div className={styles.statsCard}>
-                <Rank />
-                <p className={styles.statsLabel}>Percentile</p>
-                <p className={styles.statsValue}>0.29</p>
-              </div>
-            </div>
-          </div>
-        )}
-      </AsideDetails> */}
     </div>
   );
 };
