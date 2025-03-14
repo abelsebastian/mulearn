@@ -56,6 +56,7 @@ const LearningPathDetailPage: React.FC<LearningPathDetailPageProps> = ({
                     onClickCTA={(card) => {
                       setSelectedData(card);
                     }}
+                    custom={true}
                   />
                 </div>
               ))

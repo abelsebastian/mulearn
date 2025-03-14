@@ -134,10 +134,10 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
 interface TaskCardProps {
   card?: any;
   onClickCTA: (card: any) => void;
-
+  custom?: Boolean
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA, custom }) => {
   const skillColors = [
     "#FFB6C1",
     "#87CEFA",
@@ -148,18 +148,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
   ];
 
   return (
-    <div className={`${styles.card} ${card.completed ? styles.completedCard : ""}`}>
+    <div className={`${styles.card} ${card.completed ? styles.completedCard : ""}`} style={custom ? {minHeight: 'auto'} : {}}>
       <div className={styles.cardContent}>
-        <div className={styles.cardIcon}>
+        {!custom && <div className={styles.cardIcon}>
           {card.completed ? (
             <i className="fi fi-rr-check-circle" style={{ color: "#28a745" }}></i>
           ) : (
             card.icon || <i className="fi fi-rr-circle"></i>
           )}
-        </div>
-        <div className={styles.cardTitle}>{card.title}</div>
-        <div className={styles.cardDesc}>{card.desc}</div>
-        <div className={styles.cardIg}>
+        </div>}
+        <div className={styles.cardTitle} style={custom ? {textAlign: "left"} : {}}>{card.title}</div>
+        <div className={styles.cardDesc} style={custom ? {textAlign: "left"} : {}}>{card.desc}</div>
+        <div className={styles.cardIg} style={custom ? {textAlign: "left"} : {}}>
           <strong>IG:</strong> {card.ig}
         </div>
         <div className={styles.cardSkills}>
