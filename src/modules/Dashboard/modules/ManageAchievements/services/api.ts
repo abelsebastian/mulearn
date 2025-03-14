@@ -1,7 +1,6 @@
 import { privateGateway } from "@/MuLearnServices/apiGateways"
 import { qseverseRoutes } from "@/MuLearnServices/urls"
 import toast from "react-hot-toast"
-
 import { AchievementData } from "../ManageAchievementsInterface";
 import axios from "axios";
 
@@ -44,7 +43,6 @@ export const updateAchievements = async (data: AchievementData): Promise<Achieve
 
 export const deleteAchievements = async (id: string): Promise<void> => {
     try {
-
         const response = await axios.delete(qseverseRoutes.deleteAchievements+`${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`

@@ -1,5 +1,4 @@
 // CreateAchievementForm.tsx
-
 import { forwardRef, useImperativeHandle, useState } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
@@ -140,7 +139,6 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         placeholder="Title"
                         value={data.title}
                         onChange={handleChange}
-
                         disabled={isSubmitting}
                     />
                     {errors.title && <div style={{ color: "red" }}>{errors.title}</div>}
@@ -172,7 +170,6 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                     <label>
                         Has VC?
                         <Switch
-
                             isChecked={data.has_vc ?? false}
                             onChange={() => handleSwitchChange("has_vc")}
                             isDisabled={isSubmitting}
@@ -207,7 +204,6 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 </div>
 
                 <div className={styles.inputContainer}>
-
                     <input
                         type="text"
                         name="icon"
