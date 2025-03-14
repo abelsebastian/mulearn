@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Bell, MoreHorizontal } from 'lucide-react';
 import styles from './InterestGroupOne.module.css';
 import SidebarBannerSlider from '../../components/SideBannerSlider/SideBannerSlider';
@@ -7,6 +7,7 @@ import IGActionSection from '../../components/ActionSection/IGActionSection';
 import { InterestGroupData, interestGroups } from '../../data/interestGroups';
 import ComingSoonPage from '/src/modules/Common/Authentication/pages/ComingSoon';
 import { FiArrowLeft } from 'react-icons/fi';
+import { BsDiscord } from 'react-icons/bs';
 
 
 const interestGroupsObject = Object.fromEntries(
@@ -18,6 +19,7 @@ const CommunityForum = () => {
   const { id } = useParams();
 
   const groupData = useMemo(() => (id ? interestGroupsObject[id] : null), [id]);
+  const navigate = useNavigate();
 
   const handleAddToCalendar = (eventName: string, dayTimeString: string, durationMinutes = 60) => {
     const [dayName, timeString] = dayTimeString.split(" ");
@@ -159,7 +161,21 @@ const CommunityForum = () => {
               </button>
             </div>
           </div>
+          
           )}
+          <div className={styles.officeHoursCard}>
+            <h3>Office Hours Timings</h3>
+            <div className={styles.officeHoursCardTiming}>
+              <p>{groupData.officeHours}</p>
+              <button
+                className={styles.officeHoursButton}
+                onClick={() => window.open("https://discord.gg/4Z6Jb3Y", "_blank")}
+                aria-label="Join Community"
+              >
+                <BsDiscord/> Join Community
+              </button>
+            </div>
+          </div>
           {/* <div className={styles.sidebarSection}>
             <h2 className={styles.sidebarTitle}>Partner Companies</h2>
             <div className={styles.sidebarList}>
