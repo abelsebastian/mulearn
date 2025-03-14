@@ -24,12 +24,13 @@
   color: #666;
 }
 
-.levelSection h2{
+.levelSection h2 {
   font-size: 1.1rem;
   font-weight: 600;
 
 }
-.levelSection h4{
+
+.levelSection h4 {
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -62,7 +63,8 @@
 .lockedRibbon {
   position: absolute;
   width: 80%;
-  top: 50%; /* adjust as needed */
+  top: 50%;
+  /* adjust as needed */
   left: 50%;
   transform: translateX(-50%) rotate(-45deg);
   background-color: red;
@@ -75,13 +77,13 @@
   text-align: center;
 }
 
-.unlockTaskSection{
+.unlockTaskSection {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.unlockTaskSection button{
+.unlockTaskSection button {
   background-color: #456ff6;
   border-radius: 10px;
   padding: 10px;
@@ -89,7 +91,7 @@
   color: white;
 }
 
-.proofOfWorkButton{
+.proofOfWorkButton {
   background-color: #456ff6;
   border-radius: 10px;
   padding: 10px;
@@ -98,7 +100,7 @@
   width: 100%;
 }
 
-.loader{
+.loader {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,6 +115,21 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 550px) {
+  .topBar {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 400px) {
+  .topBarPart .indicator{
+    min-width: 100px;
+  }
+  .topBarPart .topBarButton{
+    font-size: 15px;
+  }
 }
 
 .topBarPart {
@@ -144,6 +161,7 @@
   /* Optional hover effect */
   /* background-color: #e0e0e0; */
 }
+
 /* 
 .disabledButton {
   color: #666;
@@ -156,7 +174,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  min-width: 130px; 
+  min-width: 130px;
   background-color: #456ff6;
   border-radius: 24px;
   transition: left 0.3s ease, width 0.3s ease;
@@ -169,8 +187,10 @@
 
 /* Card Container */
 .card {
-  width: 300px; /* Fixed width for consistency */
-  min-height: 320px; /* Minimum height to avoid uneven cards */
+  width: 300px;
+  /* Fixed width for consistency */
+  min-height: 320px;
+  /* Minimum height to avoid uneven cards */
   height: 100%;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
@@ -346,6 +366,7 @@
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -355,6 +376,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(100%);
   }
@@ -421,4 +443,11 @@
   border: 1px solid #ccc;
   background-color: white;
   cursor: pointer;
+}
+
+@media (max-width: 550px) {
+  .filterContainer {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
 }
