@@ -80,7 +80,7 @@ export const OffCanvasLearningPath: React.FC<OffCanvasProps> = ({ isOpen, onClos
         </div>
 
         <div className={styles.offCanvasSection}>
-          <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof of work</a></button>
+        <a href={data.discord_link} target="_blank"><button className={styles.proofOfWorkButton}> Submit proof of work</button></a>
         </div>
       </div>
     </div>
