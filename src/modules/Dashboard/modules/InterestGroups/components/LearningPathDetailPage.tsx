@@ -5,6 +5,7 @@ import { TaskCard } from "../../LearningPathNew/Pages/LearningPathPage";
 import { FormattedLevel } from "../../LearningPathNew/services/api";
 import CardCarousel from "./CardCarousel/CardCarousal";
 import { OffCanvasLearningPath } from "./OffCanvasLearningPath/OffCanvasLearningPath";
+import { FiArrowLeft } from "react-icons/fi";
 
 interface LearningPathDetailPageProps {
   level: string;
@@ -37,12 +38,15 @@ const LearningPathDetailPage: React.FC<LearningPathDetailPageProps> = ({
   return (
     <div className={styles.detailContainer}>
       <button onClick={onBack} className={styles.backButton}>
-        Back to Learning Paths
+        <FiArrowLeft/>
       </button>
-      <h2>
+      <div className={styles.header}>
+
+      <h1 className={styles.title}>
         {level} - {card.title}
-      </h2>
+      </h1>
       <p>{card.data.description}</p>
+      </div>
       <div className={styles.tasksContainer}>
         <h3>Tasks</h3>
         <CardCarousel
