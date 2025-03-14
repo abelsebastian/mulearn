@@ -133,7 +133,7 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
 
 interface TaskCardProps {
   card?: any;
-  onClickCTA: () => void;
+  onClickCTA: (card: any) => void;
 
 }
 
@@ -177,7 +177,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
           ))}
         </div>
       </div>
-      <button className={styles.viewButton} onClick={onClickCTA}>
+      <button className={styles.viewButton} onClick={()=> {
+        onClickCTA(card);
+      }}>
         View
       </button>
     </div>
