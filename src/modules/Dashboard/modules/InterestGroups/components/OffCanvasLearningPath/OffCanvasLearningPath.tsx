@@ -69,25 +69,6 @@ export const OffCanvasLearningPath: React.FC<OffCanvasProps> = ({ isOpen, onClos
           </div>
         </div>
 
-        {/* Resources */}
-        <div className={styles.offCanvasSection}>
-          <h3 className={styles.offCanvasSectionTitle}>Resources</h3>
-          <div className={styles.offCanvasSectionContent}>
-            {data.resources?.length > 0 ? (
-              <ul>
-                {data.resources.map((link: string, i: number) => (
-                  <li key={i}>
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No resources available</p>
-            )}
-          </div>
-        </div>
 
         {/* Additional Info */}
         <div className={styles.offCanvasSection}>
@@ -95,7 +76,6 @@ export const OffCanvasLearningPath: React.FC<OffCanvasProps> = ({ isOpen, onClos
           <div className={styles.offCanvasSectionContent}>
             <p><strong>Hashtag:</strong> {data.hashtag}</p>
             <p><strong>Karma Points:</strong> {data.karma}</p>
-            <p><strong>Completed:</strong> {data.completed ? 'Yes' : 'No'}</p>
           </div>
         </div>
 
