@@ -328,33 +328,35 @@ const Profile = () => {
     }
 
 
-    // useEffect(() => {
-    //     async function fetchConnectedUsers() {
-    //         try {
-    //             const response = await getConnectedUsers(key, value);
-    //             if (response) {
-    //                 setUserDID(response);
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
+    useEffect(() => {
+        async function fetchConnectedUsers() {
+            try {
+                const response = await getConnectedUsers(key, value);
+                if (response) {
+                    setUserDID(response);
+                }
+            } catch (error) {
+                console.error(error);
                 
-    //         }
-    //     }
-    //     fetchConnectedUsers();
-    // }, []);
+            }
+        }
+        fetchConnectedUsers();
+    }, []);
 
-    // useEffect(() => {
-    //    async function fetchCredentials() {
-    //     try {
-    //         const response = await getQSCredentials();
-    //         console.log("credentials", response);
-    //     } catch (error) {
-    //         console.error(error);
+    useEffect(() => {
+       async function fetchCredentials() {
+        try {
+            const response = await getQSCredentials();
+            console.log("credentials", response);
+        } catch (error) {
+            console.error(error);
             
-    //     }
-    //    }
-    //      fetchCredentials();
-    // }, [])
+        }
+       }
+         fetchCredentials();
+    }, [])
+
+  
 
     // useEffect(() => {
     //     async function fetchConnectedUsers() {

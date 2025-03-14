@@ -36,6 +36,19 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
           Close
         </button>
 
+        {data.locked &&
+
+          <div className={styles.locked}>
+
+            <div>Locked</div>
+
+            <p>Please unlock level {Number(data.level) - 1} to unlock </p>
+
+          </div>
+
+
+        }
+
         {isSpecialLevel ? (
           <div className={styles.offCanvasSection}>
             <h2 className={styles.offCanvasSectionTitle}>Special Pathway</h2>
@@ -134,10 +147,10 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
 interface TaskCardProps {
   card?: any;
   onClickCTA: (card: any) => void;
-
+  custom?: Boolean
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA, custom }) => {
   const skillColors = [
     "#FFB6C1",
     "#87CEFA",
@@ -148,18 +161,18 @@ export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
   ];
 
   return (
-    <div className={`${styles.card} ${card.completed ? styles.completedCard : ""}`}>
+    <div className={`${styles.card} ${card.completed ? styles.completedCard : ""}`} style={custom ? { minHeight: 'auto' } : {}}>
       <div className={styles.cardContent}>
-        <div className={styles.cardIcon}>
+        {!custom && <div className={styles.cardIcon}>
           {card.completed ? (
             <i className="fi fi-rr-check-circle" style={{ color: "#28a745" }}></i>
           ) : (
             card.icon || <i className="fi fi-rr-circle"></i>
           )}
-        </div>
-        <div className={styles.cardTitle}>{card.title}</div>
-        <div className={styles.cardDesc}>{card.desc}</div>
-        <div className={styles.cardIg}>
+        </div>}
+        <div className={styles.cardTitle} style={custom ? { textAlign: "left" } : {}}>{card.title}</div>
+        <div className={styles.cardDesc} style={custom ? { textAlign: "left" } : {}}>{card.desc}</div>
+        <div className={styles.cardIg} style={custom ? { textAlign: "left" } : {}}>
           <strong>IG:</strong> {card.ig}
         </div>
         <div className={styles.cardSkills}>
@@ -177,7 +190,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
           ))}
         </div>
       </div>
-      <button className={styles.viewButton} onClick={()=> {
+      <button className={styles.viewButton} onClick={() => {
         onClickCTA(card);
       }}>
         View
@@ -438,8 +451,14 @@ const LearningPathPage: React.FC = () => {
     }
   }, [activeTab]);
 
-  const handleOpenOffCanvas = (data: any) => {
-    setSelectedData(data);
+  const handleOpenOffCanvas = (data: any, level: any, unlocked: any) => {
+    const isLocked = level > unlocked;
+    if (isLocked) {
+      setSelectedData({ ...data, locked: true, level: level });
+    }
+    else {
+      setSelectedData(data);
+    }
     setOffCanvasOpen(true);
   };
 
@@ -538,23 +557,29 @@ const LearningPathPage: React.FC = () => {
         </div>
       ) : filteredLevels.length > 0 ? (
         filteredLevels.map((level) => {
-          const isLocked = level.level > unlockedLevel;
+          // const isLocked = level.level > unlockedLevel;
           return (
             <div key={level.level} className={styles.levelSection}>
               <h2>Level {level.level}</h2>
               <h4 className={styles.levelSubtitle}>{level.subtitle}</h4>
-              {isLocked && (
+              {/* {isLocked && (
                 <div className={styles.unlockTaskSection}>
                   <p className={styles.lockedText}>Complete Level {level.level - 1} to unlock</p>
                   {level.leveller && (
                     <button onClick={() => handleOpenOffCanvas(level.leveller)}>Unlock now</button>
                   )}
                 </div>
-              )}
-              <div className={`${styles.cardsContainer} ${isLocked ? styles.locked : ""}`}>
+              )} */}
+              <div className={`${styles.cardsContainer}`}>
                 {level.cards && level.cards.length > 0 && (
                   <CardCarousel>
                     {level.cards.map((card: any) => (
+                      <div key={card.id}>
+                        <TaskCard card={card} onClickCTA={() => handleOpenOffCanvas(card, level.level, unlockedLevel)} />
+                      </div>
+                    ))}
+
+                    { /* level.cards.map((card: any) => (
                       <div key={card.id} className={isLocked ? styles.lockedCard : ""}>
                         {isLocked && (
                           <div className={styles.lockedRibbon}>
@@ -563,7 +588,7 @@ const LearningPathPage: React.FC = () => {
                         )}
                         <TaskCard card={card} onClickCTA={() => handleOpenOffCanvas(card)} />
                       </div>
-                    ))}
+                    )) */}
                   </CardCarousel>
                 )}
               </div>

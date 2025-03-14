@@ -166,14 +166,14 @@ const DashboardPage = () => {
                 >
                   Join Learning
                 </motion.button>
-                <motion.button
+                {/* <motion.button
                   className={styles.button2}
                   onClick={() => window.open("https://app.formbricks.com/s/cm7ztbf2d0000l70365noohib", "_blank")}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   Report Issues
-                </motion.button>
+                </motion.button> */}
               </div>
             </div>
             <motion.img
