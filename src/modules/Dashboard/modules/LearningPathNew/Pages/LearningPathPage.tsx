@@ -19,7 +19,7 @@ interface OffCanvasProps {
   data: any;
 }
 
-const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
+export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
   const offCanvasClass = isOpen
     ? `${styles.offCanvas} ${styles.offCanvasOpen}`
     : styles.offCanvas;
@@ -132,11 +132,12 @@ const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) => {
 };
 
 interface TaskCardProps {
-  card: any;
+  card?: any;
   onClickCTA: () => void;
+
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
   const skillColors = [
     "#FFB6C1",
     "#87CEFA",

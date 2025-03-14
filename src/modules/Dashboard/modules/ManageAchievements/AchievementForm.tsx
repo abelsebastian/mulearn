@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import Select from "react-select";
 import { customReactSelectStyles } from "../../utils/common";
 import { Switch } from "@chakra-ui/react";
+import { AchievementData } from "./ManageAchievementsInterface";
 
 type Props = { id: string; closeModal: () => void };
 
@@ -31,7 +32,7 @@ const AchievementForm = forwardRef((props: Props, ref: any) => {
         vcToken: false,
         tags: [],
         type: "",
-        iconFile: null
+        icon: ""
     });
     const [errors, setErrors] = useState<any>({});
     const [selectedFile, setSelectedFile] = useState<File | null>(null);

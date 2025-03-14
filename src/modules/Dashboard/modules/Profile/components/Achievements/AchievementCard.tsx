@@ -71,7 +71,8 @@ type IssuedCredentialResponse = {
 }[];
 
 interface AchievementCardProps {
-    id: number;
+
+    id: string;
     subject_info: {
         type: "Badge" | "Certificate" | "Recognition";
     };
