@@ -35,6 +35,11 @@ const LearningPathDetailPage: React.FC<LearningPathDetailPageProps> = ({
     setSelectedData(null);
   };
 
+  const handleOpenOffCanvas = (data: any) => {
+    setSelectedData(data);
+    setOffCanvasOpen(true);
+  };
+
   return (
     <div className={styles.detailContainer}>
       <button onClick={onBack} className={styles.backButton}>
@@ -58,8 +63,9 @@ const LearningPathDetailPage: React.FC<LearningPathDetailPageProps> = ({
                     key={index}
                     card={taskCard}
                     onClickCTA={(card) => {
-                      setSelectedData(card);
+                      handleOpenOffCanvas(card)
                     }}
+                    custom={true}
                   />
                 </div>
               ))
