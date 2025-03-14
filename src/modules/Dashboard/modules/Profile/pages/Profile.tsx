@@ -34,6 +34,8 @@ import { isDev } from "@/MuLearnServices/common_functions";
 import { SimpleGrid, Switch } from "@chakra-ui/react";
 import AchievementCard from "../components/Achievements/AchievementCard";
 import { useUserStore } from "/src/ZustandProvider";
+import { getAchievements } from "../../ManageAchievements/services/api";
+import { AchievementData } from "../../ManageAchievements/ManageAchievementsInterface";
 
 
 const achievements = [
@@ -208,6 +210,9 @@ const Profile = () => {
     const [userDID, setUserDID] = useState<string | null>(null);
 
 
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [achievements, setAchievements] = useState<AchievementData[]>([]);
     const [APILoadStatus, setAPILoadStatus] = useState(0);
     const [profileList, setProfileList] = useState("basic-details");
     const [popUP, setPopUP] = useState(false);
@@ -282,6 +287,20 @@ const Profile = () => {
         }, 1000);
     };
 
+    const fetchAchievements = async () => {
+            try {
+                const achievements = await getAchievements();
+                if (achievements) {
+                    setAchievements(achievements);
+                } 
+            } catch (error) {
+                console.error("Error fetching achievements:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+    
+
     useEffect(() => {
         if (firstFetch.current) {
             if (!id) {
@@ -292,6 +311,7 @@ const Profile = () => {
                 );
                 getUserLog(setUserLog);
                 getUserLevels(setUserLevelData);
+                fetchAchievements();
             } else {
                 getPublicUserProfile(setUserProfile, setAPILoadStatus, id);
                 getPublicUserLog(setUserLog, id);
@@ -308,33 +328,33 @@ const Profile = () => {
     }
 
 
-    useEffect(() => {
-        async function fetchConnectedUsers() {
-            try {
-                const response = await getConnectedUsers(key, value);
-                if (response) {
-                    setUserDID(response);
-                }
-            } catch (error) {
-                console.error(error);
+    // useEffect(() => {
+    //     async function fetchConnectedUsers() {
+    //         try {
+    //             const response = await getConnectedUsers(key, value);
+    //             if (response) {
+    //                 setUserDID(response);
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
                 
-            }
-        }
-        fetchConnectedUsers();
-    }, []);
+    //         }
+    //     }
+    //     fetchConnectedUsers();
+    // }, []);
 
-    useEffect(() => {
-       async function fetchCredentials() {
-        try {
-            const response = await getQSCredentials();
-            console.log("credentials", response);
-        } catch (error) {
-            console.error(error);
+    // useEffect(() => {
+    //    async function fetchCredentials() {
+    //     try {
+    //         const response = await getQSCredentials();
+    //         console.log("credentials", response);
+    //     } catch (error) {
+    //         console.error(error);
             
-        }
-       }
-         fetchCredentials();
-    }, [])
+    //     }
+    //    }
+    //      fetchCredentials();
+    // }, [])
 
     // useEffect(() => {
     //     async function fetchConnectedUsers() {

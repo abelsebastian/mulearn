@@ -1,23 +1,18 @@
-interface AchievementData {
-    id: string;
+export interface AchievementData {
     title: string;
-    levelBased: boolean;
+    level_based?: boolean; // Used in form and request
+    levelBased?: boolean;  // Used in ManageAchievements
     description: string;
-    vcToken: boolean;
+    has_vc?: boolean;      // Used in form and request
+    vcToken?: boolean;     // Used in ManageAchievements
     tags: string[];
     type: string;
-    iconFile?: File | null; // For file uploads in the form
-    icon?: string; // For the icon URL or emoji from the backend
-}
+    icon: string;
+    id?: string;           // Optional, added by API or fallback
+    created_at?: string;   // Optional, added by API or fallback
+    updated_at?: string;   // Added from API response
+    updated_by?: string;   // Added from API response
+    created_by?: string;   // Added from API response
+    [key: string]: any;    // Index signature to satisfy Data type
 
-interface AchievementDataFromBackend {
-    id: string;
-    title: string;
-    levelBased: boolean;
-    description: string;
-    vcToken: boolean;
-    tags: string[];
-    type: string;
-    icon: string; // Icon URL or emoji from the backend
-    created_at: string;
 }

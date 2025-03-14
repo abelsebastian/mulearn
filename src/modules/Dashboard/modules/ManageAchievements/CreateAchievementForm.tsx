@@ -1,51 +1,53 @@
 // CreateAchievementForm.tsx
-import { forwardRef, useImperativeHandle, useState, useRef } from "react";
+
+import { forwardRef, useImperativeHandle, useState } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import { customReactSelectStyles } from "../../utils/common";
 import { Switch } from "@chakra-ui/react";
+import { createAchievements } from "./services/api";
+import { AchievementData } from "./ManageAchievementsInterface";
 
-type Props = { closeModal: () => void };
+type Props = {
+    closeModal: () => void;
+    onSuccess?: (newAchievement: any) => void;
+};
 
 const achievementTypes = [
-    { value: "Individual", label: "Individual" },
-    { value: "Team", label: "Team" },
-    { value: "Progress", label: "Progress" },
-    { value: "Special", label: "Special" }
+    { value: "Badge", label: "Badge" },
+    { value: "Learning", label: "Learning" },
+    { value: "Skills", label: "Skills" },
+    { value: "Offers", label: "Offers" }
 ];
 
 const tagsOptions = [
-    { value: "beginner", label: "Beginner" },
-    { value: "welcome", label: "Welcome" },
-    { value: "progress", label: "Progress" },
-    { value: "milestone", label: "Milestone" }
+    { value: "Level 4 skill", label: "Level 4" },
+    { value: "Level 5 skill", label: "Level 5" },
+    { value: "Level 6 skill", label: "Level 6" },
+    { value: "Level 7 skill", label: "Level 7" }
 ];
 
 const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
     const [data, setData] = useState<AchievementData>({
-        id: "",
         title: "",
-        levelBased: false,
+        level_based: false,
         description: "",
-        vcToken: false,
+        has_vc: false,
         tags: [],
-        type: ""
+        type: "",
+        icon: ""
     });
-    const [errors, setErrors] = useState<any>({});
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
+    const [errors, setErrors] = useState<Partial<Record<keyof AchievementData, string>>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setData(prev => ({ ...prev, [name]: value }));
+        setData(prev => ({ ...prev, [name]: value } as AchievementData));
     };
 
-    const handleSwitchChange = (name: string) => {
-        setData(prev => ({ ...prev, [name]: !prev[name as keyof AchievementData] }));
+    const handleSwitchChange = (name: keyof AchievementData) => {
+        setData(prev => ({ ...prev, [name]: !prev[name] } as AchievementData));
     };
 
     const handleTagsChange = (selectedOptions: any) => {
@@ -53,58 +55,78 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
         setData(prev => ({ ...prev, tags }));
     };
 
-    const handleTypeChange = (selectedOption: any) => {
+    const handleTypeChange = (selectedOption: { value: string; label: string } | null) => {
         setData(prev => ({ ...prev, type: selectedOption?.value || "" }));
     };
-
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setSelectedFile(file);
-
-            // Create preview URL
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-
-            // Update data state with file info
-            setData(prev => ({ ...prev, iconFile: file }));
-        }
-    };
-
-    const triggerFileInput = () => {
-        fileInputRef.current?.click();
-    };
-
 
     useImperativeHandle(ref, () => ({
         handleSubmitExternally: handleSubmit
     }));
 
-    const handleSubmit = () => {
-        const requiredFields = ["title", "description", "type"];
+    const handleSubmit = async () => {
+        const requiredFields: (keyof AchievementData)[] = ["title", "description", "type"];
         let isValid = true;
-        const newErrors: any = {};
+        const newErrors: Partial<Record<keyof AchievementData, string>> = {};
 
         requiredFields.forEach(field => {
-            if (!data[field as keyof AchievementData]) {
+            if (!data[field]) {
                 isValid = false;
-                newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+                // Assert field as string to use string methods
+                newErrors[field] = `${(field as string).charAt(0).toUpperCase() + (field as string).slice(1)} is required`;
             }
         });
 
         setErrors(newErrors);
 
-        if (isValid) {
+        if (!isValid) return;
+
+        setIsSubmitting(true);
+        try {
+            const achievementData = {
+                title: data.title,
+                level_based: data.level_based ?? false,
+                description: data.description,
+                has_vc: data.has_vc ?? false,
+                type: data.type,
+                tags: data.tags,
+                icon: data.icon || ""
+            };
+
+            const response = await createAchievements(achievementData);
+            console.log("Achievement created successfully", response);
+
+            // Transform response to match ManageAchievements structure
+            const transformedResponse: AchievementData = {
+                ...response,
+                levelBased: response?.level_based ?? false,
+                vcToken: response?.has_vc ?? false,
+                id: response?.id || `ach_${Date.now()}`,
+                created_at: response?.created_at || new Date().toISOString(),
+                title: response?.title ?? data.title,
+                description: response?.description ?? data.description,
+                type: response?.type ?? data.type,
+                tags: response?.tags ?? data.tags,
+                icon: response?.icon ?? data.icon
+            };
+
             toast.success("Achievement created successfully");
+            props.onSuccess?.(transformedResponse);
             props.closeModal();
-            console.log("New achievement:", {
-                ...data,
-                id: `ach_${Date.now()}`, // Generate a simple unique ID
-                si: 1 // Starting sequence/index number
+
+            setData({
+                title: "",
+                level_based: false,
+                description: "",
+                has_vc: false,
+                tags: [],
+                type: "",
+                icon: ""
             });
+        } catch (error) {
+            toast.error("Failed to create achievement");
+            console.error("Error creating achievement:", error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -118,6 +140,8 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         placeholder="Title"
                         value={data.title}
                         onChange={handleChange}
+
+                        disabled={isSubmitting}
                     />
                     {errors.title && <div style={{ color: "red" }}>{errors.title}</div>}
                 </div>
@@ -128,6 +152,7 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         placeholder="Description"
                         value={data.description}
                         onChange={handleChange}
+                        disabled={isSubmitting}
                     />
                     {errors.description && <div style={{ color: "red" }}>{errors.description}</div>}
                 </div>
@@ -136,8 +161,9 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                     <label>
                         Level Based
                         <Switch
-                            isChecked={data.levelBased}
-                            onChange={() => handleSwitchChange("levelBased")}
+                            isChecked={data.level_based ?? false}
+                            onChange={() => handleSwitchChange("level_based")}
+                            isDisabled={isSubmitting}
                         />
                     </label>
                 </div>
@@ -146,8 +172,10 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                     <label>
                         Has VC?
                         <Switch
-                            isChecked={data.vcToken}
-                            onChange={() => handleSwitchChange("vcToken")}
+
+                            isChecked={data.has_vc ?? false}
+                            onChange={() => handleSwitchChange("has_vc")}
+                            isDisabled={isSubmitting}
                         />
                     </label>
                 </div>
@@ -161,6 +189,7 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         placeholder="Tags"
                         value={tagsOptions.filter(option => data.tags.includes(option.value))}
                         onChange={handleTagsChange}
+                        isDisabled={isSubmitting}
                     />
                 </div>
 
@@ -172,35 +201,21 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         onChange={handleTypeChange}
                         placeholder="Select Type"
                         isClearable
+                        isDisabled={isSubmitting}
                     />
                     {errors.type && <div style={{ color: "red" }}>{errors.type}</div>}
                 </div>
 
                 <div className={styles.inputContainer}>
-                    <div className={styles.fileUploadContainer}>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileSelect}
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                        />
-                        <button
-                            type="button"
-                            onClick={triggerFileInput}
-                            className={styles.fileUploadButton}
-                        >
-                            Choose Icon
-                        </button>
-                        <span className={styles.fileName}>
-                            {selectedFile ? selectedFile.name : "No file selected"}
-                        </span>
-                    </div>
-                    {previewUrl && (
-                        <div className={styles.iconPreview}>
-                            <img src={previewUrl} alt="Icon preview" />
-                        </div>
-                    )}
+
+                    <input
+                        type="text"
+                        name="icon"
+                        placeholder="Icon URL"
+                        value={data.icon}
+                        onChange={handleChange}
+                        disabled={isSubmitting}
+                    />
                 </div>
             </form>
         </div>
