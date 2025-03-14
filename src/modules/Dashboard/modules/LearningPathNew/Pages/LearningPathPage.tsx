@@ -133,7 +133,7 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
 
 interface TaskCardProps {
   card?: any;
-  onClickCTA: () => void;
+  onClickCTA: (card: any) => void;
 
 }
 
@@ -177,7 +177,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ card, onClickCTA }) => {
           ))}
         </div>
       </div>
-      <button className={styles.viewButton} onClick={onClickCTA}>
+      <button className={styles.viewButton} onClick={()=> {
+        onClickCTA(card);
+      }}>
         View
       </button>
     </div>
@@ -475,21 +477,16 @@ const LearningPathPage: React.FC = () => {
           >
             Start Journey
           </button>
-          <button
+          {unlockedLevel >= 4 && <button
             ref={(el) => (tabRefs.current.becomeExpert = el)}
             className={`${styles.topBarButton} ${activeTab === "becomeExpert" ? styles.activeTab : ""}`}
             onClick={() => {
-              if (unlockedLevel < 4) {
-                alert("You need to be level 4 or greater to access")
-              }
-              else {
-                setActiveTab("becomeExpert")
-              }
+              setActiveTab("becomeExpert")
             }
             }
           >
             Become Expert
-          </button>
+          </button>}
         </div>
 
 
