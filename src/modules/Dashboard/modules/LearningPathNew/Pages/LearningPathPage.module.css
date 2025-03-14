@@ -451,3 +451,18 @@
     margin-bottom: 20px;
   }
 }
+
+.locked {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 5px;
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+  p {
+    font-size: 16px;
+  }
+}
