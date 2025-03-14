@@ -8,6 +8,7 @@ import { getUsers } from "../services/api";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import UserCard from "../../../components/UserCard";
 import { useNavigate } from "react-router-dom";
+import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
 
 interface User {
   full_name: string;
@@ -75,7 +76,7 @@ const UserList: React.FC<{
           perPage: 9,
         });
         const newUsers = response.data;
-        
+
 
         let filtered: User[] = newUsers;
         if (searchType === "college" && searchTerm) {
@@ -160,18 +161,18 @@ const UserList: React.FC<{
       <div className={styles.userGrid}>
         {displayUsers.length > 0 ? (
           displayUsers.map((user, index) => (
-              <UserCard
-                key={`${user.muid}-${index}`}
-                data={{
-                  name: user.full_name.trim() || "Unknown User",
-                  muid: user.muid,
-                  interest_groups: user.interest_groups,
-                  organizations: user.organizations,
-                  profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
-                  karma: user.karma,
-                }}
-                onSelect={() => onSelect(user)}
-              />
+            <UserCard
+              key={`${user.muid}-${index}`}
+              data={{
+                name: user.full_name.trim() || "Unknown User",
+                muid: user.muid,
+                interest_groups: user.interest_groups,
+                organizations: user.organizations,
+                profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                karma: user.karma,
+              }}
+              onSelect={() => onSelect(user)}
+            />
           ))
         ) : (
           !isFetching && (
@@ -199,6 +200,7 @@ interface User {
 }
 
 const MuLearnersSearchPage: React.FC = () => {
+  const StackComponent = useBreakpointValue({ base: VStack, md: HStack }) || VStack;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
@@ -207,7 +209,7 @@ const MuLearnersSearchPage: React.FC = () => {
   const handleUserSelect = (user: User) => {
     setSelectedUser(user);
     window.open(`/profile/${user.muid}`, "_blank");
-};
+  };
 
 
 
@@ -217,17 +219,23 @@ const MuLearnersSearchPage: React.FC = () => {
         <div className={styles.BannerContent}>
           <h1 className={styles.BannerTitle}>Find & Connect</h1>
           <p className={styles.BannerSubtitle}>
-            Explore a curated network of individuals based on interest groups, names, or colleges.
-            Navigate technology, management, and creativity with clarity and purpose.
+            Find and connect with like-minded students based on skills, interests, or institution. Collaborate, learn, and grow together in a vibrant community of peers.
           </p>
+          <span className={styles.BannerDisclaimer}>*Only <b>public</b> profiles will be displayed here</span>
         </div>
       </div>
-
+      <StackComponent align="center" justify="start" width="100%">
       <div className={styles.searchContainer}>
         <FiSearch className={styles.searchIcon} />
         <input
           type="text"
-          placeholder={`Search public profiles by ${searchType === "name" ? "name" : searchType === "college" ? "college" : "interest group"}`}
+          placeholder={`Search public profiles by ${
+            searchType === "name"
+              ? "name"
+              : searchType === "college"
+              ? "college"
+              : "interest group"
+          }`}
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -235,24 +243,31 @@ const MuLearnersSearchPage: React.FC = () => {
       </div>
       <div className={styles.searchTypeButtons}>
         <button
-          className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""}`}
+          className={`${styles.searchTypeButton} ${
+            searchType === "name" ? styles.active : ""
+          }`}
           onClick={() => setSearchType("name")}
         >
           Name
         </button>
         <button
-          className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""}`}
+          className={`${styles.searchTypeButton} ${
+            searchType === "college" ? styles.active : ""
+          }`}
           onClick={() => setSearchType("college")}
         >
           College
         </button>
         <button
-          className={`${styles.searchTypeButton} ${searchType === "interest" ? styles.active : ""}`}
+          className={`${styles.searchTypeButton} ${
+            searchType === "interest" ? styles.active : ""
+          }`}
           onClick={() => setSearchType("interest")}
         >
           Interest Group
         </button>
       </div>
+    </StackComponent>
 
       {error && <p className={styles.errorText}>{error}</p>}
 
@@ -260,7 +275,7 @@ const MuLearnersSearchPage: React.FC = () => {
         <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
 
-      
+
     </div>
   );
 };

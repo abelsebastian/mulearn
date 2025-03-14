@@ -11,6 +11,7 @@ import {
     getLearningCircleInfo,
     scheduleMeetup
 } from "src/modules/Dashboard/modules/LearningCircleV2/services/LearningCircleAPIs";
+import { getConnectedUsers } from "../modules/Dashboard/modules/Profile/services/api";
 
 export const onboardingRoutes = {
     countryList: "/api/v1/register/country/list/",
@@ -51,6 +52,8 @@ export const NotificationRoutes = {
 export const learningCircleRoutes = {
     createLearningCircle: "/api/v1/dashboard/learningcircle/create/",
     scheduleMeetup: "/api/v1/dashboard/learningcircle/meeting/create/",
+    editScheduledMeetup: "/api/v1/dashboard/learningcircle/meeting/edit/",
+    deleteScheduledMeetup: "/api/v1/dashboard/learningcircle/meeting/delete/",
     getLearningCircleInfo: "/api/v1/dashboard/learningcircle/info/",
     getCreatedLearningCircles: "/api/v1/dashboard/learningcircle/list/",
     getMeetupInfo: "/api/v1/dashboard/learningcircle/meeting/info/",
@@ -58,7 +61,8 @@ export const learningCircleRoutes = {
         "/api/v1/dashboard/learningcircle/meeting/attendee-report/",
     getMeetups: "/api/v1/dashboard/learningcircle/meeting/list/",
     joinMeetup: "/api/v1/dashboard/learningcircle/meeting/join/",
-    getLcReportInfo: "/api/v1/dashboard/learningcircle/meeting/report/"
+    getLcReportInfo: "/api/v1/dashboard/learningcircle/meeting/report/",
+    confirmRSVP: "/api/v1/dashboard/learningcircle/meeting/rsvp/"
 };
 export const dashboardRoutes = {
     forgetPassword: "/api/v1/dashboard/user/forgot-password/",
@@ -298,3 +302,17 @@ export const donationRoutes = {
     order: "api/v1/donate/order/",
     verify: "api/v1/donate/verify/"
 };
+
+
+export const qseverseRoutes = {
+    issueVerifiableCredentials: "api/issue_vc_app",
+    getAllConnectedUsers: "api/app/connected-users",
+    getConnectedUsers: "api/app/connected-users/search",
+    getCredentials: "api/user/credentials",
+    getAchievements: "api/v1/dashboard/achievement/list/",
+    createAchievements: "api/v1/dashboard/achievement/create/",
+    updateAchievements: "api/v1/integrations/qseverse/achievements",
+    deleteAchievements: "api/v1/dashboard/achievement/delete/",
+    getUserAchievements: "api/v1/dashboard/achievement/list/user/",
+    updateVCURL: "api/v1/dashboard/achievement/issue-vc/"
+}

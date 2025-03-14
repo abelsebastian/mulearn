@@ -55,7 +55,7 @@ const IGSelector = (props: Props) => {
         <div className={styles.top_sec}>
           <b>Your Interest Groups</b>
           <div className={styles.close_and_submit_btn_div}>
-            {(Number(props.userProfile.level.slice(3, 4)) >= 4 || props.userProfile.roles.includes("Mentor")) && !editIg && (
+            {(Number(props.userProfile.level.slice(3, 4)) >= 4) && !editIg && (
               <p onClick={() => setEditIg(true)} className={styles.edit_profile_btn} tabIndex={0}>
                 <i className="fi fi-rr-pencil"></i>
               </p>

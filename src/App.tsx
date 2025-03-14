@@ -101,6 +101,7 @@ import SearchMain from "./modules/Dashboard/modules/Search/Pages/SearchMain";
 import Mappage from "./modules/Dashboard/modules/ProgressBar/pages/MapPage";
 import CampusDetails from "./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo";
 import LearningPathDetailPage from "./modules/Dashboard/modules/InterestGroups/components/LearningPathDetailPage";
+import ManageAchievements from "./modules/Dashboard/modules/ManageAchievements/ManageAchievements";
 
 const Profile = lazy(
     () => import("./modules/Dashboard/modules/Profile/pages/Profile")
@@ -405,28 +406,28 @@ function App() {
                 {
                     path: "learning-paths/:id",
                     element: (
-                        <LearningPathOne/>
+                        <LearningPathOne />
                     )
                 },
                 {
                     path: "learningcircle",
                     element: <LearningCircleLanding />
                 },
-                {path: "search", element: <SearchMain />},
-                { path: "mulearners", element: <MuLearnersSearchPage/>},
-                { path: "mentors", element: <MentorSearchPage/> },
-                {path: "campus", element: <CampusSearchPage/>},
-                {path: "campus/:org_id", element: <CampusDetails/>},
+                { path: "search", element: <SearchMain /> },
+                { path: "mulearners", element: <MuLearnersSearchPage /> },
+                { path: "mentors", element: <MentorSearchPage /> },
+                { path: "campus", element: <CampusSearchPage /> },
+                { path: "campus/:org_id", element: <CampusDetails /> },
                 { path: "interestgroups", element: <InterestGroupsPage /> },
                 { path: "interestgroups/:id", element: <InterestGroupOne /> },
                 // {path: "interestgroups/:id/learning-path", element: <LearningPathDetailPage />},
                 { path: "special-events", element: <SpecialEvents /> },
-                {path: "leaderboard", element: <MuLeaderboardPage />},
+                { path: "leaderboard", element: <MuLeaderboardPage /> },
                 { path: "bootcamps", element: <ComingSoonPage /> },
                 { path: "learningCircles", element: <ComingSoonPage /> },
                 { path: "courses", element: <CoursesMainPage /> },
 
-                {path: "map", element: <Mappage />},
+                { path: "map", element: <Mappage /> },
 
             ]
         },
@@ -438,35 +439,37 @@ function App() {
                     path: "/dashboard",
                     element: <DashboardRootLayout />,
                     children: [
-                        { path: "home", element: <Dashboardpage/> },
-                        { path: "mujourney", element: <LearningPathPage/> },
-                        { path: "learning-path/:id", element: <LearningPathPage/> },
+                        { path: "home", element: <Dashboardpage /> },
+                        { path: "mujourney", element: <LearningPathPage /> },
+                        { path: "learning-path/:id", element: <LearningPathPage /> },
                         { path: "profile", element: <Profile /> },
                         { path: "muverse", element: <ComingSoonPage /> },
                         { path: "interestgroups", element: <ComingSoonPage /> },
-                        { path: "management", element: <ManagementPage /> },
-                        { path: "management/user-management/manage-users", element: <ManageUsersPage /> },
-                        { path: "management/user-management/user-role-verification", element: <UserRoleVerificationPage /> },
-                        { path: "management/organization/affiliation", element: <AffiliationPage /> },
-                        { path: "management/organization/organization-transfer", element: <OrganizationTransferPage /> },
-                        { path: "management/organization/manage-departments", element: <ManageDepartmentsPage /> },
-                        { path: "management/organization/organizations", element: <OrganizationsPage /> },
-                        // { path: "management/task-management", element: <TaskManagementPage /> },
-                        // { path: "management/task-management/tasks", element: <TasksPage /> },
-                        // { path: "management/task-management/task-type", element: <TaskTypePage /> },
-                        // { path: "management/task-management/events", element: <EventsPage /> },
-                        { path: "management/interest-groups", element: <InterestGroupsPage /> },
-                        { path: "management/lc-meetup-verification", element: <LCMeetupVerificationPage /> },
-                        { path: "management/verify-organizations", element: <VerifyOrganizationsPage /> },
-                        { path: "management/college-levels", element: <CollegeLevelsPage /> },
-                        { path: "management/karma-voucher", element: <KarmaVoucherPage /> },
-                        { path: "management/error-log", element: <ErrorLogPage /> },
-                        { path: "management/dynamic-type", element: <DynamicTypePage /> },
-                        { path: "management/manage-roles", element: <ManageRolesPage /> },
-                        { path: "management/manage-locations", element: <ManageLocationsPage /> },
-                        { path: "management/channels", element: <ChannelsPage /> },
-                        { path: "management/url-shortener", element: <URLShortenerPage /> },
-                        { path: "management/discord-moderation", element: <DiscordModerationPage /> },
+                        { path: "management", element: <AuthChecker roles={[roles.ADMIN]} children={<ManagementPage />} /> },
+                        { path: "management/manage-achievements", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageAchievements />} /> },
+                        { path: "management/user-management/manage-users", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageUsersPage />} /> },
+                        { path: "management/user-management/user-role-verification", element: <AuthChecker roles={[roles.ADMIN]} children={<UserRoleVerificationPage />} /> },
+                        { path: "management/organization/affiliation", element: <AuthChecker roles={[roles.ADMIN]} children={<AffiliationPage />} /> },
+                        { path: "management/organization/organization-transfer", element: <AuthChecker roles={[roles.ADMIN]} children={<OrganizationTransferPage />} /> },
+                        { path: "management/organization/manage-departments", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageDepartmentsPage />} /> },
+                        { path: "management/organization/organizations", element: <AuthChecker roles={[roles.ADMIN]} children={<OrganizationsPage />} /> },
+                        // { path: "management/task-management", element: <AuthChecker roles={[roles.ADMIN]} children={ <TaskManagementPage />} /> },
+                        // { path: "management/task-management/tasks", element: <AuthChecker roles={[roles.ADMIN]} children={ <TasksPage />} /> },
+                        // { path: "management/task-management/task-type", element: <AuthChecker roles={[roles.ADMIN]} children={ <TaskTypePage />} /> },
+                        // { path: "management/task-management/events", element: <AuthChecker roles={[roles.ADMIN]} children={ <EventsPage />} /> },
+                        { path: "management/interest-groups", element: <AuthChecker roles={[roles.ADMIN]} children={<InterestGroupsPage />} /> },
+                        { path: "management/lc-meetup-verification", element: <AuthChecker roles={[roles.ADMIN]} children={<LCMeetupVerificationPage />} /> },
+                        { path: "management/verify-organizations", element: <AuthChecker roles={[roles.ADMIN]} children={<VerifyOrganizationsPage />} /> },
+                        { path: "management/college-levels", element: <AuthChecker roles={[roles.ADMIN]} children={<CollegeLevelsPage />} /> },
+                        { path: "management/karma-voucher", element: <AuthChecker roles={[roles.ADMIN]} children={<KarmaVoucherPage />} /> },
+                        { path: "management/error-log", element: <AuthChecker roles={[roles.ADMIN]} children={<ErrorLogPage />} /> },
+                        { path: "management/dynamic-type", element: <AuthChecker roles={[roles.ADMIN]} children={<DynamicTypePage />} /> },
+                        { path: "management/manage-roles", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageRolesPage />} /> },
+                        { path: "management/manage-locations", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageLocationsPage />} /> },
+                        { path: "management/channels", element: <AuthChecker roles={[roles.ADMIN]} children={<ChannelsPage />} /> },
+                        { path: "/dashboard/url-shortener", element: <AuthChecker roles={[roles.ADMIN, roles.ASSOCIATE]} children={<URLShortenerPage />} /> },
+                        { path: "management/discord-moderation", element: <AuthChecker roles={[roles.ADMIN]} children={<DiscordModerationPage />} /> },
+
                         {
                             path: "connect-discord",
                             element: <ConnectDiscord />
@@ -975,7 +978,8 @@ function App() {
         // },
         {
             path: "/profile/:id",
-            element: <Profile />
+            element: <DashboardRootLayout />,
+            children: [{ index: true, element: <Profile /> }]
         },
         {
             path: "/learning-circle",

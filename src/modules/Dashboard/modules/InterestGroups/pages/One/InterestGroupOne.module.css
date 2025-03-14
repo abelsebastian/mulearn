@@ -5,6 +5,26 @@
   max-width: 1440px;
   margin: 0 auto;
   overflow-x: hidden;
+  position: relative;
+}
+
+
+.backButton{
+  /* background-color: #456ff6; */
+  color: #3e3e3e;
+  border: none;
+  padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 16px);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: clamp(0.625rem, 1.5vw, 0.8rem);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: auto;
+  font-size: 2rem;
+  max-width: 100%;
+  position: absolute;
+  top: 0rem;
+  left: .1rem;
+
 }
 
 .mainGrid {
@@ -20,7 +40,10 @@
   max-width: 100%;
   overflow-x: hidden;
 
+
 }
+
+
 
 .sidebar {
   width: 100%;
@@ -38,6 +61,7 @@
   .mainGrid {
     grid-template-columns: 75% 25%;
   }
+ 
 }
 
 @media screen and (min-width: 1024px) {
@@ -55,12 +79,11 @@
   max-width: 100%;
   overflow-x: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
 }
 
-.forumCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
+
+
 
 .bannerWrapper {
   position: relative;
@@ -352,6 +375,10 @@
     bottom: -15px;
     padding: 0 8px;
   }
+  .backButton{
+    visibility: hidden;
+   
+   }
 
   .forumSubInfo {
     flex-direction: column;
@@ -457,6 +484,10 @@
     width: 100%; /* Full width on mobile */
     right: -100%; /* Start fully off-screen on mobile */
   }
+  .backButton{
+    visibility: hidden;
+   
+   }
 
   .asideDetails.open {
     right: 0; /* Slide in fully on mobile */
@@ -536,6 +567,7 @@
     max-width: calc(100% - 30px);
   }
 }
+
 
 @media screen and (min-width: 768px) {
   .sidebarList {

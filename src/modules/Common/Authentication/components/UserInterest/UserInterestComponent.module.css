@@ -141,7 +141,7 @@
                     height: 100px;
 
                     p {
-                        transform: translateY(-90%);
+                        transform: translateY(-0%);
                     }
                 }
 
@@ -225,7 +225,7 @@
             .itemImage {
                 margin-top: 1rem;
                 object-fit: cover;
-                height: 140px;
+                height: 150px;
                 width: 140px;
                 -webkit-user-drag: none;
             }

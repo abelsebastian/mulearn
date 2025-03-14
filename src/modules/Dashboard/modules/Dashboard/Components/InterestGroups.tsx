@@ -25,6 +25,15 @@ const currentIgsData: Record<string, string[]> =
   coder: ["9b8aaf7f-16a0-4a66-ae53-79b8c25e5faa", "3a74725e-a05a-418b-a275-39d68ad9a416","1be43a3a-bcfb-4ef1-b77a-959b01bcb782","85fdd535-08d2-4619-9da7-944e21365de9","1719d19a-0206-4161-9c6f-0a7dba44d4e5"],
   manager: ["5bf2bdfe-5c22-48ab-9572-9e9836c70e79","04d29c15-4de4-4b43-ad63-0f4760c62919"]}
 
+  const imageUrls = [
+    { title: "UI UX", image: "/assets/IG/Cover/1.png" },
+    { title: "Web Development", image: "/assets/IG/Cover/2.png" },
+    { title: "Cyber Security", image: "/assets/IG/Cover/3.png" },
+    { title: "Digital Marketing", image: "/assets/IG/Cover/4.png" },
+    { title: "Game Dev", image: "/assets/IG/Cover/5.png" },
+    { title: "Cloud And Devops", image: "/assets/IG/Cover/6.png" },
+    { title: "Product Management", image: "/assets/IG/Cover/7.png" }
+  ];
 
   
 
@@ -36,10 +45,20 @@ const InterestGroups: React.FC<InterestGroupsProps> = ({ title, groups }) => {
   },[])
 
   
-  const selectedDomain = useUserStore((state) => state.userInfo.user_domains[0]);
+  const selectedDomain = useUserStore((state) => state.userInfo?.user_domains?.[0]);
+
   const currentIgs = igList.filter(igl => 
     currentIgsData[selectedDomain]?.some(ci => igl.id === ci)
 );
+
+const getImageForGroup = (groupName: string) => {
+  const matchedImage = imageUrls.find(
+    (img) => img.title.toLowerCase().trim() === groupName.toLowerCase().trim()
+  );
+  return matchedImage ? matchedImage.image : "/assets/IG/mobile_dev.jpg"; 
+};
+
+console.log(igList)
 
   const navigate = useNavigate();
   return (
@@ -58,7 +77,7 @@ const InterestGroups: React.FC<InterestGroupsProps> = ({ title, groups }) => {
         {currentIgs.map((group, index) => (
           <div key={index} className={styles.groupItem} onClick={() => navigate(`/dashboard/interestgroups/${group.id}`)}>
             <img
-              src={"/assets/IG/mobile_dev.jpg"}
+                 src={getImageForGroup(group.name)}
               alt={group.name}
               className={styles.groupImage}
               style={{marginBottom: '0'}}

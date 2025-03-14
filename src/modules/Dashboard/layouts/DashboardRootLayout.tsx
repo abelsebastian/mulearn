@@ -4,7 +4,7 @@ import SideNavBar from "../components/SideNavBar";
 import TopNavBar from "../components/TopNavBar";
 import { Suspense, useEffect, useState } from "react";
 import { FaUserFriends } from "react-icons/fa";
-import { FaMagnifyingGlass, FaMapLocationDot, FaWandMagicSparkles } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaMapLocationDot,FaHouse } from "react-icons/fa6";
 import { IoGlobeOutline } from "react-icons/io5";
 import { roles, managementTypes } from "@/MuLearnServices/types";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
@@ -106,11 +106,11 @@ const DashboardRootLayout = (props: { component?: any }) => {
             url: "/dashboard/home",
             title: "Home",
             hasView: true,
-            icon: <i className="fi fi-sr-clipboard-user"></i>
+            icon: <FaHouse />
         },
         {
             url: "/dashboard/mujourney",
-            title: "µJounrey",
+            title: "µJourney",
             hasView: true,
             icon: <FaMapLocationDot />
         },
@@ -144,12 +144,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <i className="fi fi-sr-building"></i>
         },
-        {
-            url: "/dashboard/muVerse",
-            title: "μVerse",
-            hasView: true,
-            icon: <IoIosRocket />
-        },
+        // {
+        //     url: "/dashboard/muVerse",
+        //     title: "μVerse",
+        //     hasView: true,
+        //     icon: <IoIosRocket />
+        // },
         // {
         //     url: "/dashboard/profile",
         //     title: "Profile",
@@ -160,7 +160,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
             url: "/dashboard/management",
             title: "Management",
             hasView: true,
-            roles: [roles.ADMIN, roles.FELLOW, roles.ASSOCIATE],
+            roles: [roles.ADMIN],
             icon: <i className="fi fi-sr-layout-fluid"></i>,
             dynamicType: Management
         },
@@ -171,6 +171,13 @@ const DashboardRootLayout = (props: { component?: any }) => {
             roles: [roles.CAMPUS_LEAD, roles.LEAD_ENABLER, roles.ADMIN],
             icon: <i className="fi fi-sr-book-arrow-right"></i>
         },    
+        {
+          url: "/dashboard/url-shortener",
+          title: "URL Shortner",
+          hasView: true,
+          roles: [roles.ADMIN, roles.ASSOCIATE],
+          icon: <i className="fi fi-sr-link"></i>
+        }
         // {
         //     url: "/dashboard/zonal-dashboard",
         //     title: "Zonal Dashboard",

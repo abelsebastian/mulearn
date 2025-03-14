@@ -147,7 +147,7 @@ export default function PathFinderComponent({
                                 {questions[currentQuestionIndex] && (
                         <div className={styles.questionBoxContainer}>
                             <img src="/assets/dashboard/illustrations/expert.png" alt="" />
-                                    <div>
+                                    <div className={styles.questionBoxContent}>
                                         <span className={styles.status}>
                                             Question {currentQuestionIndex + 1} of{" "}
                                             {questions.length}

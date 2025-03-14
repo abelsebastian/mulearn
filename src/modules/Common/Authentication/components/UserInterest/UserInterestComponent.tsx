@@ -7,10 +7,10 @@ import { onboardingRoutes } from "@/MuLearnServices/urls";
 import styles from "./UserInterestComponent.module.css";
 import muBrand from "/src/modules/Common/Authentication/assets/µLearn.webp";
 import OnboardingTemplate from "../OnboardingTeamplate/OnboardingTemplate";
-import creative from "/src/modules/Common/Authentication/assets/interests/creative.svg";
-import maker from "/src/modules/Common/Authentication/assets/interests/makers.svg";
-import management from "/src/modules/Common/Authentication/assets/interests/management.svg";
-import software from "/src/modules/Common/Authentication/assets/interests/software.svg";
+import software from "/assets/landing/coder2.webp";
+import maker from "/assets/landing/maker.webp";
+import management from "/assets/landing/manager.webp";
+import creative from "/assets/landing/creative.webp";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 // import others from "/src/modules/Common/Authentication/assets/interests/others.svg";
 

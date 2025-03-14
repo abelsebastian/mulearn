@@ -30,6 +30,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
     const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
     const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null); 
+    const userLevel = useUserStore((state) => state.userProfile.level);
 
     let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
     if(!userName){
@@ -69,8 +70,8 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
         const fetchLevelData = async () => {
             try {
                 setIsLoading(true);
-                if (id) {
-                    await getPublicUserLevels(setUserLevelData, id);
+                if (userInfo?.muid) {
+                    await getPublicUserLevels(setUserLevelData, userInfo.muid);
                 } else {
                     await getUserLevels(setUserLevelData);
                 }
@@ -136,6 +137,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <b className={styles.greetings}><i>Hello</i>, <b>{userName}</b> 👋</b>
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
+                            {refreshToken && userInfo?.user_domains && (
                             <div className={styles.modeContainer}>
                                 <span className={styles.modeText}>Mode</span>
                                 <span
@@ -144,11 +146,12 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                 >
                                     {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                 </span>
-                            </div>
+                            </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                            {/* <div > */}
+                    {refreshToken &&(
 
-                                <GameProgressBar levelData={userLevelData} />
+                                <GameProgressBar levelData={userLevelData} userLevel={userLevel} />
+                    )}
                             </div>
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>
@@ -198,7 +201,11 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
             {switchDomainModal && (
                 <ModeSwitchModal
                     isOpen={switchDomainModal}
-                    onClose={() => setSwitchDomainModal(false)}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setSwitchDomainModal(false)
+                        }, 300);
+                    }}
                     onSubmit={handleOnSubmit}
                 />
             )}

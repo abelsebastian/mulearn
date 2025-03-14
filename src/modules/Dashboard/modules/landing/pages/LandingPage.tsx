@@ -15,6 +15,7 @@ import launchpad from "../../SpecialEvents/assets/launchpad.webp";
 import trivialideas from "../../SpecialEvents/assets/trivialideas.webp";
 import SpecialEventCardLanding from "../components/SpecialEventCardLanding/SpecialEventCardLanding";
 import illustration from "../assets/illustration.webp"
+import FeatureGrid from "./components/FeatureGrid";
 
 // Data remains the same
 const data = [
@@ -103,18 +104,16 @@ const MuLearnLanding = () => {
   function NavLinks() {
     return (
       <>
-        <li onClick={() => navigate("/dashboard/home")}>Home</li>
-        <li onClick={() => navigate("/dashboard/mentors")}>Mentorship</li>
-        <li onClick={() => navigate("/dashboard/learning-paths")}>Learning Paths</li>
-        <li onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
-        <li> <a href="https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be" target="_blank" rel="noopener noreferrer">
-        Why μLearn
-    </a></li>
-    <li>
-    <a href="https://mulearn.org" target="_blank" rel="noopener noreferrer">
-        Visit the Old Site
-    </a>
-</li>
+        <li className="cursor-pointer" onClick={() => navigate("/")}>Home</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
+        <li className="cursor-pointer" onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
+        <li className="cursor-pointer" onClick={() => window.open("https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be", "_blank")}>
+          Why μLearn
+        </li>
+        <li className="cursor-pointer" onClick={() => window.open("https://mulearn.org", "_blank")}>
+          Visit the Old Site
+        </li>
       </>
     );
   }
@@ -230,15 +229,16 @@ const MuLearnLanding = () => {
           >
             {" "}
           </motion.span>
-          <motion.p
+          <motion.h6
             custom={3}
             variants={textVariant}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className={styles.heroDescription}
           >
             An open community for learners, makers, and innovators
-          </motion.p>
+          </motion.h6>
           <motion.div
             className={styles.ctaButtons}
             initial="hidden"
@@ -254,7 +254,7 @@ const MuLearnLanding = () => {
             </button>
             <button
               className={styles.downloadBtn}
-              onClick={() => navigate("/dashboard/learning-path")}
+              onClick={() => navigate("/dashboard/mujourney")}
             >
               Explore Learning Paths
             </button>
@@ -270,82 +270,12 @@ const MuLearnLanding = () => {
           </motion.div>
         </div>
 
-        <motion.div
-          className={styles.featuresGrid}
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {[
-            {
-              title: "Community",
-              description: "Join 40,000+ learners & innovators.",
-              image: "/assets/landing/College Project Concept Illustration.png",
-              bgColor: "rgb(220 250 230)",
-            },
-            {
-              title: "Mentors",
-              description: "Learn from those ahead of you, mentor those behind you.",
-              image: "/assets/landing/searching.png",
-              bgColor: "rgb(235 200 205)",
-            },
-            {
-              title: "Interest Groups",
-              description: "Connect with like-minded people who share your interests",
-              image: "/assets/landing/Content Team Concept Illustration.png",
-              bgColor: "rgb(255 200 205)",
-            },
-            {
-              title: "Roadmaps",
-              description: "Structured learning paths for skill mastery.",
-              image: "/assets/landing/Roadmap.png",
-              bgColor: "rgb(155 138 228)",
-            },
-            {
-              title: "Challenges",
-              description: "Engage in real-world problem-solving.",
-              image: "/assets/landing/collab.png",
-              bgColor: "rgb(215 225 255)",
-            },
-            {
-              title: "Opportunities",
-              description: "Discover Gigs, Jobs, and best opportunities around you",
-              image: "https://www.propeers.in/images/cuate.svg",
-              bgColor: "rgb(180 190 200)",
-            },
-          ].map((feature, i) => (
-            <motion.div
-              className={styles.featureCard}
-              key={i}
-              style={{ backgroundColor: feature.bgColor }}
-              variants={fadeInUp}
-              custom={i}
-            >
-              <div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </div>
-              <img
-                src={feature.image}
-                width={
-                  feature.title === "Community"
-                    ? "140px"
-                    : feature.title === "Mentors"
-                      ? "120px"
-                      : feature.title === "Interest Groups"
-                        ? "90px"
-                        : feature.title === "Roadmaps"
-                          ? "110px"
-                          : feature.title === "Challenges"
-                            ? "130px"
-                            : "90px"
-                }
-                alt={feature.title}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        <h1>What <span>µLearn</span> offers</h1>
+        <h6 className={styles.heroDescription}>
+          µLearn offers a wide range of features and opportunities that help you learn, grow, and upskill yourself
+          in a fun and engaging way. Here are some of the key features that µLearn offers.
+        </h6>
+        <FeatureGrid/>
       </motion.header>
 
       {/* Structured Learning Paths Section */}
@@ -400,9 +330,9 @@ const MuLearnLanding = () => {
           <h1>
             Understand μLearn with a <span className={styles.highlight}>Story</span>
           </h1>
-          <p>
+          <h6>
             Meet Aami, an eager learner hungry for growth! Join her voyage through the captivating µVerse, where she seizes opportunities, builds learning circles, and immerses herself in events, emerging industry-ready with newfound skills and confidence.
-          </p>
+          </h6>
         </motion.div>
         <motion.div
           className={styles.iframeContainer}
@@ -497,7 +427,9 @@ const MuLearnLanding = () => {
       >
         <motion.div className={styles.oppurtunitiesTitle} variants={fadeInUp}>
           <h1>At The End Of a μLearners Journey</h1>
-          <h6>You are offered</h6>
+          <h6>
+            At the end of a μLearner's journey, they are equipped with a plethora of opportunities to choose from. They can choose to work in a job, freelance, research, start their own venture, or work for a social cause.
+          </h6>
         </motion.div>
         <motion.div
           className={styles.oppurtunities}
@@ -510,7 +442,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/rafiki.svg"}
-                  width={"120px"}
+                  width={"400px"}
                   alt="Job"
                 />
               ),
@@ -521,7 +453,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/Mentors-cuate.svg"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Freelance"
                 />
               ),
@@ -532,7 +464,7 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"https://www.propeers.in/images/cuate.svg"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Research"
                 />
               ),
@@ -543,8 +475,19 @@ const MuLearnLanding = () => {
               icon: (
                 <img
                   src={"/assets/landing/College Project Concept Illustration.png"}
-                  width={"90px"}
+                  width={"400px"}
                   alt="Entrepreneurship"
+                />
+              ),
+            },
+            {
+              id: 5,
+              name: "Social Cause",
+              icon: (
+                <img
+                  src={"/assets/landing/social-growth.webp"}
+                  width={"400px"}
+                  alt="Social Cause"
                 />
               ),
             },
@@ -571,9 +514,9 @@ const MuLearnLanding = () => {
           <h1>
             The Impact of <span className={styles.highlight}>μLearn</span>
           </h1>
-          <p>
+          <h6>
             Over the last year, we as a community have made an impact on a significant number of students, mentors, and facilitators, enabling them to gain more knowledge about the ecosystem of learning and upskill themselves.
-          </p>
+          </h6>
         </motion.div>
         <motion.div className={styles.dataGrid} variants={fadeInUp}>
           {data.map((d, i) => (
@@ -585,7 +528,6 @@ const MuLearnLanding = () => {
         </motion.div>
       </motion.section>
 
-      {/* Community Section */}
       <motion.section
         className={`${styles.leftRightGrid} ${styles.leftRightGridCustom}`}
         variants={fadeInUp}
@@ -626,14 +568,14 @@ const MuLearnLanding = () => {
             <ul>
               <li><a href="https://mulearn.org/careers">Career Labs</a></li>
               <li><a href="https://gtechmulearn.medium.com/">Blog</a></li>
-              <li><a href="https://mulearn.org/privacypolicy">Interest Groups</a></li>
+              <li><a href="http://app.mulearn.org/dashboard/interestgroups">Interest Groups</a></li>
             </ul>
           </div>
           <div className={styles.footerSection}>
             <h3>Legal</h3>
             <ul>
               <li><a href="https://mulearn.org/termsandconditions">Terms and Conditions</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="https://mulearn.org/privacypolicy">Privacy Policy</a></li>
             </ul>
           </div>
           <div className={styles.footerSection}>
