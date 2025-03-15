@@ -311,7 +311,7 @@ export const qseverseRoutes = {
     getCredentials: "api/user/credentials",
     getAchievements: "api/v1/dashboard/achievement/list/",
     createAchievements: "api/v1/dashboard/achievement/create/",
-    updateAchievements: "api/v1/integrations/qseverse/achievements",
+    updateAchievements: "api/v1/dashboard/achievement/update/",
     deleteAchievements: "api/v1/dashboard/achievement/delete/",
     getUserAchievements: "api/v1/dashboard/achievement/list/user/",
     updateVCURL: "api/v1/dashboard/achievement/issue-vc/"

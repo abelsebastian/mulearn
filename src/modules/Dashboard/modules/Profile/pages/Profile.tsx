@@ -13,6 +13,7 @@ import {
     getPublicUserLog,
     getPublicUserProfile,
     getQSCredentials,
+    getUserAchievements,
     getUserLevels,
     getUserLog,
     getUserProfile,
@@ -36,6 +37,7 @@ import AchievementCard from "../components/Achievements/AchievementCard";
 import { useUserStore } from "/src/ZustandProvider";
 import { getAchievements } from "../../ManageAchievements/services/api";
 import { AchievementData } from "../../ManageAchievements/ManageAchievementsInterface";
+import AchievementCardOne from "../components/Achievements/AchievementCardOne";
 
 
 const achievements = [
@@ -203,15 +205,10 @@ const achievements = [
 const Profile = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-
-
-    const key = 'email';
-    const value = useUserStore(state => state.userInfo.email);
-    const [userDID, setUserDID] = useState<string | null>(null);
-
-
+    const key = 'muid';
+    const value = useUserStore(state => state.userInfo.muid);
+    const [userDID, setUserDID] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
-
     const [achievements, setAchievements] = useState<AchievementData[]>([]);
     const [APILoadStatus, setAPILoadStatus] = useState(0);
     const [profileList, setProfileList] = useState("basic-details");
@@ -287,19 +284,22 @@ const Profile = () => {
         }, 1000);
     };
 
-    const fetchAchievements = async () => {
+    useEffect(() => {
+        const fetchAchievements = async () => {
+            if (!userProfile?.muid) return; 
+    
+            setIsLoading(true);
             try {
-                const achievements = await getAchievements();
-                if (achievements) {
-                    setAchievements(achievements);
-                } 
+                const achievements = await getUserAchievements(userProfile.muid);
+                setAchievements(achievements);
             } catch (error) {
                 console.error("Error fetching achievements:", error);
             } finally {
                 setIsLoading(false);
             }
         };
-    
+        fetchAchievements();
+    }, [userProfile]);
 
     useEffect(() => {
         if (firstFetch.current) {
@@ -311,7 +311,7 @@ const Profile = () => {
                 );
                 getUserLog(setUserLog);
                 getUserLevels(setUserLevelData);
-                fetchAchievements();
+          
             } else {
                 getPublicUserProfile(setUserProfile, setAPILoadStatus, id);
                 getPublicUserLog(setUserLog, id);
@@ -321,7 +321,6 @@ const Profile = () => {
         firstFetch.current = false;
         setProfileStatus(userProfile.is_public);
     }, [id, userProfile.is_public]);
-    // console.log(userLevelData);
 
     const handleAchievementModal = () => {
         setAchievementModalOpen(!achievementModalOpen);
@@ -342,34 +341,6 @@ const Profile = () => {
         }
         fetchConnectedUsers();
     }, []);
-
-    useEffect(() => {
-       async function fetchCredentials() {
-        try {
-            const response = await getQSCredentials();
-            console.log("credentials", response);
-        } catch (error) {
-            console.error(error);
-            
-        }
-       }
-         fetchCredentials();
-    }, [])
-
-  
-
-    // useEffect(() => {
-    //     async function fetchConnectedUsers() {
-    //      try {
-    //          const response = await getAllConnectedUsers();
-    //          console.log("credentials", response);
-    //      } catch (error) {
-    //          console.error(error);
-    //      }
-    //     }
-    //     fetchConnectedUsers();
-    //  }, [])
-    
 
     return (
         <>
@@ -760,23 +731,20 @@ const Profile = () => {
                                                 justifyContent="center"  // Centers items horizontally
                                                 alignItems="center"      // Centers items vertically
                                             >
-                                                {/* {achievements.map((achievement) => (
-                                                    <AchievementCard
+                                                {achievements.map((achievement) => (
+                                                    <AchievementCardOne
                                                     key={achievement.id}
-                                                    id={achievement.id}
-                                                    subject_info={achievement.subject_info}
-                                                    credential_info={achievement.credential_info}
-                                                    template_id={achievement.template_id}
-                                                    buttonText={achievement.buttonText}
-                                                    icon={achievement.icon}
+                                                    achievement={achievement}
+                                                    userDID={userDID}
+                                                   
                                                 />
-                                                ))} */}
+                                                ))}
                                             </SimpleGrid>
                                         </div>
                                     ) : null}
 
                                 </div>
-
+                               
                                 <div className={styles.notification}>
                                     <div className={styles.existing_roles}>
                                         <div className={styles.head + " " + styles.profileStatus}>

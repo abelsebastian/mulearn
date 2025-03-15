@@ -78,7 +78,7 @@ type CredentialInfo = {
 
 interface AchievementCardOneProps {
     achievement: AchievementData;
-    userDID: string;
+    userDID?: string;
 }
 
 const getRandomColor = (): string => {
@@ -90,7 +90,6 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
     achievement,
     userDID
 }) => {
-    // console.log("Achievementcard:", achievement);
     const bgColor = getRandomColor();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const userInfo = useUserStore((state) => state.userInfo);
@@ -102,27 +101,20 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
         onOpen();
     };
 
-    const imageSelector = () => {
-        if (achievement.title === "Level 1") {
-            setCardIcon(level1);
-        } else if (achievement.title === "Level 2") {
-            setCardIcon(level2);
-        } else if (achievement.title === "Level 3") {
-            setCardIcon(level3);
-        } else if (achievement.title === "Level 4") {
-            setCardIcon(level4);
-        } else if (achievement.title === "Level 5") {
-            setCardIcon(level5);
-        } else if (achievement.title === "Level 6") {
-            setCardIcon(level6);
-        } else if (achievement.title === "Level 7") {
-            setCardIcon(level7);
-        }
+    const levelIcons: Record<string, string> = {
+        "Level 1": level1,
+        "Level 2": level2,
+        "Level 3": level3,
+        "Level 4": level4,
+        "Level 5": level5,
+        "Level 6": level6,
+        "Level 7": level7,
     };
 
     useEffect(() => {
-        imageSelector();
-    }, []);
+        if (!achievement?.achievement?.achievement_name) return;
+        setCardIcon(levelIcons[achievement.achievement.achievement_name] || levelIcons["Level 1"]); // Fallback to "Level 1" if no match
+    }, [achievement]);
 
     const handleIssueVC = async () => {
         if (!userDID) return;
@@ -130,37 +122,29 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
         try {
             const subject_info: SubjectInfo = {
                 type: "Badge",
-                muid: shareEmail && userInfo?.muid ? userInfo.muid : "",
+                muid: userInfo.muid || "",
                 did: userDID,
                 full_name: userInfo?.full_name || "",
             };
 
-            const template_id = achievement.templateID;
-
+            const template_id = achievement.achievement.template_id; // Adjust this based on actual property name
             const credential_info: CredentialInfo = {
-                course_name: achievement.title,
-                tags: achievement.tags,
+                course_name: achievement.achievement?.achievement_name || "",
+                tags: achievement.achievement?.tags || [],
             };
 
-            const response = await issueVerifiableCredential(
-                subject_info,
-                credential_info,
-                template_id as string
-            );
+            const response = await issueVerifiableCredential(subject_info, credential_info, template_id);
             const vc_url = response[0].subject_info.s3_url;
-            if(!vc_url) {
-                toast.error("Failed to issue VC. Please try again.")
-                return;            
+            if (!vc_url) {
+                toast.error("Failed to issue VC. Please try again.");
+                return;
             }
-            await updateVCURL(achievement.id || '', vc_url);
+            await updateVCURL(achievement.achievement?.id || "", vc_url);
             setIssuedCredential(response);
         } catch (error) {
             console.error("Error issuing VC:", error);
         }
     };
-
-
-
 
     return (
         <>
@@ -170,19 +154,15 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                         style={{ backgroundColor: bgColor }}
                         className="rounded-full p-3 w-48 h-48 flex items-center justify-center"
                     >
-                        {achievement.icon.startsWith("http") ? (
-                            <Img src={cardIcon} alt="Achievement icon" className="w-full h-full object-cover rounded-full" />
-                        ) : (
-                            <p className="text-3xl">{cardIcon}</p>
-                        )}
+                        <Img src={cardIcon} alt="Achievement icon" className="w-3/4 h-3/4 object-cover rounded-full"/>
                     </div>
                     <Stack mt="6" spacing="3">
                         <div className="flex flex-col w-full items-center">
                             <Heading className="text-center !mb-4">
-                                {achievement.title}
+                                {achievement.achievement.achievement_name}
                             </Heading>
                             <Text color="blue.600" fontSize="sm" align="center">
-                                {achievement.description}
+                                {achievement.achievement.description}
                             </Text>
                         </div>
                     </Stack>
@@ -194,9 +174,8 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                         _hover={{ bg: "#0056b3" }}
                         size="sm"
                         onClick={handleButtonClick}
-                        isDisabled={achievement.has_vc}
                     >
-                        {achievement.has_vc ? "View" : "Issue VC"}
+                        {achievement.is_issued ? "View" : "Issue VC"}
                     </Button>
                 </CardFooter>
             </Card>
@@ -205,7 +184,14 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        {userDID === "" ? "Link Your DID" : issuedCredential ? "Credential Issued" : "Achievement Details"}
+                        {userDID === ""
+                            ? "Link Your DID"
+                            : issuedCredential
+                                ? "Credential Issued"
+                                : achievement.is_issued
+                                    ? "Achievement Details"
+                                    :  "Credential Issued"}
+
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
@@ -234,7 +220,7 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                                     <iframe
                                         width="100%"
                                         height="200"
-                                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Replace with your actual video ID
+                                        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
                                         title="How to Link Your DID"
                                         frameBorder="0"
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -256,19 +242,41 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                                 <Img src={issuedCredential[0].message} alt="Credential Badge" />
                                 <Stack direction="row" spacing={4} wrap="wrap" className="items-start justify-start gap-4">
                                     <Text className="bg-green-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiBookOpen/> {issuedCredential[0].subject_info.course_name}
+                                        <FiBookOpen /> {issuedCredential[0].subject_info.course_name}
                                     </Text>
                                     <Text className="bg-orange-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiType/> {issuedCredential[0].subject_info.type}
+                                        <FiType /> {issuedCredential[0].subject_info.type}
                                     </Text>
                                     <Text className="bg-red-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiCalendar/> {issuedCredential[0].subject_info.completed_date}
+                                        <FiCalendar /> {issuedCredential[0].subject_info.completed_date}
                                     </Text>
+                                </Stack>
+                            </VStack>
+                        ) : achievement.is_issued? (
+                            <VStack spacing={4} align="stretch">
+                                <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center">
+                                    <AlertTitle mt={4} mb={1} fontSize="lg">
+                                        Here&apos;s your credentials!
+                                    </AlertTitle>
+                                    <AlertDescription maxWidth="sm">
+                                        Scan the QR to add it to your wallet.
+                                    </AlertDescription>
+                                </Alert>
+                                <Img src={achievement.vc_url} alt="Credential Badge" />
+                                <Stack direction="row" spacing={4} wrap="wrap" className="items-start justify-start gap-4">
+                                    <Text className="bg-green-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
+                                    <FiBookOpen /> <span>{achievement.achievement?.achievement_name}</span>
+                                    
+                                    </Text>
+                                    <Text className="bg-red-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
+                                        <FiType /> {achievement.achievement?.tags[0]}
+                                    </Text>
+                                 
                                 </Stack>
                             </VStack>
                         ) : (
                             <Text>
-                                {achievement.description}
+                                {achievement.achievement.description}
                                 <br />
                                 Ready to issue your Verifiable Credential?
                             </Text>
@@ -282,7 +290,7 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                                     color="white"
                                     mr={3}
                                     as="a"
-                                    href="https://your-did-link-url.com"
+                                    href="https://www.youtube.com/embed/dQw4w9WgXcQ"
                                     target="_blank"
                                 >
                                     Link DID
@@ -299,6 +307,8 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                             >
                                 Close
                             </Button>
+                        ) : achievement.is_issued? (
+                            ""
                         ) : (
                             <Button
                                 bg="#007bff"
