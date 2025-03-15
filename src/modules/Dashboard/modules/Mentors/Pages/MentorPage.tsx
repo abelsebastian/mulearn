@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import styles from "./MentorPage.module.css";
 import { FiSearch } from "react-icons/fi";
-import profileImage from "../assets/ProfileImages/10496279.jpg";
-import userImage2 from "../assets/ProfileImages/11475206.jpg";
 import debounce from "lodash/debounce";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import { getUsers } from "../../Search/services/api";
 import UserCard from "../../../components/UserCard";
 import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
+import defaultProfile from "../../../assets/images/defaultProfile.png"
 
 interface User {
   full_name: string;
@@ -187,7 +186,7 @@ const MentorList: React.FC<{
                   .join(", ") || "Unknown Role",
                 expertise: user.interest_groups.map((ig) => ig.name),
                 karma: user.karma,
-                image: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                image: user.profile_pic?user.profile_pic:  defaultProfile,
               }}
               onSelect={() => onSelect(user)}
             />
