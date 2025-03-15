@@ -4,6 +4,7 @@ import styles from "./LearningCirclesSection.module.css";
 import { getMeetups } from "../../LearningCircleV2/services/LearningCircleAPIs";
 import { CircleMeetupInfo } from "../../LearningCircleV2/services/LearningCircleInterface";
 import EventDetailsModal from "../../LearningCircleV2/components/EventDetailsModal/EventDetailsModal";
+import EmptyImage from "../assets/empty.webp";
 
 const meetupCache: { [key: string]: CircleMeetupInfo[] } = {};
 
@@ -88,6 +89,17 @@ const LearningCirclesSection: React.FC = () => {
           <p>Loading...</p>
         ) : (
           <div className={styles.list}>
+            {meetups.length === 0 &&
+              <div className={styles.noLc}>
+                <img src={EmptyImage} alt="No Learning Circle Found!" className={styles.emptyImage} />
+                <div className={styles.content}>
+                  <h2 className={styles.title}>No Learning Circle Found!</h2>
+                  <button className={styles.createButton} onClick={()=> {
+                    navigate("/dashboard/learningcircle")
+                  }}>Create Now</button>
+                </div>
+              </div>
+            }
             {meetups.map((meetup) => (
               <div
                 key={meetup.id}
