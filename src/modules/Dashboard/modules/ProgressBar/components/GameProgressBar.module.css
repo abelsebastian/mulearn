@@ -58,14 +58,14 @@
   position: relative;
   height: 1rem;
   width: 6rem;
-  border-radius: 9999px;
+  border-radius: 9999px 9999px 9999px 0;
   overflow: hidden;
   background: rgba(30, 41, 59, 0.8);
   display: flex;
   align-items: center;
 }
 
-.progressBar-large {
+.progressBarLarge {
   height: 1.5rem;
   width: 9rem;
 }
@@ -88,6 +88,7 @@
   font-weight: 500;
   font-size: 0.75rem;
 }
+
 
 .completedBar {
   background-color: #22c55e;
