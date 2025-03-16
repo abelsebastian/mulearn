@@ -135,17 +135,7 @@ const LearningCircleLanding = () => {
                             <h1 className={styles.BannerTitle}>Discover Learning Circles</h1>
                             <p className={styles.BannerSubtitle}>Join circles that share your interests and upgrade your skills.</p>
                         </div>
-                    </div>
-                    <div className={styles.middleContainer}>
-                        {/* <SelectTab
-                            placeholder={"Select Role"}
-                            options={INITIAL_INTERESTS}
-                            styles={customReactSelectStyles}
-                            value={selectedCategory}
-                            onChange={selectionChange}
-                        /> */}
-                        <div></div>
-                        <div>
+                        <div className={styles.BannerButton}>
                             <PowerfulButton
                                 children="Create"
                                 style={{
@@ -157,6 +147,16 @@ const LearningCircleLanding = () => {
                                 onClick={() => setIsCreateModalOpen(true)}
                             />
                         </div>
+                    </div>
+                    <div className={styles.middleContainer}>
+                        {/* <SelectTab
+                            placeholder={"Select Role"}
+                            options={INITIAL_INTERESTS}
+                            styles={customReactSelectStyles}
+                            value={selectedCategory}
+                            onChange={selectionChange}
+                        /> */}
+                        <div></div>
 
                     </div>
                     {meetups.length === 0 ? (

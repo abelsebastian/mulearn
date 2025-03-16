@@ -39,10 +39,17 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-
-
 }
 
+.joinCommunityButton{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.joinCommunityButton button{
+  margin-bottom: 1rem;
+}
 
 
 .sidebar {

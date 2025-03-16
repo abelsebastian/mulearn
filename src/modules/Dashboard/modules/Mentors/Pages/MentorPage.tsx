@@ -233,9 +233,9 @@ const MentorSearchPage: React.FC = () => {
       <div className={styles.Banner}>
         <div className={styles.BannerContent}>
           <h1 className={styles.BannerTitle}>Find a Mentor</h1>
-          <p className={styles.BannerSubtitle}>
+          {/* <p className={styles.BannerSubtitle}>
             Search for experienced mentors by expertise, name, or institution. Connect with the right guidance to navigate technology, management, and creativity with confidence.
-          </p>
+          </p> */}
           <span className={styles.BannerDisclaimer}>*Only <b>public</b> profiles will be displayed here</span>
 
         </div>
