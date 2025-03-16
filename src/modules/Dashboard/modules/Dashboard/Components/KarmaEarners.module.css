@@ -92,6 +92,20 @@
     border-radius: 50%;
     filter: drop-shadow(0px 0px 1px rgb(200, 200, 200));
   }
+
+  @media (min-width: 830px) and (max-width: 1130px) {
+    .earnerParts {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+    .earnerPartConnector {
+      text-align: center;
+    }
+    .earnerProfile {
+      width: 60px;
+      height: 60px;
+    }
+  }
     
   .streakDays {
     font-size: 1.2rem;
