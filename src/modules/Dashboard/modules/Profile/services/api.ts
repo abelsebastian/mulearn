@@ -199,7 +199,7 @@ export const getQSCredentials = async (): Promise<any> => {
 
 export const getUserAchievements = async (muid: string): Promise<any[]> => {
     try {
-      const response = await publicGateway.get(qseverseRoutes.getUserAchievements + muid);
+      const response = await publicGateway.get(qseverseRoutes.getUserAchievements + muid + "/");
       return response?.data?.response ?? []; 
     } catch (error: any) {
       console.error("Error fetching achievements:", error.response?.data || error.message);
