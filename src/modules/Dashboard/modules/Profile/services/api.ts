@@ -157,7 +157,6 @@ export const getAllConnectedUsers = async (): Promise<any> => {
     try {
         const response = await qSeversePrivateGateway.get(qseverseRoutes.getAllConnectedUsers, {
         });
-        console.log(response);
         return response;
     } catch (error: any) {
         console.error("Error fetching achievements:", error.response?.data || error.message);
@@ -175,7 +174,9 @@ export const getConnectedUsers = async (
         const response = await qSeversePrivateGateway.get(qseverseRoutes.getConnectedUsers, {
             params: { key, value }
         });
-       
+       if (response.data.matching_users.length === 0) {
+            return null;
+        }
         return response.data.matching_users[0].did;
     } catch (error: any) {
         console.error("Error fetching connected users:", error.response?.data || error.message);
@@ -199,7 +200,6 @@ export const getQSCredentials = async (): Promise<any> => {
 export const getUserAchievements = async (muid: string): Promise<any[]> => {
     try {
       const response = await publicGateway.get(qseverseRoutes.getUserAchievements + muid);
-  
       return response?.data?.response ?? []; 
     } catch (error: any) {
       console.error("Error fetching achievements:", error.response?.data || error.message);

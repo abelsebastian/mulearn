@@ -58,7 +58,6 @@ const getImageForGroup = (groupName: string) => {
   return matchedImage ? matchedImage.image : "/assets/IG/mobile_dev.jpg"; 
 };
 
-console.log(igList)
 
   const navigate = useNavigate();
   return (

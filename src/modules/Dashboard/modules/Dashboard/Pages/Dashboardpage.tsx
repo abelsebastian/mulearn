@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion"; // ✅ Import Framer Motion
-import SidebarBannerSlider from "../../InterestGroups/components/SideBannerSlider/SideBannerSlider";
+import SidebarBannerSlider, { Event } from "../../InterestGroups/components/SideBannerSlider/SideBannerSlider";
 import InterestGroups from "../Components/InterestGroups";
 import KarmaEarners from "../Components/KarmaEarners";
 import LearningCirclesSection from "../Components/LearningCirclesSection";
@@ -9,49 +9,8 @@ import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
+import { notion } from "/src/modules/utils/notion";
 
-const EVENTS = [
-  {
-    id: "evt-002",
-    title: "Figma Advanced Prototyping Masterclass",
-    link: "https://uiuxcommunity.com/events/figma-masterclass",
-    venue: "Semarang Convention Center",
-    eventType: "Offline" as const,
-    date: "April 10, 2025",
-    time: "09:00 - 12:00 WIB",
-    image: "/assets/interestgroup_assets/Top100Desigers3.png",
-  },
-  {
-    id: "evt-003",
-    title: "User Research Techniques Webinar",
-    link: "https://uiuxcommunity.com/events/user-research-webinar",
-    venue: "Online via Microsoft Teams",
-    eventType: "Online" as const,
-    date: "May 5, 2025",
-    time: "10:00 - 11:30 GMT",
-    image: "/assets/interestgroup_assets/Top100Desigers2.png",
-  },
-  {
-    id: "evt-004",
-    title: "UI Design Trends 2025 Conference",
-    link: "https://uiuxcommunity.com/events/ui-trends-2025",
-    venue: "Jakarta Design Hub",
-    eventType: "Offline" as const,
-    date: "June 20, 2025",
-    time: "13:00 - 17:00 WIB",
-    image: "/assets/interestgroup_assets/Top100Desigers3.png",
-  },
-  {
-    id: "evt-005",
-    title: "Accessibility in UX Design Workshop",
-    link: "https://uiuxcommunity.com/events/accessibility-workshop",
-    venue: "Online via Google Meet",
-    eventType: "Online" as const,
-    date: "July 12, 2025",
-    time: "15:00 - 16:30 GMT",
-    image: "/assets/interestgroup_assets/Top100Desigers2.png",
-  },
-];
 
 interface InterestGroup {
   title: string;
@@ -60,11 +19,20 @@ interface InterestGroup {
   image: string;
 }
 
+
+const imageMap: { [key: string]: { src: string; alt: string } } = {
+  coder: { src: "/assets/landing/coder2.webp", alt: "Coding illustration" },
+  maker: { src: "/assets/landing/maker.webp", alt: "Maker illustration" },
+  creative: { src: "/assets/landing/creative.webp", alt: "Designer illustration" },
+  manager: { src: "/assets/landing/manager.webp", alt: "Manager illustration" },
+};
+
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
   let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
   const storedUserInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+  const [events, setEvents] = useState<Event[]>([]);
 
   if (!userName) {
     userName = storedUserInfo ? storedUserInfo?.full_name.split(" ")?.[0] : null;
@@ -118,12 +86,56 @@ const DashboardPage = () => {
     fetchKarmaFeed();
   }, []);
 
-  const imageMap: { [key: string]: { src: string; alt: string } } = {
-    coder: { src: "/assets/landing/coder2.webp", alt: "Coding illustration" },
-    maker: { src: "/assets/landing/maker.webp", alt: "Maker illustration" },
-    creative: { src: "/assets/landing/creative.webp", alt: "Designer illustration" },
-    manager: { src: "/assets/landing/manager.webp", alt: "Manager illustration" },
-  };
+  
+  useEffect(() => {
+    const fetchEvents = async () => {
+        try {
+            const proxyUrl = "https://proxy.cors.sh/"; 
+            const notionApiUrl = "https://api.notion.com/v1/databases/1b759e69b1bf80a3853afd0b09ef93ad/query";
+
+            const response = await fetch(proxyUrl + notionApiUrl, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${import.meta.env.VITE_NOTION_API_KEY}`,
+                    "Notion-Version": "2022-06-28",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    filter: {
+                        property: "IG Based",
+                        select: {
+                            equals: "False",
+                        },
+                    },
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            setEvents(data.results.map((event: any) => ({
+                name: event.properties.Name?.title?.[0]?.plain_text || "No Name",
+                description: event.properties.Description?.rich_text?.[0]?.plain_text || "No Description",
+                // igBased: event.properties["IG Based"]?.select?.name || "Unknown",
+                // ig: event.properties.IG?.select?.name || "Not Provided",
+                poster: event.properties.Poster?.files?.[0]?.file?.url || "",
+                link: event.properties.URL?.url || "#",
+                date: event.properties.Date?.date?.start || "No Date",
+            })));
+
+        } catch (error) {
+            console.error("Error fetching data from Notion:", error);
+        }
+    };
+
+    fetchEvents();
+}, []);
+
+
+  
+
   const defaultImage = { src: "/assets/landing/others.png", alt: "General illustration" };
   const { src, alt } = imageMap[userDomains[0]] || defaultImage;
 
@@ -188,13 +200,15 @@ const DashboardPage = () => {
           </motion.section>
           <LearningCirclesSection />
         </motion.div>
-
+        
+       
         <motion.aside 
           className={styles.rightWrapper}
           initial={{ x: 50 }}
           animate={{ x: 0 }}
           transition={{ duration: 0.6 }}
         >
+           {events.length !==0 &&(
           <motion.section className={styles.slider} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
             <h2 className={styles.happeningTitle}>Happening Now</h2>
             <motion.div 
@@ -203,9 +217,9 @@ const DashboardPage = () => {
               animate={{ scale: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <SidebarBannerSlider events={EVENTS} />
+              <SidebarBannerSlider events={events} />
             </motion.div>
-          </motion.section>
+          </motion.section>)}
           {karmaFeed.length > 1 && karmaFeed[0].user && karmaFeed[1].user && (
             <KarmaEarners highestStudent={karmaFeed[0]} highestCollege={karmaFeed[1]} />
           )}
