@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Search, Users, ChevronLeft, ChevronRight, Users2 } from 'lucide-react';
 import styles from './InterestGroupsPage.module.css';
 import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiUsers } from 'react-icons/fi';
 import { getInterestGroups, getInterestGroupsList } from '../../InterestGroup/apis';
 import MuLoader from '@/MuLearnComponents/MuLoader/MuLoader';
 import {InterestGroupData, interestGroups} from "../data/interestGroups"; 
@@ -133,6 +133,7 @@ function InterestGroupsPage() {
             onClick={() => navigate(`/dashboard/interestgroups/${group.id}`)}
           >
             <div className={styles.GroupImageWrapper}>
+              
               {group.image ? (
                 <img
                   src={group.image}
@@ -154,12 +155,7 @@ function InterestGroupsPage() {
                   );
                 })()
               )}
-              <div className={styles.GroupOverlay}>
-                <span className={styles.GroupParticipantsBadge}>
-                  <Users2 className={styles.GroupParticipantsIcon} />
-                  {group.memberCount} 
-                </span>
-              </div>
+              
             </div>
             <div className={styles.GroupDetails}>
               {group.category && <span className={styles.GroupCategory}>
@@ -167,6 +163,12 @@ function InterestGroupsPage() {
                 </span>}
             
               <h3 className={styles.GroupTitle}>{group.title}</h3>
+              <div className={styles.GroupOverlay}>
+                <span className={styles.GroupParticipantsBadge}>
+                  <FiUsers className={styles.GroupParticipantsIcon} />
+                  {group.memberCount} members joined
+                </span>
+              </div>
             </div>
           </div>
           ))}

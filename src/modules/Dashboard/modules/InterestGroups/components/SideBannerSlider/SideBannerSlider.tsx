@@ -38,7 +38,7 @@ const SidebarBannerSlider: React.FC<SidebarBannerSliderProps> = ({ events }) => 
         {events?.map((event) => (
           <SwiperSlide key={event.id} className={styles.swiperSlide}>
             <div className={styles.imageWrapper}>
-              <img src={event.poster} alt={event.title} className={styles.sliderImage} />
+              <img src={event.poster} alt={event.title} className={styles.sliderImage} loading='lazy'/>
               {event.link&&(
               <a href={event.link} className={styles.knowMoreButton}>
                 Know More
