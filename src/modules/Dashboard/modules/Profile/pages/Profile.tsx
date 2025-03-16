@@ -4,6 +4,7 @@ import dpm from "../assets/images/dpm.webp";
 import Karma, { KarmaWhite } from "../assets/svg/Karma";
 import MulearnBrand from "../assets/svg/MulearnBrand";
 import Rank from "../assets/svg/Rank";
+import emptyAchievements from "../assets/images/empty achievements.webp"
 import { PieChart } from "../components/Piechart/PieChart";
 import {
 
@@ -32,16 +33,17 @@ import Socials from "../components/Socials/pages/Socials";
 import ShareProfilePopUp from "../components/ShareProfilePopUp/pages/ShareProfilePopUp";
 import HelmetMetaTags from "../components/HelmetMetaTags/HelmetMetaTags";
 import { isDev } from "@/MuLearnServices/common_functions";
-import { SimpleGrid, Switch } from "@chakra-ui/react";
+import { Img, SimpleGrid, Switch } from "@chakra-ui/react";
 import AchievementCard from "../components/Achievements/AchievementCard";
 import { useUserStore } from "/src/ZustandProvider";
 import { getAchievements } from "../../ManageAchievements/services/api";
 import { AchievementData } from "../../ManageAchievements/ManageAchievementsInterface";
 import AchievementCardOne from "../components/Achievements/AchievementCardOne";
+import toast from "react-hot-toast";
 
 
 const achievements = [
-    
+
     {
         id: 1,
         subject_info: {
@@ -50,7 +52,7 @@ const achievements = [
         credential_info: {
             course_name: "Top 100 Coders",
             description: "Ranked among the top 100 coders in the community. Keep pushing forward!",
-            "completed_date": "2024-04-23", 
+            "completed_date": "2024-04-23",
 
         },
         template_id: "bbd38679-c114-423c-be83-4f2854f33026",
@@ -206,7 +208,7 @@ const Profile = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const key = 'muid';
-    const value = useUserStore(state => state.userInfo.muid);
+    const [value, setValue] = useState<string>();
     const [userDID, setUserDID] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
     const [achievements, setAchievements] = useState<AchievementData[]>([]);
@@ -214,6 +216,7 @@ const Profile = () => {
     const [profileList, setProfileList] = useState("basic-details");
     const [popUP, setPopUP] = useState(false);
     const [editPopUp, setEditPopUp] = useState(false);
+    const [fromUserSearch, setFromUserSearch] = useState(false);
     const [achievementModalOpen, setAchievementModalOpen] = useState(false);
     const [userProfile, setUserProfile] = useState({
         full_name: "",
@@ -285,21 +288,51 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        const fetchAchievements = async () => {
-            if (!userProfile?.muid) return; 
+        const initializeProfileData = async () => {
+            setAchievements([])
+            
+            let newValue = "";
+            if (id) {
+                newValue = id;
+                setFromUserSearch(true);
+            } else {
+                newValue = useUserStore.getState().userInfo.muid;
+            }
+            setValue(newValue);
     
-            setIsLoading(true);
-            try {
-                const achievements = await getUserAchievements(userProfile.muid);
-                setAchievements(achievements);
-            } catch (error) {
-                console.error("Error fetching achievements:", error);
-            } finally {
-                setIsLoading(false);
+            if (newValue) {
+                try {
+                    const connectedUsersResponse = await getConnectedUsers(key, newValue);
+                    if (connectedUsersResponse) {
+                        setUserDID(connectedUsersResponse);
+                    }
+                } catch (error) {
+                    console.error("Error fetching connected users:", error);
+                    toast.error("Failed to fetch connected users.");
+                }
+            } else {
+                console.warn("Value is not available for fetchConnectedUsers");
+            }
+    
+            // Step 3: Fetch achievements (only if value is available)
+            if (newValue) {
+                setIsLoading(true);
+                try {
+                    const achievements = await getUserAchievements(newValue);
+                    setAchievements(achievements);
+                } catch (error) {
+                    console.error("Error fetching achievements:", error);
+                    toast.error("Failed to fetch achievements.");
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                toast.error("Error fetching muid for achievements.");
             }
         };
-        fetchAchievements();
-    }, [userProfile]);
+    
+        initializeProfileData();
+    }, [id, key]); // Dependencies: id (for value) and key (for fetchConnectedUsers)
 
     useEffect(() => {
         if (firstFetch.current) {
@@ -311,7 +344,7 @@ const Profile = () => {
                 );
                 getUserLog(setUserLog);
                 getUserLevels(setUserLevelData);
-          
+
             } else {
                 getPublicUserProfile(setUserProfile, setAPILoadStatus, id);
                 getPublicUserLog(setUserLog, id);
@@ -326,21 +359,25 @@ const Profile = () => {
         setAchievementModalOpen(!achievementModalOpen);
     }
 
+    // useEffect(() => {
+    //     const fetchConnectedUsers = async () => {
+    //         if (!value) {
+    //             console.warn("Value is not available yet for fetchConnectedUsers");
+    //             return;
+    //         }
+    //         try {
+    //             const response = await getConnectedUsers(key, value);
+    //             if (response) {
+    //                 setUserDID(response);
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching connected users:", error);
+    //             toast.error("Failed to fetch connected users.");
+    //         }
+    //     };
 
-    useEffect(() => {
-        async function fetchConnectedUsers() {
-            try {
-                const response = await getConnectedUsers(key, value);
-                if (response) {
-                    setUserDID(response);
-                }
-            } catch (error) {
-                console.error(error);
-                
-            }
-        }
-        fetchConnectedUsers();
-    }, []);
+    //     fetchConnectedUsers();
+    // }, [value, key]);
 
     return (
         <>
@@ -725,6 +762,14 @@ const Profile = () => {
                                         <div className="bg-white rounded-xl w-full !p-4 ">
                                             <h2 className="!mb-8">Eligible Achievements</h2>
 
+                                            {achievements.length === 0 &&(
+                                                <div className="text-center flex flex-col items-center justify-center text-gray-500">
+                                                    <Img src={emptyAchievements} alt="No achievements" w={400} h={400}/>
+                                                    <p>No achievements available for you at the moment. Keep learning.</p>
+
+                                                </div>
+                                            )}
+
                                             <SimpleGrid
                                                 columns={[1, 2, 3]}
                                                 spacing={6}
@@ -733,35 +778,36 @@ const Profile = () => {
                                             >
                                                 {achievements.map((achievement) => (
                                                     <AchievementCardOne
-                                                    key={achievement.id}
-                                                    achievement={achievement}
-                                                    userDID={userDID}
-                                                   
-                                                />
+                                                        key={achievement.id}
+                                                        achievement={achievement}
+                                                        userDID={userDID}
+                                                        muid={value}
+                                                        usersName={userProfile.full_name}
+                                                        fromUserSearch={fromUserSearch}
+                                                    />
                                                 ))}
                                             </SimpleGrid>
                                         </div>
                                     ) : null}
 
                                 </div>
-                               
+
                                 <div className={styles.notification}>
                                     <div className={styles.existing_roles}>
-                                        <div className={styles.head + " " + styles.profileStatus}>
-                                            <h2>Switch to public profile</h2>
-                                            <div className={styles.option}>
-                                                <Switch
-                                                    isChecked={profileStatus}
-                                                    onChange={e => {
-                                                        setProfileStatus(
-                                                            e.target.checked
-                                                        );
-                                                        putIsPublic(e.target.checked);
-                                                    }}
-                                                />
+                                    {!id && (
+                                            <div className={styles.head + " " + styles.profileStatus}>
+                                                <h2>Switch to public profile</h2>
+                                                <div className={styles.option}>
+                                                    <Switch
+                                                        isChecked={profileStatus}
+                                                        onChange={e => {
+                                                            setProfileStatus(e.target.checked);
+                                                            putIsPublic(e.target.checked);
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-
-                                        </div>
+                                        )}
                                         <div className={styles.head}>
                                             <Socials />
                                         </div>
