@@ -142,9 +142,10 @@ const CommunityForum = () => {
           {/* <div className={styles.sidebarSection}>
             <h2 className={styles.sidebarTitle}>Happening Now</h2>
             <div className={styles.sidebarBanner}>
-              {/* <SidebarBannerSlider events={groupData.tabs.events || []} /> */}
+              <SidebarBannerSlider events={groupData.tabs.events || []} />
             </div>
-          </div> */}
+          </div> 
+          */}
           {groupData.officeHours !== "TBA" && (
 
             <div className={styles.officeHoursCard}>
