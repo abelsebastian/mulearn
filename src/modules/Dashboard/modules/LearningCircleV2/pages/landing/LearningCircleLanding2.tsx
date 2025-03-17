@@ -96,10 +96,13 @@ export default function LearningCircleLanding() {
     setShowCreateForm(true);
   };
 
-  const handleDelete = (meetupId: string) => {
+  const handleDelete = async (meetupId: string) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       console.log("Deleting event with ID:", meetupId);
-      deleteScheduleMeetup({ meetId: meetupId })
+      if(await deleteScheduleMeetup({ meetId: meetupId })){
+        window.location.reload();
+      }
+
     }
   };
 

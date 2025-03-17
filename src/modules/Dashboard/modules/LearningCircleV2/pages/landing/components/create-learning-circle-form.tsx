@@ -62,11 +62,10 @@ export function CreateLearningCircleForm({ onClose, meetUp }: CreateLearningCirc
       recurrence_type: "weekly",
       recurrence: 1,
     }
-
     if (meetUp?.id) {
       editScheduleMeetup({
         meetId: data.meetId,
-        circle_id: meetUp.id,
+        circle_id: meetUp.circle_id.includes('LearningCircle object') ? meetUp.circle_id.match(/\(([^)]+)\)/)?.[1] : meetUp.circle_id,
         title: data.title,
         description: data.description,
         meet_place: data.location,
@@ -102,7 +101,7 @@ export function CreateLearningCircleForm({ onClose, meetUp }: CreateLearningCirc
       });
     }
     onClose();
-    // window.location.reload();
+    window.location.reload();
   };
 
   return (
