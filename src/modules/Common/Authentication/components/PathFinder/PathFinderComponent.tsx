@@ -85,13 +85,24 @@ export default function PathFinderComponent({
     };
 
     const getRecommendedPathways = () => {
-        const pathways = [];
-        if (scores.A > 2) pathways.push("maker");
-        if (scores.B > 2) pathways.push("coder");
-        if (scores.C > 2) pathways.push("creative");
-        if (scores.D > 2) pathways.push("manager");
-        return pathways;
+        const pathwaysWithScores = [
+            { pathway: "maker", score: scores.A },
+            { pathway: "coder", score: scores.B },
+            { pathway: "creative", score: scores.C },
+            { pathway: "manager", score: scores.D }
+        ];
+    
+        pathwaysWithScores.sort((a, b) => a.score - b.score);
+    
+        const maxScore = pathwaysWithScores[pathwaysWithScores.length - 1].score;
+    
+        const recommendedPathways = pathwaysWithScores
+            .filter(pathway => pathway.score === maxScore)
+            .map(pathway => pathway.pathway);
+    
+        return recommendedPathways;
     };
+    
 
     return (
         <OnboardingTemplate>
