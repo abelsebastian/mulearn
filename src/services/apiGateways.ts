@@ -42,7 +42,7 @@ privateGateway.interceptors.request.use(
 privateGateway.interceptors.request.use(
     (config) => {
         if (config.url && !config.url.endsWith("/")) {
-            config.url += "";
+            config.url += "/";
         }
         return config;
     },
