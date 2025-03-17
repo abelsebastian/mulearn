@@ -15,21 +15,14 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    FormControl,
-    FormLabel,
     VStack,
-    Box,
-    Switch,
     Alert,
-    AlertIcon,
     AlertTitle,
     AlertDescription,
     Img,
 } from "@chakra-ui/react";
-import { useUserStore } from "/src/ZustandProvider";
-import { FiBookOpen, FiCalendar, FiType } from "react-icons/fi";
+import { FiBookOpen, FiType } from "react-icons/fi";
 import { AchievementData } from "../../../ManageAchievements/ManageAchievementsInterface";
-import { issueVerifiableCredential, updateVCURL } from "../../services/api";
 import level7 from "../../../Profile/components/MuVoyage/assets/images/Level7.webp";
 import level6 from "../../../Profile/components/MuVoyage/assets/images/Level6.webp";
 import level5 from "../../../Profile/components/MuVoyage/assets/images/Level5.webp";
@@ -37,7 +30,6 @@ import level4 from "../../../Profile/components/MuVoyage/assets/images/Level4.we
 import level3 from "../../../Profile/components/MuVoyage/assets/images/Level3.webp";
 import level2 from "../../../Profile/components/MuVoyage/assets/images/Level2.webp";
 import level1 from "../../../Profile/components/MuVoyage/assets/images/Level1.webp";
-import toast from "react-hot-toast";
 
 const Colors: Record<string, string> = {
     lavender: "#CDC1FF",
@@ -46,39 +38,12 @@ const Colors: Record<string, string> = {
     blue: "#7BD3EA",
 };
 
-// Define the API response type
-type IssuedCredentialResponse = {
-    message: string; // S3 URL
-    subject_info: {
-        completed_date: string;
-        course_name: string;
-        credential_id: string;
-        credential_type: "Badge" | "Certificate" | "Recognition";
-        description: string;
-        did: string;
-        email: string;
-        full_name: string;
-        s3_url: string;
-        template_id: string;
-        type: "Badge" | "Certificate" | "Recognition";
-    };
-}[];
-
-type SubjectInfo = {
-    type: "Badge" | "Certificate" | "Recognition";
-    did: string;
-    muid: string;
-    full_name: string;
-}
-
-type CredentialInfo = {
-    course_name: string;
-    tags: string[];
-}
-
 interface AchievementCardOneProps {
     achievement: AchievementData;
-    userDID: string;
+    userDID?: string;
+    muid?: string;
+    usersName?: string;
+    fromUserSearch?: boolean;
 }
 
 const getRandomColor = (): string => {
@@ -88,79 +53,34 @@ const getRandomColor = (): string => {
 
 const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
     achievement,
-    userDID
+    userDID,
+    muid,
+    usersName,
+    fromUserSearch,
 }) => {
-    // console.log("Achievementcard:", achievement);
     const bgColor = getRandomColor();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const userInfo = useUserStore((state) => state.userInfo);
-    const [shareEmail, setShareEmail] = useState(false);
     const [cardIcon, setCardIcon] = useState("");
-    const [issuedCredential, setIssuedCredential] = useState<IssuedCredentialResponse | null>(null);
 
-    const handleButtonClick = () => {
-        onOpen();
-    };
-
-    const imageSelector = () => {
-        if (achievement.title === "Level 1") {
-            setCardIcon(level1);
-        } else if (achievement.title === "Level 2") {
-            setCardIcon(level2);
-        } else if (achievement.title === "Level 3") {
-            setCardIcon(level3);
-        } else if (achievement.title === "Level 4") {
-            setCardIcon(level4);
-        } else if (achievement.title === "Level 5") {
-            setCardIcon(level5);
-        } else if (achievement.title === "Level 6") {
-            setCardIcon(level6);
-        } else if (achievement.title === "Level 7") {
-            setCardIcon(level7);
-        }
+    const levelIcons: Record<string, string> = {
+        "Level 1": level1,
+        "Level 2": level2,
+        "Level 3": level3,
+        "Level 4": level4,
+        "Level 5": level5,
+        "Level 6": level6,
+        "Level 7": level7,
     };
 
     useEffect(() => {
-        imageSelector();
-    }, []);
+        if (!achievement?.achievement?.achievement_name) return;
+        setCardIcon(levelIcons[achievement.achievement.achievement_name] || levelIcons["Level 1"]);
+    }, [achievement]);
 
-    const handleIssueVC = async () => {
-        if (!userDID) return;
-
-        try {
-            const subject_info: SubjectInfo = {
-                type: "Badge",
-                muid: shareEmail && userInfo?.muid ? userInfo.muid : "",
-                did: userDID,
-                full_name: userInfo?.full_name || "",
-            };
-
-            const template_id = achievement.templateID;
-
-            const credential_info: CredentialInfo = {
-                course_name: achievement.title,
-                tags: achievement.tags,
-            };
-
-            const response = await issueVerifiableCredential(
-                subject_info,
-                credential_info,
-                template_id as string
-            );
-            const vc_url = response[0].subject_info.s3_url;
-            if(!vc_url) {
-                toast.error("Failed to issue VC. Please try again.")
-                return;            
-            }
-            await updateVCURL(achievement.id || '', vc_url);
-            setIssuedCredential(response);
-        } catch (error) {
-            console.error("Error issuing VC:", error);
-        }
+    const handleButtonClick = () => {
+        if (fromUserSearch && !achievement.is_issued) return; // Prevent opening modal if not issued when searching
+        onOpen();
     };
-
-
-
 
     return (
         <>
@@ -170,142 +90,130 @@ const AchievementCardOne: React.FC<AchievementCardOneProps> = ({
                         style={{ backgroundColor: bgColor }}
                         className="rounded-full p-3 w-48 h-48 flex items-center justify-center"
                     >
-                        {achievement.icon.startsWith("http") ? (
-                            <Img src={cardIcon} alt="Achievement icon" className="w-full h-full object-cover rounded-full" />
-                        ) : (
-                            <p className="text-3xl">{cardIcon}</p>
-                        )}
+                        <Img src={cardIcon} alt="Achievement icon" className="w-3/4 h-3/4 object-cover rounded-full" />
                     </div>
                     <Stack mt="6" spacing="3">
                         <div className="flex flex-col w-full items-center">
                             <Heading className="text-center !mb-4">
-                                {achievement.title}
+                                {achievement.achievement.achievement_name}
                             </Heading>
                             <Text color="blue.600" fontSize="sm" align="center">
-                                {achievement.description}
+                                {achievement.achievement.description}
                             </Text>
                         </div>
                     </Stack>
                 </CardBody>
                 <CardFooter className="flex justify-center">
-                    <Button
-                        bg="#007bff"
-                        color="white"
-                        _hover={{ bg: "#0056b3" }}
-                        size="sm"
-                        onClick={handleButtonClick}
-                        isDisabled={achievement.has_vc}
-                    >
-                        {achievement.has_vc ? "View" : "Issue VC"}
-                    </Button>
+                    {!fromUserSearch && (
+                        <Button
+                            bg="#007bff"
+                            color="white"
+                            _hover={{ bg: "#0056b3" }}
+                            size="sm"
+                            onClick={handleButtonClick}
+                        >
+                            {achievement.is_issued ? "View" : "Issue VC"}
+                        </Button>
+                    )}
+                    {fromUserSearch && achievement.is_issued && (
+                        <Button
+                            bg="#007bff"
+                            color="white"
+                            _hover={{ bg: "#0056b3" }}
+                            size="sm"
+                            onClick={handleButtonClick}
+                        >
+                            View
+                        </Button>
+                    )}
+                    {fromUserSearch && !achievement.is_issued && (
+                        <Text fontSize="sm" color="gray.600">
+                            The user hasn't claimed this achievement yet.
+                        </Text>
+                    )}
                 </CardFooter>
             </Card>
-            {/* Modal Logic */}
-            <Modal isOpen={isOpen} onClose={() => { onClose(); setIssuedCredential(null); }} isCentered size="lg">
+
+            {/* Modal Logic - Only show for issued achievements when fromUserSearch is true */}
+            <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>
-                        {userDID === "" ? "Link Your DID" : issuedCredential ? "Credential Issued" : "Achievement Details"}
+                        {fromUserSearch ? "Achievement Details" : achievement.is_issued ? "Achievement Details" : "Issue Credential"}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        {userDID === "" ? (
+                        {fromUserSearch && achievement.is_issued ? (
                             <VStack spacing={4} align="stretch">
-                                <Text>
-                                    It seems you haven't linked your DID yet. Please link it to proceed.
-                                </Text>
-                                <Text fontSize="sm" color="gray.600">
-                                    Note: Your name ({userInfo?.full_name || "Unknown"}) and muid ({userInfo?.muid || "Not provided"}) will be shared when you issue this credential.
-                                </Text>
-                                <div className="bg-gray-100 !p-4 rounded-md">
-                                    <FormControl className="flex justify-between items-center">
-                                        <FormLabel htmlFor="email-switch" mb="0">
-                                            Share Email
-                                        </FormLabel>
-                                        <Switch
-                                            id="email-switch"
-                                            isChecked={shareEmail}
-                                            onChange={(e) => setShareEmail(e.target.checked)}
-                                        />
-                                    </FormControl>
-                                </div>
-                                <Box>
-                                    <Text mb={2}>How to Link Your DID:</Text>
-                                    <iframe
-                                        width="100%"
-                                        height="200"
-                                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Replace with your actual video ID
-                                        title="How to Link Your DID"
-                                        frameBorder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                </Box>
-                            </VStack>
-                        ) : issuedCredential ? (
-                            <VStack spacing={4} align="stretch">
-                                <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center">
-                                    <AlertIcon boxSize="20px" mr={0} />
+                                <Alert
+                                    status="success"
+                                    variant="subtle"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                >
                                     <AlertTitle mt={4} mb={1} fontSize="lg">
-                                        Credential Issued Successfully!
+                                        Here's the user's credential!
                                     </AlertTitle>
                                     <AlertDescription maxWidth="sm">
-                                        Your Verifiable Credential has been issued.<br /> Scan the QR to add it to your wallet.
+                                        This is the issued Verifiable Credential.
                                     </AlertDescription>
                                 </Alert>
-                                <Img src={issuedCredential[0].message} alt="Credential Badge" />
+                                <Img src={achievement.vc_url} alt="Credential Badge" />
                                 <Stack direction="row" spacing={4} wrap="wrap" className="items-start justify-start gap-4">
                                     <Text className="bg-green-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiBookOpen/> {issuedCredential[0].subject_info.course_name}
-                                    </Text>
-                                    <Text className="bg-orange-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiType/> {issuedCredential[0].subject_info.type}
+                                        <FiBookOpen /> <span>{achievement.achievement?.achievement_name}</span>
                                     </Text>
                                     <Text className="bg-red-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
-                                        <FiCalendar/> {issuedCredential[0].subject_info.completed_date}
+                                        <FiType /> {achievement.achievement?.tags[0]}
                                     </Text>
                                 </Stack>
                             </VStack>
-                        ) : (
+                        ) : !fromUserSearch && achievement.is_issued ? (
+                            <VStack spacing={4} align="stretch">
+                                <Alert
+                                    status="success"
+                                    variant="subtle"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                >
+                                    <AlertTitle mt={4} mb={1} fontSize="lg">
+                                        Here's your credential!
+                                    </AlertTitle>
+                                    <AlertDescription maxWidth="sm">
+                                        Scan the QR to add it to your wallet.
+                                    </AlertDescription>
+                                </Alert>
+                                <Img src={achievement.vc_url} alt="Credential Badge" />
+                                <Stack direction="row" spacing={4} wrap="wrap" className="items-start justify-start gap-4">
+                                    <Text className="bg-green-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
+                                        <FiBookOpen /> <span>{achievement.achievement?.achievement_name}</span>
+                                    </Text>
+                                    <Text className="bg-red-300 text-white !px-2 !py-1 rounded-full text-xs flex justify-center items-center gap-2">
+                                        <FiType /> {achievement.achievement?.tags[0]}
+                                    </Text>
+                                </Stack>
+                            </VStack>
+                        ) : !fromUserSearch && (
                             <Text>
-                                {achievement.description}
+                                {achievement.achievement.description}
                                 <br />
                                 Ready to issue your Verifiable Credential?
                             </Text>
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        {userDID === "" ? (
-                            <>
-                                <Button
-                                    bg="#007bff"
-                                    color="white"
-                                    mr={3}
-                                    as="a"
-                                    href="https://your-did-link-url.com"
-                                    target="_blank"
-                                >
-                                    Link DID
-                                </Button>
-                                <Button variant="ghost" onClick={onClose}>
-                                    Cancel
-                                </Button>
-                            </>
-                        ) : issuedCredential ? (
-                            <Button
-                                bg="#007bff"
-                                color="white"
-                                onClick={() => { onClose(); setIssuedCredential(null); }}
-                            >
-                                Close
-                            </Button>
-                        ) : (
-                            <Button
-                                bg="#007bff"
-                                color="white"
-                                onClick={handleIssueVC}
-                            >
+                        {!fromUserSearch && !achievement.is_issued && (
+                            <Button bg="#007bff" color="white" /* onClick={handleIssueVC} */>
                                 Issue VC
+                            </Button>
+                        )}
+                        {(fromUserSearch || achievement.is_issued) && (
+                            <Button bg="#007bff" color="white" onClick={onClose}>
+                                Close
                             </Button>
                         )}
                     </ModalFooter>

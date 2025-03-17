@@ -9,6 +9,7 @@ import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import UserCard from "../../../components/UserCard";
 import { useNavigate } from "react-router-dom";
 import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
+import defaultProfile from "../../../assets/images/defaultProfile.png"
 
 interface User {
   full_name: string;
@@ -111,6 +112,8 @@ const UserList: React.FC<{
     [searchType]
   );
 
+  console.log(allUsers, "user list" )
+
   const debouncedFetchUsers = useCallback(
     debounce((searchTerm: string, pageNum: number) => {
       fetchUsers(searchTerm, pageNum);
@@ -168,7 +171,7 @@ const UserList: React.FC<{
                 muid: user.muid,
                 interest_groups: user.interest_groups,
                 organizations: user.organizations,
-                profile_pic: user.profile_pic || (index % 2 === 0 ? profileImage : userImage2),
+                profile_pic: user.profile_pic?user.profile_pic:  defaultProfile,
                 karma: user.karma,
               }}
               onSelect={() => onSelect(user)}

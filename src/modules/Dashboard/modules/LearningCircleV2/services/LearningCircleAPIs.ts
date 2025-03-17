@@ -309,8 +309,8 @@ export const editScheduleMeetup = async (
     params: LCMeetCreate
 ): Promise<boolean> => {
     try {
-        const response = await privateGateway.post(
-            learningCircleRoutes.editScheduledMeetup + params.meetId,
+        const response = await privateGateway.put(
+            learningCircleRoutes.editScheduledMeetup + params.meetId + '/',
             params
         );
         if (response.status === 200) {
@@ -339,7 +339,7 @@ export const deleteScheduleMeetup = async (
     params: { meetId: string }
 ): Promise<boolean> => {
     try {
-        const response = await privateGateway.post(
+        const response = await privateGateway.delete(
             learningCircleRoutes.deleteScheduledMeetup + params.meetId,
         );
         if (response.status === 200) {

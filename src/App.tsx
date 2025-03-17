@@ -49,6 +49,7 @@ import LcAdmin from "./modules/Dashboard/modules/LearningCircle/pages/LcAdmin/Lc
 import VerifyOrganizations from "./modules/Dashboard/modules/VerifyOrganizations/VerifyOrganizations";
 import CreateLC from "./modules/Dashboard/modules/LearningCircleV2/pages/CreateLC/CreateLC";
 import LearningCircleLanding from "./modules/Dashboard/modules/LearningCircleV2/pages/landing/LearningCircleLanding";
+import LearningCircleLanding2 from "./modules/Dashboard/modules/LearningCircleV2/pages/landing/LearningCircleLanding2";
 import CreateLCMeetup from "./modules/Dashboard/modules/LearningCircleV2/pages/CreateLCMeetup/CreateLCMeetup";
 import DashboardLC from "./modules/Dashboard/modules/LearningCircleV2/pages/dashboard/DashboardLC";
 import YourLC from "./modules/Dashboard/modules/LearningCircleV2/pages/YourLC/YourLC";
@@ -411,7 +412,7 @@ function App() {
                 },
                 {
                     path: "learningcircle",
-                    element: <LearningCircleLanding />
+                    element: <LearningCircleLanding2 />
                 },
                 { path: "search", element: <SearchMain /> },
                 { path: "mulearners", element: <MuLearnersSearchPage /> },
@@ -888,30 +889,30 @@ function App() {
                             path: "learningcircle/create-meetup/:circle_id",
                             element: <CreateLCMeetup />
                         },
-                        // {
-                        //     path: "learning-circle/meetup/:id",
-                        //     element: <LcMeetupIfo />
-                        // },
-                        // {
-                        //     path: "learning-circle/meetup/:id/attendee-report",
-                        //     element: <LcReportAttendee />
-                        // },
-                        // {
-                        //     path: "learning-circle/details/:id",
-                        //     element: <LearningCircle />
-                        // },
-                        // {
-                        //     path: "learning-circle/dashboard/:id",
-                        //     element: <LcDashboard />
-                        // },
-                        // {
-                        //     path: "learning-circle/find-circle",
-                        //     element: <FindCircle />
-                        // },
-                        // {
-                        //     path: "learning-circle/create-circle",
-                        //     element: <LearningCircleCreate />
-                        // },
+                        {
+                            path: "learning-circle/meetup/:id",
+                            element: <LcMeetupIfo />
+                        },
+                        {
+                            path: "learning-circle/meetup/:id/attendee-report",
+                            element: <LcReportAttendee />
+                        },
+                        {
+                            path: "learning-circle/details/:id",
+                            element: <LearningCircle />
+                        },
+                        {
+                            path: "learning-circle/dashboard/:id",
+                            element: <LcDashboard />
+                        },
+                        {
+                            path: "learning-circle/find-circle",
+                            element: <FindCircle />
+                        },
+                        {
+                            path: "learning-circle/create-circle",
+                            element: <LearningCircleCreate />
+                        },
                         {
                             path: "organization-transfer",
                             element: (

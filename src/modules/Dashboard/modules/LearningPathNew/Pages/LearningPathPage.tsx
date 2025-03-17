@@ -486,27 +486,25 @@ const LearningPathPage: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
-        <div className={styles.topBarPart}>
-
-          <div className={styles.indicator} style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
-          <button
-            ref={(el) => (tabRefs.current.startLearning = el)}
-            className={`${styles.topBarButton} ${activeTab === "startLearning" ? styles.activeTab : ""}`}
-            onClick={() => setActiveTab("startLearning")}
-          >
-            Start Journey
-          </button>
-          {unlockedLevel >= 4 && <button
-            ref={(el) => (tabRefs.current.becomeExpert = el)}
-            className={`${styles.topBarButton} ${activeTab === "becomeExpert" ? styles.activeTab : ""}`}
-            onClick={() => {
-              setActiveTab("becomeExpert")
-            }
-            }
-          >
-            Become Expert
-          </button>}
-        </div>
+        {unlockedLevel >= 4 ?
+          <div className={styles.topBarPart}>
+            <div className={styles.indicator} style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
+            <button
+              ref={(el) => (tabRefs.current.startLearning = el)}
+              className={`${styles.topBarButton} ${activeTab === "startLearning" ? styles.activeTab : ""}`}
+              onClick={() => setActiveTab("startLearning")}
+            >
+              Start Journey
+            </button>
+            <button
+              ref={(el) => (tabRefs.current.becomeExpert = el)}
+              className={`${styles.topBarButton} ${activeTab === "becomeExpert" ? styles.activeTab : ""}`}
+              onClick={() => setActiveTab("becomeExpert")}
+            >
+              Become Expert
+            </button>
+          </div> : <div></div>
+        }
 
 
 

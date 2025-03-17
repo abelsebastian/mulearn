@@ -1580,7 +1580,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Passionate about creating immersive experiences in gaming? The Game Development Interest Group is your gateway to learning about designing, programming, and storytelling in the world of games. Whether you're into creating captivating visuals, coding mechanics, or crafting narratives, join us to level up your game development skills.",
     bannerImage:
-    "/assets/IG/Cover/4.png",
+    "/assets/IG/Cover/5.png",
 
     memberCount: 2500,
     memberSince: "January 2022",
@@ -2721,7 +2721,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Excited to explore the dynamic world of digital marketing? The Digital Marketing Interest Group empowers you with practical and theoretical knowledge, covering SEO, email marketing, social media management, and analytics. This group is perfect for anyone passionate about creating impactful campaigns and analyzing audience behaviour.",
     bannerImage:
-    "/assets/IG/Cover/5.png",
+    "/assets/IG/Cover/4.png",
     memberCount: 2700,
     memberSince: "November 2021",
     isPublic: true,

@@ -157,11 +157,10 @@ export const getAllConnectedUsers = async (): Promise<any> => {
     try {
         const response = await qSeversePrivateGateway.get(qseverseRoutes.getAllConnectedUsers, {
         });
-        console.log(response);
         return response;
     } catch (error: any) {
         console.error("Error fetching achievements:", error.response?.data || error.message);
-        toast.error("Failed to fetch achievements");
+        // toast.error("Failed to fetch achievements");
         throw new Error(error.response?.data?.message || "Failed to fetch achievements");
     }
 }
@@ -175,10 +174,13 @@ export const getConnectedUsers = async (
         const response = await qSeversePrivateGateway.get(qseverseRoutes.getConnectedUsers, {
             params: { key, value }
         });
+       if (response.data.matching_users.length === 0) {
+            return null;
+        }
         return response.data.matching_users[0].did;
     } catch (error: any) {
         console.error("Error fetching connected users:", error.response?.data || error.message);
-        toast.error("Failed to fetch connected users");
+        // toast.error("Failed to fetch connected users");
         throw new Error(error.response?.data?.message || "Failed to fetch connected users");
     }
 };
@@ -195,88 +197,16 @@ export const getQSCredentials = async (): Promise<any> => {
     }
 }
 
-export const getUserAchievements = async (
-    muid: string,
-    credentials: Credential[]
-  ): Promise<any[]> => {
+export const getUserAchievements = async (muid: string): Promise<any[]> => {
     try {
-      const response = await publicGateway.get(
-        qseverseRoutes.getUserAchievements + `${muid}`
-      );
-      if (response?.data?.response && credentials.length !== 0) {
-        const achievements = response.data.response.map((achievement: any) => {
-          const matchedCredential = credentials.find(
-              (credential) => 
-              achievement.achievement.tags[0] === credential.tags[0],
-          );
-
-          
-          
-          return {
-            id: achievement.achievement.id,
-            title: achievement.achievement.achievement_name,
-            level_based: achievement.achievement.level_based,
-            description: achievement.achievement.description,
-            tags: achievement.achievement.tags || [],
-            type: "Learning", // Assuming this based on context
-            templateID: matchedCredential ? matchedCredential.id : "", 
-            icon: achievement.achievement.icon,
-            has_vc: achievement.is_issued,
-          };
-        });
-        console.log(achievements);
-
-        return achievements; 
-      }
-  
-      return []; // Return empty array if response is empty
+      const response = await publicGateway.get(qseverseRoutes.getUserAchievements + muid + "/");
+      return response?.data?.response ?? []; 
     } catch (error: any) {
       console.error("Error fetching achievements:", error.response?.data || error.message);
-      toast.error("Failed to fetch achievements");
+    //   toast.error("Failed to fetch achievements");
       throw new Error(error.response?.data?.message || "Failed to fetch achievements");
     }
   };
-
-// export const getUserAchievementsWithCredentials = async (muid: string): Promise<any[]> => {
-//     try {
-//         // Fetch credentials and user achievements concurrently
-//         const [credentialsResponse, userAchievementsResponse] = await Promise.all([
-//             qSeversePrivateGateway.get(qseverseRoutes.getCredentials),
-//             publicGateway.get(qseverseRoutes.getUserAchievements + muid)
-//         ]);
-
-//         const credentials = credentialsResponse.data;
-//         const userAchievementsData = userAchievementsResponse.data.response;
-
-//         if (userAchievementsData && Array.isArray(userAchievementsData) && credentials && Array.isArray(credentials) && credentials.length !== 0) {
-//             const achievements = userAchievementsData.map((achievement: any) => {
-//                 const matchedCredential = credentials.find(
-//                     (credential: any) => achievement.achievement.tags[0] === credential.tags[0]
-//                 );
-//                 return {
-//                     id: achievement.achievement.id,
-//                     title: achievement.achievement.achievement_name,
-//                     level_based: achievement.achievement.level_based,
-//                     description: achievement.achievement.description,
-//                     tags: achievement.achievement.tags || [],
-//                     type: "Learning",
-//                     templateID: matchedCredential ? matchedCredential.id : "",
-//                     icon: achievement.achievement.icon,
-//                     has_vc: achievement.is_issued,
-//                 };
-//             });
-//             return achievements;
-//         }
-
-//         // Return empty array if conditions are not met
-//         return [];
-//     } catch (error: any) {
-//         console.error("Error fetching data:", error.response?.data || error.message);
-//         toast.error("Failed to fetch data");
-//         throw new Error(error.response?.data?.message || "Failed to fetch data");
-//     }
-// };
-  
 
 
 export const updateVCURL = async (
