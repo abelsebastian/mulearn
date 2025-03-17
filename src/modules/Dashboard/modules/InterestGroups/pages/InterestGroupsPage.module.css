@@ -197,6 +197,8 @@
   align-items: start;
   width: auto;
   justify-content: start;
+  background-color: white;
+  border: 1px solid blue;
   padding: clamp(4px, 0.5vw, 6px) clamp(8px, 1vw, 12px);
 }
 
@@ -206,7 +208,7 @@
 }
 
 .GroupOverlay{
-  background-color: #ffb6c1;
+  /* background-color: #ffb6c1; */
   padding: 2px 0px;
   width: fit-content;
   border-radius: 500px;

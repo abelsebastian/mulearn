@@ -1,0 +1,217 @@
+/* Learning Circle Dialog */
+.dialogContent {
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.cardImageContainer {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.actionButtons {
+    /* position: absolute;
+    top: 12px;
+    left: 12px; */
+    display: flex;
+    gap: 8px;
+}
+
+.editButton, .deleteButton {
+    /* width: fit-content;
+    height: fit-content; */
+    /* background: rgba(255, 255, 255, 0.8); */
+    /* border-radius: 50%; */
+}
+
+.editButton .icon{
+    color: orange;
+}
+
+.deleteButton .icon{
+    color: red;
+}
+
+.clockIcon{
+    color: green;
+    margin-right: 4px;
+}
+
+.icon{
+    color: rgb(0, 119, 255);
+}
+
+
+.cardContent {
+    padding: 16px;
+}
+
+.cardTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: left;
+}
+
+.cardDescription {
+    color: #6b7280;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    text-align: left;
+}
+
+.badgeContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 8px;
+}
+
+.categoryBadge, .onlineBadge, .membersBadge {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.onlineBadge{
+    cursor: pointer;
+}
+
+.onlineIcon, .offlineIcon {
+    margin-right: 6px;
+}
+
+.onlineIcon{
+    color: green;
+}
+
+.offlineIcon{
+    color: orange;
+}
+
+.icon{
+    /* color: rgb(0, 106, 255); */
+    margin-right: 4px;
+}
+
+.joiningCodeContainer {
+    margin-top: 12px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.joiningCodeLabel {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.joiningCode {
+    font-size: 16px;
+    font-family: monospace;
+}
+
+.joiningCodeActions {
+    display: flex;
+    gap: 8px;
+}
+
+.learningSummaryContainer {
+    margin-top: 12px;
+}
+
+.learningSummaryLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 120px;
+    border: 1px solid #d1d5db;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 12px;
+}
+
+.joinInputContainer {
+    display: flex;
+    gap: 8px;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.input {
+    flex: 1;
+    border: 1px solid #d1d5db;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.cardFooter {
+    padding: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.closeButton, .joinButton, .submitButton {
+    flex: 1;
+}
+
+.joiningCodeDetails{
+    text-align: left;
+}
+
+.qrCodeContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.congratsIconContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.congratsIcon {
+    width: 96px;
+    height: 96px;
+    background: #d1fae5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.congratsMessage {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.bold {
+    font-weight: bold;
+}

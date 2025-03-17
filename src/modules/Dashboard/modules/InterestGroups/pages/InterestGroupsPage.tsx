@@ -166,7 +166,7 @@ function InterestGroupsPage() {
               <div className={styles.GroupOverlay}>
                 <span className={styles.GroupParticipantsBadge}>
                   <FiUsers className={styles.GroupParticipantsIcon} />
-                  {group.memberCount} members joined
+                  {group.memberCount} members
                 </span>
               </div>
             </div>

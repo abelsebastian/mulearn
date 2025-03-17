@@ -9,6 +9,7 @@ import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
+import LearningCircleLanding from "../../LearningCircleV2/pages/landing/LearningCircleLanding2";
 
 interface InterestGroup {
   title: string;
@@ -204,6 +205,9 @@ const DashboardPage = () => {
               transition={{ duration: 0.6 }}
             />
           </motion.section>
+          {/* <div style={{width: '50%'}}> */}
+          {/* <LearningCircleLanding/> */}
+          {/* </div> */}
           <LearningCirclesSection />
         </motion.div>
 

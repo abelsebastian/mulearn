@@ -198,7 +198,7 @@ const LearningCircleLanding = () => {
                                         venue={event.meet_place}
                                         joiningUrl={event.meet_link}
                                         karmaPoints={event.duration}
-                                        joinedPeople={Number(event.attendee) || 10}
+                                        joinedPeople={Number(event.attendees) || 10}
                                         imageUrl="https://img.freepik.com/free-vector/people-studying-learning-room_74855-6615.jpg?t=st=1738405617~exp=1738409217~hmac=7d528d88304c4f919c3c258289bbce219d623170f0c85eff4b9cf1f348a2c1c4&w=2000"
                                     />
 

@@ -308,7 +308,7 @@ const Profile = () => {
                     }
                 } catch (error) {
                     console.error("Error fetching connected users:", error);
-                    toast.error("Failed to fetch connected users.");
+                    // toast.error("Failed to fetch connected users.");
                 }
             } else {
                 console.warn("Value is not available for fetchConnectedUsers");
@@ -322,7 +322,7 @@ const Profile = () => {
                     setAchievements(achievements);
                 } catch (error) {
                     console.error("Error fetching achievements:", error);
-                    toast.error("Failed to fetch achievements.");
+                    // toast.error("Failed to fetch achievements.");
                 } finally {
                     setIsLoading(false);
                 }

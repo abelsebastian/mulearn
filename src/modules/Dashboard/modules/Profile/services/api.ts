@@ -160,7 +160,7 @@ export const getAllConnectedUsers = async (): Promise<any> => {
         return response;
     } catch (error: any) {
         console.error("Error fetching achievements:", error.response?.data || error.message);
-        toast.error("Failed to fetch achievements");
+        // toast.error("Failed to fetch achievements");
         throw new Error(error.response?.data?.message || "Failed to fetch achievements");
     }
 }
@@ -180,7 +180,7 @@ export const getConnectedUsers = async (
         return response.data.matching_users[0].did;
     } catch (error: any) {
         console.error("Error fetching connected users:", error.response?.data || error.message);
-        toast.error("Failed to fetch connected users");
+        // toast.error("Failed to fetch connected users");
         throw new Error(error.response?.data?.message || "Failed to fetch connected users");
     }
 };
@@ -203,7 +203,7 @@ export const getUserAchievements = async (muid: string): Promise<any[]> => {
       return response?.data?.response ?? []; 
     } catch (error: any) {
       console.error("Error fetching achievements:", error.response?.data || error.message);
-      toast.error("Failed to fetch achievements");
+    //   toast.error("Failed to fetch achievements");
       throw new Error(error.response?.data?.message || "Failed to fetch achievements");
     }
   };

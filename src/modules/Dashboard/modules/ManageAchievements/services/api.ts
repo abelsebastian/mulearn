@@ -15,7 +15,7 @@ export const getAchievements = async (): Promise<AchievementData[] | undefined> 
             return response.data.response; // Access 'response' instead of 'data'
         }
     } catch (error) {
-        toast.error("Failed to fetch achievements");
+        // toast.error("Failed to fetch achievements");
         console.error("Error fetching achievements:", error);
     }
 };
