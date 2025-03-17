@@ -99,7 +99,12 @@ export default function LearningCircleLanding() {
   const handleDelete = (meetupId: string) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       console.log("Deleting event with ID:", meetupId);
-      deleteScheduleMeetup({ meetId: meetupId })
+      deleteScheduleMeetup({ meetId: meetupId }).then((data) => {
+        if (data) {
+          setisLoading(true);
+          onRefresh();
+        }
+      })
     }
   };
 
@@ -157,6 +162,13 @@ export default function LearningCircleLanding() {
     setOpen(true);
   }
 
+  const onRefresh = () => {
+    getMeetups(selectedCategory?.value).then(res => {
+      setMeetups(res);
+      setisLoading(false);
+    });
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -177,7 +189,11 @@ export default function LearningCircleLanding() {
               </DialogTrigger>
               <DialogOverlay />
               <DialogContent className={styles.dialogContent}>
-                <CreateLearningCircleForm onClose={handleCreateFormClose} meetUp={meetup} />
+                <CreateLearningCircleForm onClose={handleCreateFormClose} meetUp={meetup} onRefresh={() => {
+                  setisLoading(true);
+                  onRefresh();
+                }
+                } />
               </DialogContent>
             </Dialog>
           </div>
@@ -230,7 +246,7 @@ export default function LearningCircleLanding() {
               checked={createdByMe}
               onCheckedChange={(checked) => setCreatedByMe(checked)}
             />
-            <Label style={{marginLeft: '4px'}} htmlFor="isOnline">
+            <Label style={{ marginLeft: '4px' }} htmlFor="isOnline">
               Created By Me
             </Label>
           </div>
@@ -240,7 +256,7 @@ export default function LearningCircleLanding() {
               checked={showOld}
               onCheckedChange={(checked) => setShowOld(checked)}
             />
-            <Label style={{marginLeft: '4px'}} htmlFor="showOld">
+            <Label style={{ marginLeft: '4px' }} htmlFor="showOld">
               Old Learning Circles
             </Label>
           </div>
