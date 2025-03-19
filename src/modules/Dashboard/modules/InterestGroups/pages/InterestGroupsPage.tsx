@@ -36,7 +36,8 @@ function InterestGroupsPage() {
     { title: "Digital Marketing", image: "/assets/IG/Cover/4.png" },
     { title: "Game Development", image: "/assets/IG/Cover/5.png" },
     { title: "Cloud and DevOps", image: "/assets/IG/Cover/6.png" },
-    { title: "Product Management", image: "/assets/IG/Cover/7.png" }
+    { title: "Product Management", image: "/assets/IG/Cover/7.png" },
+    {title: "Internet Of Things (IOT) And Robotics", image: "/assets/IG/Cover/7.png"}
   ];
   
 
