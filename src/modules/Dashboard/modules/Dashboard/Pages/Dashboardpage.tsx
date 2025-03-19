@@ -9,7 +9,7 @@ import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
-import LearningCircleLanding from "../../LearningCircleV2/pages/landing/LearningCircleLanding2";
+import { publicGateway } from "/src/services/apiGateways";
 import axios from "axios";
 
 interface InterestGroup {
@@ -82,7 +82,7 @@ const DashboardPage = () => {
     fetchKarmaFeed();
   }, []);
 
-  const fetchEvents = useCallback(async () => {
+  const fetchEvents = async () => {
     try {
       const response = await axios.get("https://opensheet.elk.sh/19Os47FI_fAgpMk7lnhFWz9aRwyd72cB-4PKz7W8rF9g/1");
 
@@ -110,7 +110,7 @@ const DashboardPage = () => {
     } catch (error) {
       console.error("Error fetching events:", error);
     }
-  }, []);
+  };
 
 
 
@@ -118,7 +118,7 @@ const DashboardPage = () => {
     fetchEvents();
   }, []);
 
-
+console.log(events)
 
 
   const defaultImage = { src: "/assets/landing/others.png", alt: "General illustration" };
