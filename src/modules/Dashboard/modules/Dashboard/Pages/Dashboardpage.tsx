@@ -171,7 +171,7 @@ const DashboardPage = () => {
           >
             <div className={styles.welcomeText}>
               <h1 className={styles.welcomeTitle}>
-                {!storedUserInfo.exist_in_guild ? "Welcome" : "Welcome back"} <span>{userName}</span> 👋
+                {storedUserInfo.exist_in_guild ? "Welcome" : "Welcome"} <span>{userName}</span> 👋
               </h1>
               <p className={styles.welcomeMessage}>
                 This dashboard is being updated. Expect improvements and possible bugs. Thanks for your patience!
