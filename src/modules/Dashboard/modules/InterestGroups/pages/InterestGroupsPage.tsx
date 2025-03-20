@@ -30,14 +30,14 @@ function InterestGroupsPage() {
   ];
 
   const imageUrls = [
-    { title: "UI/UX Interest Group", image: "/assets/IG/Cover/1.png" },
-    { title: "Web Development", image: "/assets/IG/Cover/2.png" },
-    { title: "Cybersecurity", image: "/assets/IG/Cover/3.png" },
-    { title: "Digital Marketing", image: "/assets/IG/Cover/4.png" },
-    { title: "Game Development", image: "/assets/IG/Cover/5.png" },
-    { title: "Cloud and DevOps", image: "/assets/IG/Cover/6.png" },
-    { title: "Product Management", image: "/assets/IG/Cover/7.png" },
-    {title: "Internet Of Things (IOT) And Robotics", image: "/assets/IG/Cover/7.png"}
+    { title: "UI/UX Interest Group", image: "/assets/IG/Cover/1.webp" },
+    { title: "Web Development", image: "/assets/IG/Cover/2.webp" },
+    { title: "Cybersecurity", image: "/assets/IG/Cover/3.webp" },
+    { title: "Digital Marketing", image: "/assets/IG/Cover/4.webp" },
+    { title: "Game Development", image: "/assets/IG/Cover/5.webp" },
+    { title: "Cloud and DevOps", image: "/assets/IG/Cover/6.webp" },
+    { title: "Product Management", image: "/assets/IG/Cover/7.webp" },
+    {title: "Internet Of Things (IOT) And Robotics", image: "/assets/IG/Cover/8.webp"}
   ];
   
 

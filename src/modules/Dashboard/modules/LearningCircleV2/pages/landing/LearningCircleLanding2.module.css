@@ -44,14 +44,15 @@
 }
 
 .headerTitle {
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #4B5563;
     text-align: left;
-    color: #1f2937;
 }
 
 .headerDescription {
-    color: #6b7280;
+    font-size: 0.95rem;
     margin-top: 0.5rem;
     font-weight: 400;
     max-width: 600px;

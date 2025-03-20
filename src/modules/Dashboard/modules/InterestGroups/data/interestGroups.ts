@@ -121,7 +121,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Welcome to the UI/UX Interest Group! We’re a vibrant community of designers, researchers, and enthusiasts passionate about crafting intuitive and beautiful digital experiences.",
     bannerImage:
-    "/assets/IG/Cover/1.png",
+    "/assets/IG/Cover/1.webp",
     memberCount: 2300,
     memberSince: "July 2022",
     isPublic: true,
@@ -590,7 +590,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Ever wondered how web applications are built? Everything seems complex until you learn the basics. μLearn Foundation's Web Development Interest Group is designed to help you develop and refine your skills, bringing together people eager to explore emerging web technologies.",
     bannerImage:
-    "/assets/IG/Cover/2.png",
+    "/assets/IG/Cover/2.webp",
 
     memberCount: 4200,
     memberSince: "March 2021",
@@ -1067,7 +1067,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Curious about protecting the digital world? The Cybersecurity Interest Group by GTech μLearn delves into securing data and networks from potential threats. This group provides essential knowledge on staying safe online, ideal for those passionate about keeping cyberspace secure.",
     bannerImage:
-    "/assets/IG/Cover/3.png",
+    "/assets/IG/Cover/3.webp",
 
     memberCount: 3000,
     memberSince: "September 2020",
@@ -1565,7 +1565,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Passionate about creating immersive experiences in gaming? The Game Development Interest Group is your gateway to learning about designing, programming, and storytelling in the world of games. Whether you're into creating captivating visuals, coding mechanics, or crafting narratives, join us to level up your game development skills.",
     bannerImage:
-    "/assets/IG/Cover/5.png",
+    "/assets/IG/Cover/5.webp",
 
     memberCount: 2500,
     memberSince: "January 2022",
@@ -2167,7 +2167,7 @@ export const interestGroups: InterestGroupData[] = [
   "id": "d379d82b-e116-4b67-8128-670916e6bb42",
   "title": "Internet Of Things (IOT) And Robotics",
   "description": "Imagine a world where devices communicate seamlessly, revolutionizing industries and everyday life. The Internet of Things (IoT) bridges the physical and digital realms, enabling innovations in smart homes, healthcare, manufacturing, and more. The IoT Interest Group is your gateway to exploring this transformative technology, mastering its tools, and collaborating with like-minded innovators.",
-  "bannerImage": "/assets/IG/Cover/2.png",
+  "bannerImage": "/assets/IG/Cover/8.webp",
   "memberCount": 1800,
   "memberSince": "August 2021",
   "isPublic": true,
@@ -2966,7 +2966,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Excited to explore the dynamic world of digital marketing? The Digital Marketing Interest Group empowers you with practical and theoretical knowledge, covering SEO, email marketing, social media management, and analytics. This group is perfect for anyone passionate about creating impactful campaigns and analyzing audience behaviour.",
     bannerImage:
-    "/assets/IG/Cover/4.png",
+    "/assets/IG/Cover/4.webp",
     memberCount: 2700,
     memberSince: "November 2021",
     isPublic: true,
@@ -3744,7 +3744,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Wonder how applications are deployed and managed in the cloud? Cloud computing and DevOps are the backbone of modern IT infrastructure, ensuring that software is delivered faster, more efficiently, and with higher reliability. The Cloud Computing & DevOps Interest Group at GTech μLearn is here to equip you with the skills needed to master cloud platforms, automation tools, and continuous integration/continuous deployment (CI/CD) practices. Join us to explore, learn, and collaborate on real-world projects, and dive into the future of cloud-native technologies.",
     bannerImage:
-    "/assets/IG/Cover/6.png",
+    "/assets/IG/Cover/6.webp",
     memberCount: 1057, 
     memberSince: "March 2023", // Placeholder; adjust as needed
     isPublic: true,
@@ -3921,7 +3921,7 @@ export const interestGroups: InterestGroupData[] = [
     description:
       "Product Management is deciding what to build next”. Are you interested in learning to build the right product and the product right? Join our “Product Management” Interest Group to learn and collaborate with peers.",
     bannerImage:
-    "/assets/IG/Cover/7.png",
+    "/assets/IG/Cover/7.webp",
     memberCount: 2199, // Placeholder value; adjust as needed
     memberSince: "March 2023", // Placeholder; adjust as needed
     isPublic: true,
