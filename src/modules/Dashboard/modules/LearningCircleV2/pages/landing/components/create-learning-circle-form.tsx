@@ -105,7 +105,7 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
       });
     }
     onClose();
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
