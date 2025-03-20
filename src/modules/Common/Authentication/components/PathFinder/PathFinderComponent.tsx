@@ -16,6 +16,15 @@ const shuffleQuestions = (questions: Question[]): Question[] => {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+
+    // Shuffle options within each question
+    shuffled.forEach(question => {
+        for (let i = question.options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [question.options[i], question.options[j]] = [question.options[j], question.options[i]];
+        }
+    });
+
     return shuffled;
 };
 
