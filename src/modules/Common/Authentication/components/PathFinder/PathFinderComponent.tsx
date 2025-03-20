@@ -9,6 +9,7 @@ import { originalQuestions } from "./questions";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import quizImg from "../../assets/quiz.png";
 import exploreImg from "../../assets/explore.png";
+import { ArrowUpRight } from "lucide-react";
 
 const shuffleQuestions = (questions: Question[]): Question[] => {
     const shuffled = [...questions];
@@ -100,18 +101,18 @@ export default function PathFinderComponent({
             { pathway: "creative", score: scores.C },
             { pathway: "manager", score: scores.D }
         ];
-    
+
         pathwaysWithScores.sort((a, b) => a.score - b.score);
-    
+
         const maxScore = pathwaysWithScores[pathwaysWithScores.length - 1].score;
-    
+
         const recommendedPathways = pathwaysWithScores
             .filter(pathway => pathway.score === maxScore)
             .map(pathway => pathway.pathway);
-    
+
         return recommendedPathways;
     };
-    
+
 
     return (
         <OnboardingTemplate>
@@ -163,10 +164,10 @@ export default function PathFinderComponent({
 
                 ) : (
                     <div className={styles.questionBox}>
-                            <div>
-                                {questions[currentQuestionIndex] && (
-                        <div className={styles.questionBoxContainer}>
-                            <img src="/assets/dashboard/illustrations/expert.png" alt="" />
+                        <div>
+                            {questions[currentQuestionIndex] && (
+                                <div className={styles.questionBoxContainer}>
+                                    <img src="/assets/dashboard/illustrations/expert.png" alt="" />
                                     <div className={styles.questionBoxContent}>
                                         <span className={styles.status}>
                                             Question {currentQuestionIndex + 1} of{" "}
@@ -209,6 +210,12 @@ export default function PathFinderComponent({
                                                         }
                                                     >
                                                         <td>
+                                                            <div className={styles.highlightContainer}>
+                                                                <div className={styles.highlight}>
+                                                                    <ArrowUpRight width={15}/>
+                                                                    {option.highlight}
+                                                                </div>
+                                                            </div>
                                                             <Checkbox
                                                                 className={
                                                                     styles.checkbox
@@ -267,8 +274,8 @@ export default function PathFinderComponent({
                                         </div>
                                     </div>
                                 </div>
-                                )}
-                            </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
