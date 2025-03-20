@@ -49,7 +49,7 @@ export default function GameProgressBar({
     const cleanedUserLevel = (userLevel || "lvl1").replace("lvl", "");
 
     if (!levelData || !Array.isArray(levelData) || levelData.length === 0) {
-      console.error('Invalid or empty levelData provided:', levelData);
+      // console.error('Invalid or empty levelData provided:', levelData);
       return {
         currentLevel: 1,
         currentPoints: 0,
@@ -86,6 +86,30 @@ export default function GameProgressBar({
       karmaRequired: 0
     };
   }
+
+  if (!levelData || levelData.length === 0) {
+    return (
+      <div className={style.container}>
+        <div className={style.wrapper}>
+          <motion.div className={`${style.iconContainer} ${style.iconContainerLarge}`}>
+            <Img src={ImageMap[0].image} className={style.image} />
+          </motion.div>
+          <div className={style.progressContainer}>
+            <div className={style.progressTitle}>Loading...</div>
+            <div className={`${style.progressBar} ${style.progressBarLarge}`}>
+              <motion.div
+                className={style.progressFill}
+                initial={{ width: "0%" }}
+                animate={{ width: "50%" }}
+                transition={{ duration: 1, repeat: Infinity, repeatType: "reverse" }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
 
   if (!userLevel) {
     return (

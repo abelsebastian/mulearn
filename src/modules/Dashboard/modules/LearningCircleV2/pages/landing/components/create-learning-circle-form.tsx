@@ -17,9 +17,10 @@ import ReactSelect from "react-select"
 interface CreateLearningCircleFormProps {
   onClose: () => void
   meetUp?: CircleMeetupInfo
+  onRefresh?: () => void
 }
 
-export function CreateLearningCircleForm({ onClose, meetUp }: CreateLearningCircleFormProps) {
+export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateLearningCircleFormProps) {
   const [formData, setFormData] = useState({
     title: meetUp?.title || "",
     description: meetUp?.description || "",
@@ -94,7 +95,10 @@ export function CreateLearningCircleForm({ onClose, meetUp }: CreateLearningCirc
             is_report_needed: false,
             report_description: '',
             meet_link: data.meetLink || "https://meet.google.com"
-          }).then(() => {
+          }).then((data) => {
+            if(data){
+              if (onRefresh) onRefresh();
+            }
             onClose();
           });
         }

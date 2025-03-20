@@ -9,7 +9,8 @@ import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
-import LearningCircleLanding from "../../LearningCircleV2/pages/landing/LearningCircleLanding2";
+import { publicGateway } from "/src/services/apiGateways";
+import axios from "axios";
 
 interface InterestGroup {
   title: string;
@@ -81,70 +82,44 @@ const DashboardPage = () => {
     fetchKarmaFeed();
   }, []);
 
-  const fetchEvents = useCallback(async () => {
+  const fetchEvents = async () => {
     try {
-      const proxyUrl = "https://proxy.cors.sh/";
-      const notionApiUrl = "https://api.notion.com/v1/databases/1b759e69b1bf80a3853afd0b09ef93ad/query";
-      const response = await fetch(proxyUrl + notionApiUrl, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${import.meta.env.VITE_NOTION_API_KEY}`,
-          "Notion-Version": "2022-06-28",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          filter: {
-            property: "IG Based",
-            select: {
-              equals: "False",
-            },
-          },
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      const response = await axios.get("https://opensheet.elk.sh/19Os47FI_fAgpMk7lnhFWz9aRwyd72cB-4PKz7W8rF9g/1");
+
+      if (!response) {
+        throw new Error(`HTTP error! Status: ${response}`);
       }
-      const data = await response.json();
-      const newEvents = data.results.map((event: any) => ({
-        name: event.properties.Name?.title?.[0]?.plain_text || "No Name",
-        description: event.properties.Description?.rich_text?.[0]?.plain_text || "No Description",
-        poster: event.properties.Poster?.files?.[0]?.file?.url || "",
-        link: event.properties.URL?.url || "#",
-        date: event.properties.Date?.date?.start || "No Date",
+
+      const data = await response.data;
+
+      // const convertDriveLink = (url: string) => {
+      //   if (!url) return "";
+      //   const match = url.match(/\/d\/(.*?)\/view/);
+      //   return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
+      // };
+
+      const newEvents = data.map((event: any) => ({
+        name: event.Name || "No Name",
+        description: event.Description || "No Description",
+        poster: event.Poster || "",
+        link: event.Links || "#",
+        date: event.Date || "No Date",
       }));
 
-      // Store events in localStorage with a timestamp
-      const eventsData = {
-        data: newEvents,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem("cachedEvents", JSON.stringify(eventsData));
       setEvents(newEvents);
     } catch (error) {
-      console.error("Error fetching data from Notion:", error);
+      console.error("Error fetching events:", error);
     }
-  }, []);
+  };
+
+
 
   useEffect(() => {
-    const loadEvents = () => {
-      // Check if events are cached in localStorage
-      const cachedEvents = localStorage.getItem("cachedEvents");
-      if (cachedEvents) {
-        const { data, timestamp } = JSON.parse(cachedEvents);
-        const cacheAge = (Date.now() - timestamp) / (1000 * 60); // Age in minutes
+    fetchEvents();
+  }, []);
 
-        // Use cached data if it's less than 60 minutes old (adjust as needed)
-        if (cacheAge < 60) {
-          setEvents(data);
-          return;
-        }
-      }
-      // Fetch new events if no cache or cache is stale
-      fetchEvents();
-    };
+console.log(events)
 
-    loadEvents();
-  }, [fetchEvents]);
 
   const defaultImage = { src: "/assets/landing/others.png", alt: "General illustration" };
   const { src, alt } = imageMap[userDomains[0]] || defaultImage;
