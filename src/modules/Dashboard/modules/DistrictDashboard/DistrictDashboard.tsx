@@ -157,7 +157,7 @@ function DistrictDashboard() {
 
     return (
         <>
-            <TableTopTab
+          <TableTopTab
                 active={activeTab}
                 onTabClick={handleTabClick}
                 tabletopTab={["Student management", "Campus management"]}
