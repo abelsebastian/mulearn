@@ -15,8 +15,8 @@ import { useUserStore } from "/src/ZustandProvider";
 import toast from "react-hot-toast";
 import { fetchURLQRCode } from "@/modules/Dashboard/modules/LearningCircle/services/LearningCircleAPIs";
 import { joinMeetup } from "../../../services/LearningCircleAPIs";
-import { QrReader } from 'react-qr-reader';
 import { VisuallyHidden } from "@chakra-ui/react";
+import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
 
 interface Member {
   id: string;
@@ -82,7 +82,7 @@ export function LearningCircleCard({
   useEffect(() => {
     fetchURLQRCode(
       setBlob,
-      (window.location.href ?? "unknown") + "/?code=" + meet_code
+       meet_code
     );
   }, [meet_code]);
 
@@ -105,13 +105,13 @@ export function LearningCircleCard({
 
 
   const handleJoin = async () => {
+    console.log('joiningCodeInput:', joiningCodeInput);
     if (joiningCodeInput === meet_code) {
       try {
         const success = await joinMeetup(id, meet_code);
         if (success) {
           setIsJoined(true);
           setShowJoinInput(false);
-          toast.success('Successfully joined the circle!');
         }
       } catch (e) {
         console.error('Failed to join meetup:', e, id);
@@ -134,12 +134,14 @@ export function LearningCircleCard({
     toast.success('Copied joining code');
   };
 
-  const handleScan = (data: string | null) => {
-    if (data) {
+  const handleScan = (detectedCodes: IDetectedBarcode[]) => {
+    if (detectedCodes.length > 0) {
+      const data = detectedCodes[0].rawValue; // Extract the raw value from the first detected barcode
       setJoiningCodeInput(data);
       setShowQrScanner(false);
-      return;
-      // console.log('QR Scan Result:', data);
+      if (joiningCodeInput === meet_code) {
+        handleJoin();
+      }
     }
   };
 
@@ -154,9 +156,9 @@ export function LearningCircleCard({
       <Dialog open={open} onOpenChange={(value) => { setOpen(value); if (!value) onClose(); }}>
         <DialogOverlay />
         <DialogContent className={styles.dialogContent} title="Learning Circle Details" aria-describedby="learning-circle-description">
-        <VisuallyHidden>
-          <DialogTitle>Learning circle Description</DialogTitle>
-        </VisuallyHidden>
+          <VisuallyHidden>
+            <DialogTitle>Learning circle Description</DialogTitle>
+          </VisuallyHidden>
           <Card className={styles.card}>
             <CardContent className={styles.cardContent}>
               <h2 className={styles.cardTitle}>{title}</h2>
@@ -298,9 +300,9 @@ export function LearningCircleCard({
 
       <Dialog open={showQrScanner} onOpenChange={setShowQrScanner}>
         <DialogContent className={styles.dialogContent} title="Scan QR Code" aria-describedby="qr-scan-description">
-        <VisuallyHidden>
-          <DialogTitle>QR Scanner</DialogTitle>
-        </VisuallyHidden>
+          <VisuallyHidden>
+            <DialogTitle>QR Scanner</DialogTitle>
+          </VisuallyHidden>
           <DialogHeader>
             <DialogTitle>Scan QR Code</DialogTitle>
             <DialogDescription>
@@ -308,16 +310,14 @@ export function LearningCircleCard({
             </DialogDescription>
           </DialogHeader>
           <div className={styles.qrScannerContainer}>
-            <QrReader
-              onResult={(result, error) => {
-                if (result) {
-                  handleScan(result.getText()); // Use getText() instead of .text
-                }
-                if (error) {
-                  handleError(error);
-                }
+            <Scanner
+              onScan={handleScan}
+              onError={handleError}
+              constraints={{ facingMode: 'environment' }}
+              components={{
+                audio: false,
+                finder: true,
               }}
-              constraints={{ facingMode: 'environment' }} // Use rear camera
             />
           </div>
           <Button
@@ -332,9 +332,9 @@ export function LearningCircleCard({
 
       <Dialog open={showCongratulations} onOpenChange={setShowCongratulations}>
         <DialogContent className={styles.dialogContent} title="Congratulations!" aria-describedby="congrats-description">
-        <VisuallyHidden>
-          <DialogTitle>Congratulations!</DialogTitle>
-        </VisuallyHidden>
+          <VisuallyHidden>
+            <DialogTitle>Congratulations!</DialogTitle>
+          </VisuallyHidden>
           <DialogHeader>
             <DialogTitle className={styles.congratsTitle}>🎉 Congratulations! 🎉</DialogTitle>
             <DialogDescription className={styles.congratsDescription}>
