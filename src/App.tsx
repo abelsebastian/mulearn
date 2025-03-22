@@ -12,6 +12,7 @@ import NotFound from "./components/NotFound";
 import { roles, managementTypes } from "./services/types";
 import SecureAuthRoutes from "./services/authCheck";
 import { Toaster } from "react-hot-toast";
+import MuLoader from "./components/MuComponents/MuLoader/MuLoader";
 
 // Lazy-loaded components
 const CampusStudentList = lazy(() => import("./modules/Dashboard/modules").then(module => ({ default: module.CampusStudentList })));
@@ -304,7 +305,7 @@ function App() {
 
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<MuLoader/>}>
                 <RouterProvider router={router} />
             </Suspense>
             <Toaster position="bottom-center" reverseOrder={true} />

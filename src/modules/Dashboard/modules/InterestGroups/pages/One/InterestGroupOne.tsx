@@ -162,7 +162,7 @@ const CommunityForum = () => {
                   </button>
                   <button
                     className={styles.officeHoursButton}
-                    onClick={() => window.open("https://discord.gg/4Z6Jb3Y", "_blank")}
+                    onClick={() => window.open("https://discord.com/invite/gtech-mulearn-771670169691881483", "_blank")}
                     aria-label="Join Community"
                   >
                     <BsDiscord /> Join Community

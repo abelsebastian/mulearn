@@ -167,7 +167,7 @@ const Account = () => {
                     </div>
                 </div>
                 <br />
-                {isOpen && (
+                {/* {isOpen && (
                     <Modal
                         setIsOpen={setIsOpen}
                         id={"Leave"}
@@ -198,7 +198,7 @@ const Account = () => {
                             Delete Account
                         </PowerfulButton>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -568,7 +568,7 @@ const MuLearnLanding = () => {
             <ul>
               <li><a href="https://mulearn.org/careers">Career Labs</a></li>
               <li><a href="https://gtechmulearn.medium.com/">Blog</a></li>
-              <li><a href="http://app.mulearn.org/dashboard/interestgroups">Interest Groups</a></li>
+              <li><a className="cursor-pointer" onClick={()=>(navigate("dashboard/interestgroups"))}>Interest Groups</a></li>
             </ul>
           </div>
           <div className={styles.footerSection}>
