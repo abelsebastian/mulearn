@@ -103,12 +103,13 @@ export default function LearningCircleLanding() {
         if (data) {
           setisLoading(true);
           onRefresh();
+        setSelectedCircle(null);
+        setOpen(false);
         }
       })
     }
   };
 
-  // Updated filtering with new filters and updated sorting
   const filteredCircles = meetups
     .filter((circle) => {
       const searchLower = searchQuery.toLowerCase();

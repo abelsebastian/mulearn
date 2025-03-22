@@ -90,7 +90,7 @@ export default function GameProgressBar({
   if (!levelData || levelData.length === 0) {
     return (
       <div className={style.container}>
-        <div className={style.wrapper}>
+        {/* <div className={style.wrapper}>
           <motion.div className={`${style.iconContainer} ${style.iconContainerLarge}`}>
             <Img src={ImageMap[0].image} className={style.image} />
           </motion.div>
@@ -105,7 +105,7 @@ export default function GameProgressBar({
               />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
