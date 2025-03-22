@@ -112,7 +112,6 @@ const UserList: React.FC<{
     [searchType]
   );
 
-  console.log(allUsers, "user list" )
 
   const debouncedFetchUsers = useCallback(
     debounce((searchTerm: string, pageNum: number) => {
