@@ -83,7 +83,6 @@ export async function getKarmaFeed(): Promise<KarmaFeedItem[]> {
         return [];
     } catch (error) {
         console.error("Failed to fetch karma feed:", error);
-        toast.error("Failed to fetch karma feed");
         return [];
     }
 }
