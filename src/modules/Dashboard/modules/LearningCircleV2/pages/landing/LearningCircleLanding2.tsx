@@ -136,10 +136,10 @@ export default function LearningCircleLanding() {
     .filter((circle) => {
       const meetupTime = new Date(circle.meet_time);
       if (isNaN(meetupTime.getTime())) return false;
-      const twoHoursAgo = new Date();
-      twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+      const twentyFourHoursAgo = new Date();
+      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24); // Changed from 2 to 24
       // If showOld is true, show circles that are already in the past; otherwise show upcoming ones
-      return showOld ? meetupTime < twoHoursAgo : meetupTime >= twoHoursAgo;
+      return showOld ? meetupTime < twentyFourHoursAgo : meetupTime >= twentyFourHoursAgo;
     })
     .sort((a, b) => {
       // First, sort circles created by the current user to the top

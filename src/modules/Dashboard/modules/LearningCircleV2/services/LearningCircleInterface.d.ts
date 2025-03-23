@@ -97,6 +97,8 @@ interface CircleMeetingAttendee {
     is_joined: boolean;
     is_report_submitted: boolean;
     is_lc_approved: boolean;
+    full_name?: string;
+    
 }
 
 interface LCReportInfo {

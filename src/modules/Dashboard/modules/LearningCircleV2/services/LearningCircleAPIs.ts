@@ -84,9 +84,10 @@ export const joinMeetup = async (
             { meet_code: meetCode }
         );
         if (response.status === 200) {
+
             toast.success(
                 [
-                    response.data?.message?.general ??
+                    response.data.message?.general ??
                     "Joined learning circle successfully"
                 ][0]
             );
@@ -102,7 +103,7 @@ export const joinMeetup = async (
         const error = err as AxiosError;
         console.log(error);
         toast.error(
-            ((error.response as any)?.data?.message?.general ?? [
+            ((error as any)?.message?.general ?? [
                 "Unable to join learning circle."
             ])[0]
         );
