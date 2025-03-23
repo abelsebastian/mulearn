@@ -46,6 +46,21 @@ interface LearningCircleCardProps {
   handleEdit: (meetupId: string) => void;
 }
 
+// Helper function to format attendees display
+const formatAttendeesDisplay = (attendees: CircleMeetingAttendee[]) => {
+  if (!attendees || attendees.length === 0) return "No attendees yet";
+  
+  const visibleAttendees = attendees.slice(0, 5);
+  const remainingCount = attendees.length - 5;
+  
+  const attendeeNames = visibleAttendees.map(attendee => attendee.full_name).join(", ");
+  
+  if (remainingCount > 0) {
+    return `${attendeeNames} +${remainingCount} others`;
+  }
+  return attendeeNames;
+};
+
 export function LearningCircleCard({
   id,
   title,
@@ -86,11 +101,9 @@ export function LearningCircleCard({
     const currentTime = new Date().getTime();
     const meetTime = new Date(meet_time).getTime();
     setIsMeetJoinable(currentTime >= meetTime);
-  }
-    , [meet_time]);
+  }, [meet_time]);
 
   console.log('isMeetJoinable:', isMeetJoinable, title, isJoined);
-
 
   useEffect(() => {
     fetchURLQRCode(
@@ -116,6 +129,7 @@ export function LearningCircleCard({
     }
   };
 
+  console.log(members, attendees)
 
   const handleJoin = async () => {
     if (!isMeetJoinable) {
@@ -153,7 +167,7 @@ export function LearningCircleCard({
 
   const handleScan = (detectedCodes: IDetectedBarcode[]) => {
     if (detectedCodes.length > 0) {
-      const data = detectedCodes[0].rawValue; // Extract the raw value from the first detected barcode
+      const data = detectedCodes[0].rawValue;
       setJoiningCodeInput(data);
       setShowQrScanner(false);
       if (joiningCodeInput === meet_code) {
@@ -188,14 +202,14 @@ export function LearningCircleCard({
                     : <><WifiOff className={styles.offlineIcon} /><span>Offline</span></>}
                 </Badge>
 
-                <Sheet open={showMembersList} onOpenChange={setShowMembersList}>
-                  <SheetTrigger asChild>
+                {/* <Sheet open={showMembersList} onOpenChange={setShowMembersList}> */}
+                  {/* <SheetTrigger asChild> */}
                     <Badge variant="outline" className={styles.membersBadge}>
                       <Users className={styles.icon} />
                       <span>{attendees?.length} {attendees?.length === 1 ? 'member' : 'members'}</span>
                     </Badge>
-                  </SheetTrigger>
-                  <SheetContent>
+                  {/* </SheetTrigger> */}
+                  {/* <SheetContent>
                     <SheetHeader>
                       <SheetTitle>Members</SheetTitle>
                       <SheetDescription>People who have joined this learning circle.</SheetDescription>
@@ -210,8 +224,8 @@ export function LearningCircleCard({
                         </div>
                       ))}
                     </div>
-                  </SheetContent>
-                </Sheet>
+                  </SheetContent> */}
+                {/* </Sheet> */}
               </div>
 
               <div className={styles.badgeContainer}>
@@ -223,6 +237,14 @@ export function LearningCircleCard({
                   <Clock className={styles.clockIcon} />
                   <span>{new Date(meet_time).toLocaleString()}</span>
                 </Badge>
+              </div>
+
+              {/* Attendees Section */}
+              <div className={styles.attendeesContainer}>
+                <p className={styles.attendeesLabel}>Attendees:</p>
+                <p className={styles.attendeesNames}>
+                  {formatAttendeesDisplay(attendees || [])}
+                </p>
               </div>
 
               {isCreator && (

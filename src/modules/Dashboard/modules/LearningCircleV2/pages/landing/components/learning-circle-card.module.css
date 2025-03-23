@@ -272,3 +272,20 @@
   .statusBadge {
     margin: 0.5rem 0;
   }
+
+  .attendeesContainer {
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+  }
+  
+  .attendeesLabel {
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+  
+  .attendeesNames {
+    font-size: 0.9rem;
+    color: #333;
+    word-break: break-word;
+  }
