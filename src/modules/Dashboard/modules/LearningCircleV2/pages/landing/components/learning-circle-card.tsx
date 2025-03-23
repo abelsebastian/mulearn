@@ -103,7 +103,6 @@ export function LearningCircleCard({
     setIsMeetJoinable(currentTime >= meetTime);
   }, [meet_time]);
 
-  console.log('isMeetJoinable:', isMeetJoinable, title, isJoined);
 
   useEffect(() => {
     fetchURLQRCode(
@@ -129,7 +128,6 @@ export function LearningCircleCard({
     }
   };
 
-  console.log(members, attendees)
 
   const handleJoin = async () => {
     if (!isMeetJoinable) {
