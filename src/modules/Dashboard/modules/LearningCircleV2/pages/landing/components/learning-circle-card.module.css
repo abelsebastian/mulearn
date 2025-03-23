@@ -261,3 +261,14 @@
 .bold {
     font-weight: bold;
 }
+
+.waitMessage {
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .statusBadge {
+    margin: 0.5rem 0;
+  }

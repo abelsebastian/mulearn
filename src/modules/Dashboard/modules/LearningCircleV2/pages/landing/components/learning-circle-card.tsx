@@ -78,11 +78,24 @@ export function LearningCircleCard({
   const [learningSummary, setLearningSummary] = useState("");
   const [showMembersList, setShowMembersList] = useState(false);
   const [showQrScanner, setShowQrScanner] = useState(false);
+  console.log(meet_time)
+
+  const [isMeetJoinable, setIsMeetJoinable] = useState(false);
+
+  useEffect(() => {
+    const currentTime = new Date().getTime();
+    const meetTime = new Date(meet_time).getTime();
+    setIsMeetJoinable(currentTime >= meetTime);
+  }
+    , [meet_time]);
+
+  console.log('isMeetJoinable:', isMeetJoinable, title, isJoined);
+
 
   useEffect(() => {
     fetchURLQRCode(
       setBlob,
-       meet_code
+      meet_code
     );
   }, [meet_code]);
 
@@ -105,7 +118,11 @@ export function LearningCircleCard({
 
 
   const handleJoin = async () => {
-    console.log('joiningCodeInput:', joiningCodeInput);
+    if (!isMeetJoinable) {
+      toast.error('The meeting hasn’t started yet. Please wait until the scheduled time.');
+      return;
+    }
+
     if (joiningCodeInput === meet_code) {
       try {
         const success = await joinMeetup(id, meet_code);
