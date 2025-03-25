@@ -139,7 +139,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <div className={styles.menu}>
                             {refreshToken && userInfo?.user_domains && (
                             <div className={styles.modeContainer}>
-                                <span className={styles.modeText}>Mode</span>
+                                {/* <span className={styles.modeText}>Mode</span> */}
                                 <span
                                     className={styles.userDomain}
                                     onClick={() => setSwitchDomainModal(true)}
