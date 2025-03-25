@@ -250,7 +250,7 @@ const MuLearnLanding = () => {
               className={styles.joinBtn}
               onClick={() => (refreshToken ? navigate("/dashboard/home") : navigate("/register"))}
             >
-              Join for Free
+              Join µLearn
             </button>
             <button
               className={styles.downloadBtn}
