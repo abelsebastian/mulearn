@@ -370,7 +370,7 @@ const MuLearnLanding = () => {
 
       {/* Comparison Table Section */}
       <motion.section
-        className={styles.topBottomGrid}
+        className={`${styles.topBottomGrid} ${styles.comparisonGridSection}`}
         variants={fadeInUp}
         initial="hidden"
         whileInView="visible"

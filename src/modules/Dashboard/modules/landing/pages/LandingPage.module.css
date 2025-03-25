@@ -348,6 +348,10 @@
   }
 }
 
+.comparisonGridSection {
+  padding-bottom: 0px;
+}
+
 .camparison {
   display: flex;
   flex-direction: column;
