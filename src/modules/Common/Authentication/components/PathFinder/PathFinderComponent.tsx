@@ -132,7 +132,7 @@ export default function PathFinderComponent({
                                 }
                             >
                                 <img
-                                    src={"/assets/dashboard/illustrations/learner.png"}
+                                    src={"/assets/dashboard/illustrations/learner.webp"}
                                     alt="Explore"
                                 // className={styles.boxImage}
                                 />
@@ -147,7 +147,7 @@ export default function PathFinderComponent({
                                 onClick={() => setCurrentQuestionIndex(0)}
                             >
                                 <img
-                                    src={"/assets/dashboard/illustrations/expert.png"}
+                                    src={"/assets/dashboard/illustrations/expert.webp"}
                                     alt="Quiz"
                                 // className={styles.boxImage}
                                 />
@@ -167,7 +167,7 @@ export default function PathFinderComponent({
                         <div>
                             {questions[currentQuestionIndex] && (
                                 <div className={styles.questionBoxContainer}>
-                                    <img src="/assets/dashboard/illustrations/expert.png" alt="" />
+                                    <img src="/assets/dashboard/illustrations/expert.webp" alt="" />
                                     <div className={styles.questionBoxContent}>
                                         <span className={styles.status}>
                                             Question {currentQuestionIndex + 1} of{" "}
