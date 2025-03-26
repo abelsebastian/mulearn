@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef, useMemo } from "react";
 import styles from "./MuLearnersSearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
-import profileImage from "../assets/ProfileImages/10496279.jpg";
-import userImage2 from "../assets/ProfileImages/11475206.jpg";
 import debounce from "lodash/debounce";
 import { getUsers } from "../services/api";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import UserCard from "../../../components/UserCard";
-import { useNavigate } from "react-router-dom";
 import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
 import defaultProfile from "../../../assets/images/defaultProfile.png";
 
@@ -19,39 +16,6 @@ interface User {
   profile_pic: string | null;
   karma: string;
 }
-
-interface Pagination {
-  totalPages: number;
-  isNext: boolean;
-}
-
-interface UserResource {
-  read: () => { data: User[]; pagination: Pagination };
-}
-
-const createResource = (promise: Promise<any>): UserResource => {
-  let status: "pending" | "success" | "error" = "pending";
-  let result: any;
-
-  const suspender = promise.then(
-    (data) => {
-      status = "success";
-      result = data;
-    },
-    (error) => {
-      status = "error";
-      result = error;
-    }
-  );
-
-  return {
-    read: () => {
-      if (status === "pending") throw suspender;
-      if (status === "error") throw result;
-      return result;
-    },
-  };
-};
 
 const UserList: React.FC<{
   search: string;
@@ -65,8 +29,6 @@ const UserList: React.FC<{
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate();
-  const [requestId, setRequestId] = useState<number>(0);
   const latestRequestIdRef = useRef<number>(0);
 
   const fetchUsers = useCallback(
@@ -82,7 +44,6 @@ const UserList: React.FC<{
           perPage: 30,
         });
 
-        // Only update if this is still the latest request
         if (currentRequestId === latestRequestIdRef.current) {
           const newUsers = response.data;
           let filtered: User[] = newUsers;
@@ -125,17 +86,14 @@ const UserList: React.FC<{
   const debouncedFetchUsers = useMemo(
     () => debounce((searchTerm: string, pageNum: number) => {
       fetchUsers(searchTerm, pageNum);
-    }, 1000),
+    }, 800),
     [fetchUsers]
   );
 
   useEffect(() => {
-    if (search !== undefined) {
-      setAllUsers([]);
-      setFilteredUsers([]);
       setPage(1);
       debouncedFetchUsers(search, 1);
-    }
+      setIsFetching(true);
     return () => {
       debouncedFetchUsers.cancel();
     };
@@ -281,7 +239,6 @@ const MuLearnersSearchPage: React.FC = () => {
       </StackComponent>
 
       {error && <p className={styles.errorText}>{error}</p>}
-
       <Suspense fallback={<MuLoader />}>
         <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
