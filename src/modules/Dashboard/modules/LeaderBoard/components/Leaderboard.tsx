@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopPlayers } from "./top-players";
 import { LeaderboardTable } from "./leaderboard-table";
 import { FilterBar } from "./filter-bar";
@@ -40,13 +40,25 @@ export default function Leaderboard({
   defaultFilter = "monthly",
   defaultCategory = "student",
   topPlayerCount = 3,
-}: LeaderboardProps) {
-  const [activeFilter, setActiveFilter] = useState<"monthly" | "overall">(defaultFilter);
-  const [activeCategory, setActiveCategory] = useState<"student" | "campus">(defaultCategory as "student" | "campus");
+  setActiveFilter,
+  setActiveCategory,
+}: LeaderboardProps & {
+  setActiveFilter: (filter: "monthly" | "overall") => void;
+  setActiveCategory: (category: "student" | "campus") => void;
+}) {
+  const [activeFilter, setLocalActiveFilter] = useState<"monthly" | "overall">(defaultFilter);
+  const [activeCategory, setLocalActiveCategory] = useState<"student" | "campus">(defaultCategory as "student" | "campus");
 
-  // Select the current leaderboard based on active category and filter
+  // Update parent state when local state changes
+  useEffect(() => {
+    setActiveFilter(activeFilter);
+  }, [activeFilter]);
+
+  useEffect(() => {
+    setActiveCategory(activeCategory);
+  }, [activeCategory]);
+
   const currentLeaderboard = leaderboards[activeCategory]?.[activeFilter] || [];
-
   const topPlayers = currentLeaderboard.slice(0, topPlayerCount);
   const remainingPlayers = currentLeaderboard.slice(topPlayerCount);
 
@@ -55,9 +67,9 @@ export default function Leaderboard({
       <div className={styles.leaderboard}>
         <FilterBar
           activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
+          setActiveFilter={setLocalActiveFilter}
           activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+          setActiveCategory={setLocalActiveCategory}
           filterOptions={filterOptions}
           categoryOptions={categoryOptions}
         />

@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { privateGateway, publicGateway } from '@/MuLearnServices/apiGateways';
-import { dashboardRoutes } from '@/MuLearnServices/urls';
-import Leaderboard from '../components/Leaderboard';
-import styles from './leaderboard.module.css';
-import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader"; 
+import { useEffect, useRef, useState } from "react";
+import { publicGateway } from "@/MuLearnServices/apiGateways";
+import { dashboardRoutes } from "@/MuLearnServices/urls";
+import Leaderboard from "../components/Leaderboard";
+import styles from "./leaderboard.module.css";
+import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 
 interface LeaderboardEntry {
   name: string;
@@ -14,95 +14,87 @@ interface LeaderboardEntry {
 }
 
 const MuLeaderboardPage = () => {
-  const [studentLeaderboardData, setStudentYearlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
-  const [monthlyStudentLeaderBoard, setStudentMonthlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
-  const [campusLeaderboardData, setCampusLeaderBoard] = useState<LeaderboardEntry[]>([]);
-  const [monthlyCampusLeaderboard, setCampusMonthlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [activeFilter, setActiveFilter] = useState<"monthly" | "overall">("monthly");
+  const [activeCategory, setActiveCategory] = useState<"student" | "campus">("student");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
+  // Cache for storing API results
+  const cache = useRef<{ [key: string]: LeaderboardEntry[] }>({});
 
-        const [
-          studentOverallResponse,
-          studentMonthlyResponse,
-          campusOverallResponse,
-          campusMonthlyResponse,
-        ] = await Promise.all([
-          publicGateway.get(dashboardRoutes.getStudentLeaderBoard),
-          publicGateway.get(dashboardRoutes.getMonthlyStudentLeaderBoard),
-          publicGateway.get(dashboardRoutes.getCollegeLeaderBoard),
-          publicGateway.get(dashboardRoutes.getCollegeMonthlyLeaderBoard),
-        ]);
+  const fetchLeaderboardData = async () => {
+    setIsLoading(true);
 
-        if (studentOverallResponse?.data?.response) {
-          setStudentYearlyLeaderBoard(
-            studentOverallResponse.data.response.map((student: { full_name: string; total_karma: number }) => ({
-              name: student.full_name,
-              overall: student.total_karma,
-              category: "student",
-            }))
-          );
-        }
+    // Generate a unique cache key based on the active filter and category
+    const cacheKey = `${activeCategory}-${activeFilter}`;
 
-        if (studentMonthlyResponse?.data?.response) {
-          setStudentMonthlyLeaderBoard(
-            studentMonthlyResponse.data.response.map((student: { full_name: string; total_karma: number }) => ({
-              name: student.full_name,
-              monthly: student.total_karma,
-              category: "student",
-            }))
-          );
-        }
+    // Check if the data is already cached
+    if (cache.current[cacheKey]) {
+      setLeaderboardData(cache.current[cacheKey]); // Use cached data
+      setIsLoading(false);
+      return;
+    }
 
-        if (campusOverallResponse?.data?.response) {
-          setCampusLeaderBoard(
-            campusOverallResponse.data.response.map((campus: { title: string; total_karma: number }) => ({
-              name: campus.title,
-              overall: campus.total_karma,
-              category: "campus",
-            }))
-          );
-        }
+    try {
+      let apiUrl = "";
 
-        if (campusMonthlyResponse?.data?.response) {
-          setCampusMonthlyLeaderBoard(
-            campusMonthlyResponse.data.response.map((campus: { code: string; total_karma: number }) => ({
-              name: campus.code,
-              monthly: campus.total_karma,
-              category: "campus",
-            }))
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching leaderboards:", error);
-      } finally {
-        setIsLoading(false); 
+      // Determine the API URL based on the active filter and category
+      if (activeCategory === "student" && activeFilter === "monthly") {
+        apiUrl = dashboardRoutes.getMonthlyStudentLeaderBoard;
+      } else if (activeCategory === "student" && activeFilter === "overall") {
+        apiUrl = dashboardRoutes.getStudentLeaderBoard;
+      } else if (activeCategory === "campus" && activeFilter === "monthly") {
+        apiUrl = dashboardRoutes.getCollegeMonthlyLeaderBoard;
+      } else if (activeCategory === "campus" && activeFilter === "overall") {
+        apiUrl = dashboardRoutes.getCollegeLeaderBoard;
       }
-    };
 
-    fetchData();
-  }, []);
+      // Fetch data from the determined API
+      const response = await publicGateway.get(apiUrl);
 
+      if (response?.data?.response) {
+        const transformedData = response.data.response.map((item: any) => ({
+          name: activeCategory === "student" ? item.full_name : item.title || item.code,
+          [activeFilter]: item.total_karma,
+          category: activeCategory,
+        }));
+
+        // Cache the result
+        cache.current[cacheKey] = transformedData;
+
+        setLeaderboardData(transformedData);
+      } else {
+        setLeaderboardData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard data:", error);
+      setLeaderboardData([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch data whenever the active filter or category changes
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, [activeFilter, activeCategory]);
 
   return (
     <div className={styles.pageWrapper}>
       {isLoading ? (
         <div className={styles.loadingContainer}>
-          <MuLoader /> 
+          <MuLoader />
         </div>
       ) : (
         <Leaderboard
           leaderboards={{
             student: {
-              overall: studentLeaderboardData,
-              monthly: monthlyStudentLeaderBoard,
+              overall: activeCategory === "student" && activeFilter === "overall" ? leaderboardData : [],
+              monthly: activeCategory === "student" && activeFilter === "monthly" ? leaderboardData : [],
             },
             campus: {
-              overall: campusLeaderboardData,
-              monthly: monthlyCampusLeaderboard,
+              overall: activeCategory === "campus" && activeFilter === "overall" ? leaderboardData : [],
+              monthly: activeCategory === "campus" && activeFilter === "monthly" ? leaderboardData : [],
             },
           }}
           filterOptions={["monthly", "overall"]}
@@ -110,9 +102,11 @@ const MuLeaderboardPage = () => {
             { label: "Student", value: "student" },
             { label: "Campus", value: "campus" },
           ]}
-          defaultFilter="monthly"
-          defaultCategory="student"
+          defaultFilter={activeFilter}
+          defaultCategory={activeCategory}
           topPlayerCount={3}
+          setActiveFilter={setActiveFilter}
+          setActiveCategory={setActiveCategory}
         />
       )}
     </div>
