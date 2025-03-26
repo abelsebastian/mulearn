@@ -135,7 +135,8 @@ export const OffCanvas: React.FC<OffCanvasProps> = ({ isOpen, onClose, data }) =
             </div>
 
             <div className={styles.offCanvasSection}>
-              <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof of work</a></button>
+              
+              {data.hashtag === "#ge-self-intro" ? <button className={styles.proofOfWorkButton}><a href="https://discord.com/channels/832894680290809354/771680366590689330" target="_blank"> Submit self introduction</a></button> : <button className={styles.proofOfWorkButton}><a href={data.discord_link} target="_blank"> Submit proof of work</a></button>}
             </div>
           </>
         )}

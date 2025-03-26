@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopPlayers } from "./top-players";
 import { LeaderboardTable } from "./leaderboard-table";
 import { FilterBar } from "./filter-bar";
@@ -52,6 +52,7 @@ export default function Leaderboard({
   // Select the current leaderboard based on active category and filter
   const currentLeaderboard = leaderboards[activeCategory]?.[activeFilter] || [];
 
+  const currentLeaderboard = leaderboards[activeCategory]?.[activeFilter] || [];
   const topPlayers = currentLeaderboard.slice(0, topPlayerCount);
   const remainingPlayers = currentLeaderboard.slice(topPlayerCount);
 
