@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Img } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import style from "./GameProgressBar.module.css";
 import Level1 from "../../Profile/components/MuVoyage/assets/images/Level1.webp";
 import Level2 from "../../Profile/components/MuVoyage/assets/images/Level2.webp";
@@ -9,24 +10,7 @@ import Level4 from "../../Profile/components/MuVoyage/assets/images/Level4.webp"
 import Level5 from "../../Profile/components/MuVoyage/assets/images/Level5.webp";
 import Level6 from "../../Profile/components/MuVoyage/assets/images/Level6.webp";
 import Level7 from "../../Profile/components/MuVoyage/assets/images/Level7.webp";
-
-interface Task {
-  completed: boolean;
-  karma?: number;
-}
-
-interface Level {
-  name?: string;
-  tasks?: Task[];
-  karma: number;
-}
-
-interface LevelDataResult {
-  currentLevel: number;
-  currentPoints: number;
-  karmaRequired: number;
-  progress?: number;
-}
+import { getUserLevelFeed, LevelFeedResponse } from "../services/api";
 
 const ImageMap = [
   { level: 1, image: Level1 },
@@ -38,80 +22,77 @@ const ImageMap = [
   { level: 7, image: Level7 },
 ];
 
-export default function GameProgressBar({
-  levelData = [],
-  userLevel
-}: {
-  levelData: Level[],
-  userLevel?: string
-}) {
-  function transformToLevelData(levelData: Level[], userLevel: string = "lvl1"): LevelDataResult | string {
-    const cleanedUserLevel = (userLevel || "lvl1").replace("lvl", "");
+const LEVEL_REQUIREMENTS = {
+  1: 20,    // Level 1 → Level 2: 20 points
+  2: 200,   // Level 2 → Level 3: 200 points
+  3: 800,   // Level 3 → Level 4: 800 points
+  4: 1600,  // Level 4 → Level 5: 1600 points
+  5: 1600,  // Level 5 → Level 6: 1600 points
+  6: 1600,  // Level 6 → Level 7: 1600 points
+  7: 0      // Max level
+};
 
-    if (!levelData || !Array.isArray(levelData) || levelData.length === 0) {
-      // console.error('Invalid or empty levelData provided:', levelData);
-      return {
-        currentLevel: 1,
-        currentPoints: 0,
-        karmaRequired: 0
-      };
-    }
+const CACHE_KEY = "mulearn_level_data";
+const CACHE_TIMESTAMP_KEY = "mulearn_level_data_timestamp";
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
 
-    for (const level of levelData) {
-      if (!level.name || level.name.replace("lvl", "") !== cleanedUserLevel) {
-        continue;
+export default function GameProgressBar() {
+  const [levelData, setLevelData] = useState<LevelFeedResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const saveLevelDataToCache = (data: LevelFeedResponse) => {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+  };
+
+  const getLevelDataFromCache = (): { data: LevelFeedResponse | null, isValid: boolean } => {
+    try {
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      const timestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+      
+      if (!cachedData || !timestamp) {
+        return { data: null, isValid: false };
       }
-
-      const currentLevel = Number(cleanedUserLevel) || 1;
-      if (currentLevel === 7) {
-        return "You've Made it!";
-      }
-
-      const karmaRequired = level.karma;
-      const currentLevelKarma = level.tasks
-        ?.filter(task => task.completed === true)
-        .reduce((sum, task) => sum + (task.karma ?? 0), 0) || 0;
-
-      return {
-        currentLevel,
-        currentPoints: currentLevelKarma,
-        karmaRequired,
-        progress: (currentLevelKarma / karmaRequired) * 100
-      };
+      
+      const isValid = Date.now() - parseInt(timestamp) < CACHE_DURATION;
+      return { data: JSON.parse(cachedData), isValid };
+    } catch (error) {
+      console.error("Error reading from cache:", error);
+      return { data: null, isValid: false };
     }
+  };
 
-    return {
-      currentLevel: 1,
-      currentPoints: 0,
-      karmaRequired: 0
+  useEffect(() => {
+    const fetchLevelData = async () => {
+      setIsLoading(true);
+      
+      const { data: cachedData, isValid } = getLevelDataFromCache();
+      
+      if (cachedData && isValid) {
+        console.log("Using cached level data");
+        setLevelData(cachedData);
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        console.log("Fetching fresh level data");
+        const data = await getUserLevelFeed();
+        if (data) {
+          setLevelData(data);
+          saveLevelDataToCache(data);
+        }
+      } catch (error) {
+        console.error("Error fetching level data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-  }
 
-  if (!levelData || levelData.length === 0) {
-    return (
-      <div className={style.container}>
-        {/* <div className={style.wrapper}>
-          <motion.div className={`${style.iconContainer} ${style.iconContainerLarge}`}>
-            <Img src={ImageMap[0].image} className={style.image} />
-          </motion.div>
-          <div className={style.progressContainer}>
-            <div className={style.progressTitle}>Loading...</div>
-            <div className={`${style.progressBar} ${style.progressBarLarge}`}>
-              <motion.div
-                className={style.progressFill}
-                initial={{ width: "0%" }}
-                animate={{ width: "50%" }}
-                transition={{ duration: 1, repeat: Infinity, repeatType: "reverse" }}
-              />
-            </div>
-          </div>
-        </div> */}
-      </div>
-    );
-  }
-  
+    fetchLevelData();
+  }, []);
 
-  if (!userLevel) {
+  if (isLoading || !levelData) {
     return (
       <div className={style.container}>
         <div className={style.wrapper}>
@@ -134,9 +115,10 @@ export default function GameProgressBar({
     );
   }
 
-  const result = transformToLevelData(levelData, userLevel);
-
-  if (typeof result === "string") {
+  const currentLevel = levelData.level_order;
+  const levelRequirement = LEVEL_REQUIREMENTS[currentLevel as keyof typeof LEVEL_REQUIREMENTS] || 0;
+  
+  if (currentLevel === 7) {
     return (
       <div className={style.container}>
         <div className={style.wrapper}>
@@ -146,7 +128,7 @@ export default function GameProgressBar({
           <div className={style.progressContainer}>
             <div className={style.progressTitle}>Level 7</div>
             <div className={`${style.progressBar} ${style.progressBarLarge}`} style={{ background: "#22c55e" }}>
-              <span className={style.progressText}>You've Made it!</span>
+              <span className={style.progressText}>Max Level Reached!</span>
             </div>
           </div>
         </div>
@@ -154,8 +136,14 @@ export default function GameProgressBar({
     );
   }
 
-  const { currentLevel, currentPoints, karmaRequired, progress } = result;
+  const progress = Math.min(
+    (levelData.user_karma / levelRequirement) * 100, 
+    100
+  );
+  
   const imageIndex = Math.min(Math.max(currentLevel - 1, 0), 6);
+
+  const nextLevel = currentLevel + 1;
 
   return (
     <div className={style.container}>
@@ -164,11 +152,18 @@ export default function GameProgressBar({
           <Img src={ImageMap[imageIndex].image} className={style.image} />
         </motion.div>
         <div className={style.progressContainer}>
-          <div className={style.progressTitle}>Level {currentLevel}</div>
+          <div className={style.progressTitle}>
+            Level {currentLevel} → {nextLevel}
+          </div>
           <div className={`${style.progressBar} ${style.progressBarLarge}`}>
-            <motion.div className={style.progressFill} initial={{ width: "0%" }} animate={{ width: `${progress}%` }} transition={{ duration: 0.4, ease: "easeOut" }} />
+            <motion.div 
+              className={style.progressFill} 
+              initial={{ width: "0%" }} 
+              animate={{ width: `${progress}%` }} 
+              transition={{ duration: 0.4, ease: "easeOut" }} 
+            />
             <div className={style.progressText}>
-              {currentPoints}/{karmaRequired}
+              {levelData.user_karma}/{levelRequirement}
             </div>
           </div>
         </div>
@@ -176,4 +171,3 @@ export default function GameProgressBar({
     </div>
   );
 }
-

@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./SideNavBar.module.css";
-import { MdNotifications, MdNotificationAdd } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import dpm from "../assets/images/dpm.webp";
-import { IoMdLogIn } from "react-icons/io";
-import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import { MuButtonLight } from "@/MuLearnComponents/MuButtons/MuButton";
 import MuLogOut from "../assets/svg/MuLogOut";
 import toast from "react-hot-toast";
 import GameProgressBar from "../modules/ProgressBar/components/GameProgressBar";
-import { getPublicUserLevels, getUserLevels } from "../modules/Profile/services/api";
 import ModeSwitchModal from "../modules/Dashboard/Components/ModeSwitchModal";
 import { selectDomainCategory } from "../modules/Dashboard/Api/ModeSwitchApi";
 import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
@@ -25,20 +21,17 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
-    const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null); 
-    const userLevel = useUserStore((state) => state.userProfile.level);
+    const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null);
 
     let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
-    if(!userName){
+    if (!userName) {
         const storedUserInfo = localStorage.getItem("userInfo");
         userName = storedUserInfo ? JSON.parse(storedUserInfo)?.full_name.split(" ")?.[0] : null;
-      }
+    }
     const profilePic = userInfo?.profile_pic || null;
 
-    
+
 
     // useEffect(() => {
     //     const fetchLevelData = async () => {
@@ -84,16 +77,16 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                 `${onboardingRoutes.register}select-domains/`,
                 { domains: [data] }
             );
-    
+
             selectDomainCategory({ domains: [data] });
-    
+
             const response = await privateGateway.get(dashboardRoutes.getInfo);
             const updatedUserInfo = response.data.response;
-    
+
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
             setLocalUserInfo(updatedUserInfo);
             setUserInfo(updatedUserInfo); // Update store with new user info
-    
+
             toast.success("Domain updated successfully!");
         } catch (error) {
             console.error("Failed to update domain on server:", error);
@@ -112,20 +105,20 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                         <div className={styles.mulearn_brand2}></div>
                         <div className={styles.menu}>
                             {refreshToken && userInfo?.user_domains && (
-                            <div className={styles.modeContainer}>
-                                {/* <span className={styles.modeText}>Mode</span> */}
-                                <span
-                                    className={styles.userDomain}
-                                    onClick={() => setSwitchDomainModal(true)}
-                                >
-                                    {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
-                                </span>
-                            </div>)}
+                                <div className={styles.modeContainer}>
+                                    {/* <span className={styles.modeText}>Mode</span> */}
+                                    <span
+                                        className={styles.userDomain}
+                                        onClick={() => setSwitchDomainModal(true)}
+                                    >
+                                        {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
+                                    </span>
+                                </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                    {refreshToken &&(
+                                {refreshToken && (
 
-                                <GameProgressBar/>
-                    )}
+                                    <GameProgressBar />
+                                )}
                             </div>
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>
@@ -133,7 +126,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                         onClick={() => setUserSettings(!userSettings)}
                                         src={profilePic || dpm}
                                         alt=""
-                                        style={{marginBottom: '0'}}
+                                        style={{ marginBottom: '0' }}
                                     />
                                 </div>
                             )}

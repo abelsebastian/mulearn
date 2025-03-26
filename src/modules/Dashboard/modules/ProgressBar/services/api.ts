@@ -13,10 +13,8 @@ export async function getUserLevelFeed(): Promise<LevelFeedResponse | null> {
     const response = await privateGateway.get(dashboardRoutes.getUserLevelFeed);
     return response.data.response;
   } catch (error) {
-    // Log detailed error for debugging
     console.error("Failed to fetch user level feed:", error);
     
-    // Check if it's an API error with a response
         if (isApiError(error)) {
           console.error("API Error Response:", {
             status: error.response.status,
