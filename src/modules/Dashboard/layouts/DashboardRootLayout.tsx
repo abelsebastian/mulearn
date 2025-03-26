@@ -8,8 +8,6 @@ import { FaMagnifyingGlass, FaMapLocationDot,FaHouse, FaRankingStar } from "reac
 import { IoGlobeOutline } from "react-icons/io5";
 import { roles, managementTypes } from "@/MuLearnServices/types";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
-import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
-import { IoIosRocket } from "react-icons/io";
 import { dashboardRoutes } from "@/MuLearnServices/urls";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
 import { UserProfile, useUserStore } from "/src/ZustandProvider";

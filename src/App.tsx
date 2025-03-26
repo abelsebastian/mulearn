@@ -95,7 +95,6 @@ const CampusForumLandingPage = lazy(() => import("./modules/Dashboard/modules/Ca
 const Dashboardpage = lazy(() => import("./modules/Dashboard/modules/Dashboard/Pages/Dashboardpage"));
 const LearningPathPage = lazy(() => import("./modules/Dashboard/modules/LearningPathNew/Pages/LearningPathPage"));
 const SearchMain = lazy(() => import("./modules/Dashboard/modules/Search/Pages/SearchMain"));
-const Mappage = lazy(() => import("./modules/Dashboard/modules/ProgressBar/pages/MapPage"));
 const CampusDetails = lazy(() => import("./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo"));
 const LearningPathDetailPage = lazy(() => import("./modules/Dashboard/modules/InterestGroups/components/LearningPathDetailPage"));
 const ManageAchievements = lazy(() => import("./modules/Dashboard/modules/ManageAchievements/ManageAchievements"));
