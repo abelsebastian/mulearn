@@ -66,24 +66,24 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
         }
     }, [setUserInfo]);
 
-    useEffect(() => {
-        const fetchLevelData = async () => {
-            try {
-                setIsLoading(true);
-                if (userInfo?.muid) {
-                    await getPublicUserLevels(setUserLevelData, userInfo.muid);
-                } else {
-                    await getUserLevels(setUserLevelData);
-                }
-            } catch (err) {
-                console.error("Error fetching level data:", err);
-                setError("Failed to load level data");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchLevelData();
-    }, [id]);
+    // useEffect(() => {
+    //     const fetchLevelData = async () => {
+    //         try {
+    //             setIsLoading(true);
+    //             if (userInfo?.muid) {
+    //                 await getPublicUserLevels(setUserLevelData, userInfo.muid);
+    //             } else {
+    //                 await getUserLevels(setUserLevelData);
+    //             }
+    //         } catch (err) {
+    //             console.error("Error fetching level data:", err);
+    //             setError("Failed to load level data");
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     fetchLevelData();
+    // }, [id]);
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         const div = document.getElementById("user_settings");
@@ -148,10 +148,10 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                 </span>
                             </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                    {refreshToken &&(
+                    {/* {refreshToken &&(
 
                                 <GameProgressBar levelData={userLevelData} userLevel={userLevel} />
-                    )}
+                    )} */}
                             </div>
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>

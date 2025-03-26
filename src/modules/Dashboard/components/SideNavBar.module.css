@@ -10,7 +10,7 @@
     justify-content: space-evenly;
     align-items: center;
     cursor: pointer;
-    z-index: 110;
+    z-index: 500;
     flex-direction: column;
 }
 
