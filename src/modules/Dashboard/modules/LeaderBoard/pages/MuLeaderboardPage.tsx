@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { publicGateway } from "@/MuLearnServices/apiGateways";
-import { dashboardRoutes } from "@/MuLearnServices/urls";
-import Leaderboard from "../components/Leaderboard";
-import styles from "./leaderboard.module.css";
-import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
+import { useEffect, useState } from "react";
+import { privateGateway, publicGateway } from '@/MuLearnServices/apiGateways';
+import { dashboardRoutes } from '@/MuLearnServices/urls';
+import Leaderboard from '../components/Leaderboard';
+import styles from './leaderboard.module.css';
+import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader"; 
 
 interface LeaderboardEntry {
   name: string;
@@ -25,7 +25,10 @@ interface FetchedDataState {
 }
 
 const MuLeaderboardPage = () => {
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
+  const [studentLeaderboardData, setStudentYearlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
+  const [monthlyStudentLeaderBoard, setStudentMonthlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
+  const [campusLeaderboardData, setCampusLeaderBoard] = useState<LeaderboardEntry[]>([]);
+  const [monthlyCampusLeaderboard, setCampusMonthlyLeaderBoard] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<"monthly" | "overall">("monthly");
   const [activeCategory, setActiveCategory] = useState<"student" | "campus">("student");
@@ -115,6 +118,7 @@ const MuLeaderboardPage = () => {
       } finally {
         setIsLoading(false);
       }
+    };
 
     const shouldFetchData = !fetchedData[activeCategory][activeFilter];
 
@@ -123,23 +127,22 @@ const MuLeaderboardPage = () => {
     }
   }, [activeFilter, activeCategory, fetchedData]);
 
-
   return (
     <div className={styles.pageWrapper}>
       {isLoading ? (
         <div className={styles.loadingContainer}>
-          <MuLoader />
+          <MuLoader /> 
         </div>
       ) : (
         <Leaderboard
           leaderboards={{
             student: {
-              overall: activeCategory === "student" && activeFilter === "overall" ? leaderboardData : [],
-              monthly: activeCategory === "student" && activeFilter === "monthly" ? leaderboardData : [],
+              overall: studentLeaderboardData,
+              monthly: monthlyStudentLeaderBoard,
             },
             campus: {
-              overall: activeCategory === "campus" && activeFilter === "overall" ? leaderboardData : [],
-              monthly: activeCategory === "campus" && activeFilter === "monthly" ? leaderboardData : [],
+              overall: campusLeaderboardData,
+              monthly: monthlyCampusLeaderboard,
             },
           }}
           filterOptions={["monthly", "overall"]}
@@ -147,8 +150,8 @@ const MuLeaderboardPage = () => {
             { label: "Student", value: "student" },
             { label: "Campus", value: "campus" },
           ]}
-          defaultFilter={activeFilter}
-          defaultCategory={activeCategory}
+          defaultFilter="monthly"
+          defaultCategory="student"
           topPlayerCount={3}
           activeFilter={activeFilter}
           setActiveFilter={setActiveFilter}
