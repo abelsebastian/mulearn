@@ -61,30 +61,16 @@ const Account = () => {
             .catch(error => {
                 setIsLoading(false);
                 
-                let errorMessage = "Failed to change password. Please try again later.";
+                let errorMessage = "Failed to change password. Please try again.";
                 
-                // Handle different error scenarios
-                if (error.response?.data?.message?.general && error.response.data.message.general.length > 0) {
-                    // Display specific error message from the server
-                    errorMessage = error.response.data.message.general[0];
-                } else if (error.response?.data?.message?.current_password) {
-                    // Handle current password validation errors
-                    errorMessage = error.response.data.message.current_password[0];
-                } else if (error.response?.data?.message?.password) {
-                    // Handle new password validation errors
-                    errorMessage = error.response.data.message.password[0];
-                } else if (error.response?.status === 401) {
-                    errorMessage = "Current password is incorrect. Please try again.";
-                } else if (error.response?.status === 400) {
-                    errorMessage = "Invalid input. Please check your entries and try again.";
+                if (error.message.general) {
+                    toast.error(error.message.general[0]);
                 }
                 
                 setStatusMessage({ 
                     type: "error", 
                     message: errorMessage 
                 });
-                
-                toast.error(errorMessage);
             });
     };
 
