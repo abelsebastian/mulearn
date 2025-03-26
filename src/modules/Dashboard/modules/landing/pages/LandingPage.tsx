@@ -250,7 +250,7 @@ const MuLearnLanding = () => {
               className={styles.joinBtn}
               onClick={() => (refreshToken ? navigate("/dashboard/home") : navigate("/register"))}
             >
-              Join for Free
+              Join µLearn
             </button>
             <button
               className={styles.downloadBtn}
@@ -370,7 +370,7 @@ const MuLearnLanding = () => {
 
       {/* Comparison Table Section */}
       <motion.section
-        className={styles.topBottomGrid}
+        className={`${styles.topBottomGrid} ${styles.comparisonGridSection}`}
         variants={fadeInUp}
         initial="hidden"
         whileInView="visible"

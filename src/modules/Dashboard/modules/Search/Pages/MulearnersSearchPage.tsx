@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
+import React, { useState, useEffect, useCallback, Suspense, useRef, useMemo } from "react";
 import styles from "./MuLearnersSearchPage.module.css";
 import { FiSearch } from "react-icons/fi";
 import profileImage from "../assets/ProfileImages/10496279.jpg";
@@ -9,7 +9,7 @@ import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
 import UserCard from "../../../components/UserCard";
 import { useNavigate } from "react-router-dom";
 import { HStack, useBreakpointValue, VStack } from "@chakra-ui/react";
-import defaultProfile from "../../../assets/images/defaultProfile.png"
+import defaultProfile from "../../../assets/images/defaultProfile.png";
 
 interface User {
   full_name: string;
@@ -66,68 +66,80 @@ const UserList: React.FC<{
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const [requestId, setRequestId] = useState<number>(0);
+  const latestRequestIdRef = useRef<number>(0);
 
   const fetchUsers = useCallback(
     async (searchTerm: string, pageNum: number) => {
+      const currentRequestId = Date.now();
+      latestRequestIdRef.current = currentRequestId;
       setIsFetching(true);
+      
       try {
         const response = await getUsers({
           search: searchType === "name" ? searchTerm : "",
           pageIndex: pageNum,
-          perPage: 9,
+          perPage: 30,
         });
-        const newUsers = response.data;
 
+        // Only update if this is still the latest request
+        if (currentRequestId === latestRequestIdRef.current) {
+          const newUsers = response.data;
+          let filtered: User[] = newUsers;
+          
+          if (searchType === "college" && searchTerm) {
+            filtered = newUsers.filter((user) =>
+              user.organizations.some(
+                (org) =>
+                  org.org_type === "College" &&
+                  org.title.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            );
+          } else if (searchType === "interest" && searchTerm) {
+            filtered = newUsers.filter((user) =>
+              user.interest_groups.some((ig) =>
+                ig.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+            );
+          }
 
-        let filtered: User[] = newUsers;
-        if (searchType === "college" && searchTerm) {
-          filtered = newUsers.filter((user) =>
-            user.organizations.some(
-              (org) =>
-                org.org_type === "College" &&
-                org.title.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+          setAllUsers((prevUsers) =>
+            pageNum === 1 ? newUsers : [...prevUsers, ...newUsers]
           );
-        } else if (searchType === "interest" && searchTerm) {
-          filtered = newUsers.filter((user) =>
-            user.interest_groups.some((ig) =>
-              ig.name.toLowerCase().includes(searchTerm.toLowerCase())
-            )
+          setFilteredUsers((prevFiltered) =>
+            pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
           );
+          setTotalPages(response.pagination.totalPages);
         }
-
-        setAllUsers((prevUsers) =>
-          pageNum === 1 ? newUsers : [...prevUsers, ...newUsers]
-        );
-        setFilteredUsers((prevFiltered) =>
-          pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
-        );
-        setTotalPages(response.pagination.totalPages);
-        setIsFetching(false);
       } catch (error) {
         console.error("Failed to fetch users:", error);
-        setIsFetching(false);
+      } finally {
+        if (currentRequestId === latestRequestIdRef.current) {
+          setIsFetching(false);
+        }
       }
     },
     [searchType]
   );
 
-
-  const debouncedFetchUsers = useCallback(
-    debounce((searchTerm: string, pageNum: number) => {
+  const debouncedFetchUsers = useMemo(
+    () => debounce((searchTerm: string, pageNum: number) => {
       fetchUsers(searchTerm, pageNum);
-    }, 300),
+    }, 1000),
     [fetchUsers]
   );
 
-  // Reset and fetch initial page when search or searchType changes
   useEffect(() => {
-    setAllUsers([]);
-    setFilteredUsers([]);
-    setPage(1);
-    debouncedFetchUsers(search, 1);
-    return () => debouncedFetchUsers.cancel();
-  }, [search, searchType, debouncedFetchUsers]);
+    if (search !== undefined) {
+      setAllUsers([]);
+      setFilteredUsers([]);
+      setPage(1);
+      debouncedFetchUsers(search, 1);
+    }
+    return () => {
+      debouncedFetchUsers.cancel();
+    };
+  }, [search, searchType]);
 
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
@@ -149,19 +161,21 @@ const UserList: React.FC<{
   }, [isFetching, page, totalPages]);
 
   useEffect(() => {
-    if (page > 1) {
+    if (page > 1 && search) {
       fetchUsers(search, page);
     }
   }, [page, search, fetchUsers]);
 
-  const displayUsers =
-    searchType === "name" || !search ? allUsers : filteredUsers;
-
+  const displayUsers = searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
     <div>
       <div className={styles.userGrid}>
-        {displayUsers.length > 0 ? (
+        {isFetching && page === 1 ? (
+          <div className={styles.loadingContainer}>
+            <MuLoader />
+          </div>
+        ) : displayUsers.length > 0 ? (
           displayUsers.map((user, index) => (
             <UserCard
               key={`${user.muid}-${index}`}
@@ -170,24 +184,24 @@ const UserList: React.FC<{
                 muid: user.muid,
                 interest_groups: user.interest_groups,
                 organizations: user.organizations,
-                profile_pic: user.profile_pic?user.profile_pic:  defaultProfile,
+                profile_pic: user.profile_pic ? user.profile_pic : defaultProfile,
                 karma: user.karma,
               }}
               onSelect={() => onSelect(user)}
             />
           ))
-        ) : (
-          !isFetching && (
-            <p className={styles.noResultsText}>
-              The universe says... no results. Try again?
-            </p>
-          )
+        ) : (!isFetching && search) ? (
+          <p className={styles.noResultsText}>
+            The universe says... no results. Try again?
+          </p>
+        ) : null}
+        {isFetching && page > 1 && (
+          <div className={styles.loadingContainer}>
+            <MuLoader />
+          </div>
         )}
       </div>
-      <div className={styles.loadingContainer}>
-        {isFetching && <MuLoader />}
-        <div ref={loadMoreRef} style={{ height: "20px" }} />
-      </div>
+      <div ref={loadMoreRef} style={{ height: "20px" }} />
     </div>
   );
 };
@@ -213,8 +227,6 @@ const MuLearnersSearchPage: React.FC = () => {
     window.open(`/profile/${user.muid}`, "_blank");
   };
 
-
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.Banner}>
@@ -227,56 +239,52 @@ const MuLearnersSearchPage: React.FC = () => {
         </div>
       </div>
       <StackComponent align="center" justify="start" width="100%">
-      <div className={styles.searchContainer}>
-        <FiSearch className={styles.searchIcon} />
-        <input
-          type="text"
-          placeholder={`Search public profiles by ${
-            searchType === "name"
-              ? "name"
-              : searchType === "college"
-              ? "college"
-              : "interest group"
-          }`}
-          className={styles.searchInput}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-      <div className={styles.searchTypeButtons}>
-        <button
-          className={`${styles.searchTypeButton} ${
-            searchType === "name" ? styles.active : ""
-          }`}
-          onClick={() => setSearchType("name")}
-        >
-          Name
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${
-            searchType === "college" ? styles.active : ""
-          }`}
-          onClick={() => setSearchType("college")}
-        >
-          College
-        </button>
-        <button
-          className={`${styles.searchTypeButton} ${
-            searchType === "interest" ? styles.active : ""
-          }`}
-          onClick={() => setSearchType("interest")}
-        >
-          Interest Group
-        </button>
-      </div>
-    </StackComponent>
+        <div className={styles.searchContainer}>
+          <FiSearch className={styles.searchIcon} />
+          <input
+            type="text"
+            // placeholder={`Search public profiles by ${searchType === "name"
+            //     ? "name"
+            //     : searchType === "college"
+            //       ? "college"
+            //       : "interest group"
+            //   }`}
+            placeholder={`Search public profiles by name, college`}
+            className={styles.searchInput}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        {/* <div className={styles.searchTypeButtons}>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""
+              }`}
+            onClick={() => setSearchType("name")}
+          >
+            Name
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""
+              }`}
+            onClick={() => setSearchType("college")}
+          >
+            College
+          </button>
+          <button
+            className={`${styles.searchTypeButton} ${searchType === "interest" ? styles.active : ""
+              }`}
+            onClick={() => setSearchType("interest")}
+          >
+            Interest Group
+          </button>
+        </div> */}
+      </StackComponent>
 
       {error && <p className={styles.errorText}>{error}</p>}
 
       <Suspense fallback={<MuLoader />}>
         <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
       </Suspense>
-
 
     </div>
   );

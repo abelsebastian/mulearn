@@ -4,7 +4,7 @@ import SideNavBar from "../components/SideNavBar";
 import TopNavBar from "../components/TopNavBar";
 import { Suspense, useEffect, useState } from "react";
 import { FaUserFriends } from "react-icons/fa";
-import { FaMagnifyingGlass, FaMapLocationDot,FaHouse } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaMapLocationDot,FaHouse, FaRankingStar } from "react-icons/fa6";
 import { IoGlobeOutline } from "react-icons/io5";
 import { roles, managementTypes } from "@/MuLearnServices/types";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
@@ -30,75 +30,85 @@ declare global {
 const DashboardRootLayout = (props: { component?: any }) => {
     const navigate = useNavigate();
     const Management: ManagementTypes[] = Object.values(managementTypes).slice(2);
-    const { setUserInfo, updateUserInfo, userProfile, setUserProfile } = useUserStore();
+    const { setUserInfo, updateUserInfo, userProfile, setUserProfile, userInfo } = useUserStore();
   const [isLoading, setIsLoading] = useState(true);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    const intializeUserProfile = async () => {
-      const response = await privateGateway.get(dashboardRoutes.getUserProfile);
-      if (!response || !response.data) {
-        throw new Error('Invalid API response');
+    // Only proceed if both userInfo and userProfile are not set
+    if (userInfo || userProfile) {
+      console.log("User info and profile already set");
+      setIsLoading(false);
+      return;
+    };
+  
+    const initializeUserData = async () => {
+      try {
+        setIsLoading(true);
+  
+        // Fetch user profile
+        const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
+        if (!profileResponse || !profileResponse.data) {
+          throw new Error('Invalid user profile API response');
+        }
+        const fetchedUserProfile: UserProfile = profileResponse.data.response;
+        if (!fetchedUserProfile || typeof fetchedUserProfile !== 'object') {
+          throw new Error('Invalid userProfile data');
+        }
+        setUserProfile(fetchedUserProfile);
+  
+        // Fetch user info
+        const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
+        if (!infoResponse || !infoResponse.data) {
+          throw new Error('Invalid user info API response');
+        }
+  
+        const userInfo: UserInfo = infoResponse.data.response;
+        if (!userInfo || typeof userInfo !== 'object') {
+          throw new Error('Invalid userInfo data');
+        }
+  
+        const processedUserInfo = {
+          ...userInfo, 
+          first_name: userInfo.full_name.split(" ")[0]
+        };
+  
+        setUserInfo(processedUserInfo);
+        localStorage.setItem("userInfo", JSON.stringify(processedUserInfo));
+  
+        // Set connected status if applicable
+        if ('exist_in_guild' in userInfo) {
+          setConnected(userInfo.exist_in_guild ?? false);
+        }
+  
+        // Check domains and endgoals
+        const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
+        const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
+  
+        if (!hasDomains || !hasEndgoals) {
+          navigate("/register/pathfinder?ruri=/dashboard/home");
+        }
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+        useUserStore.getState().resetUserInfo();
+      } finally {
+        setIsLoading(false);
       }
-      const userProfile: UserProfile = response.data.response;
-      if (!userProfile || typeof userProfile !== 'object') {
-        throw new Error('Invalid userProfile data');
+    };
+  
+    let isMounted = true;
+    const fetchData = async () => {
+      if (isMounted) {
+        await initializeUserData();
       }
-      setUserProfile(userProfile);
-      
-    }
-    intializeUserProfile();
-  }, []);
-
-    useEffect(() => {
-        const initializeUserInfo = async () => {
-          try {
-            const response = await privateGateway.get(dashboardRoutes.getInfo);            
-            if (!response || !response.data) {
-              throw new Error('Invalid API response');
-            }
-    
-            const userInfo: UserInfo = response.data.response;
-    
-            if (!userInfo || typeof userInfo !== 'object') {
-              throw new Error('Invalid userInfo data');
-            }
-    
-            setUserInfo({...userInfo, first_name: userInfo.full_name.split(" ")[0]});
-            localStorage.setItem("userInfo", JSON.stringify(userInfo)); 
-    
-            if ('exist_in_guild' in userInfo) {
-              setConnected(userInfo.exist_in_guild ?? false);
-            }
-    
-            const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
-            const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
-    
-            if (!hasDomains || !hasEndgoals) {
-              navigate("/register/pathfinder?ruri=/dashboard/home");
-              return; 
-            }
-    
-          } catch (err) {
-            console.error("Failed to fetch user info:", err);
-            useUserStore.getState().resetUserInfo();
-          } finally {
-            setIsLoading(false);
-          }
-        };
-    
-        let isMounted = true;
-        const fetchData = async () => {
-          if (isMounted) {
-            await initializeUserInfo();
-          }
-        };
-    
-        fetchData();
-        return () => {
-          isMounted = false;
-        };
-      }, [navigate, setUserInfo]);
+    };
+  
+    fetchData();
+  
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate, setUserInfo, userInfo, userProfile]);
 
 
     const buttons = [
@@ -132,6 +142,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
             hasView: true,
             icon: <FaMagnifyingGlass />
         },
+        {
+          url: "/dashboard/leaderboard",
+          title: "Leaderboard",
+          hasView: true,
+          icon: <FaRankingStar />
+      },
         {
             url: "/dashboard/special-events",
             title: "Special Events",
