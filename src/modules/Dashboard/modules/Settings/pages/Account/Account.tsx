@@ -12,6 +12,8 @@ import Modal from "@/MuLearnComponents/Modal/Modal";
 
 const Account = () => {
     const scheme = Yup.object({
+        currentPassword: Yup.string()
+            .required("Current password is required"),
         password: Yup.string()
             .required("Password is required")
             .min(8, "Password should be at least 8 characters"),
@@ -22,18 +24,67 @@ const Account = () => {
 
     const naviage = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [statusMessage, setStatusMessage] = useState({ type: "", message: "" });
 
-    const onSubmit = (values: any) => {
+    const onSubmit = (values: any, formikHelpers: any) => {
+        setIsLoading(true);
+        setStatusMessage({ type: "", message: "" });
+        
         privateGateway
             .post(dashboardRoutes.changePassword, {
+                current_password: values.currentPassword,
                 password: values.password
             })
             .then(response => {
-                toast.success(response.data.message.general[0]);
-                naviage("/dashboard/profile");
+                setIsLoading(false);
+                // Check if the response has a specific message
+                const successMessage = response.data.message?.general && response.data.message.general.length > 0
+                    ? response.data.message.general[0]
+                    : "Password changed successfully!";
+                
+                setStatusMessage({ 
+                    type: "success", 
+                    message: successMessage 
+                });
+                
+                toast.success(successMessage);
+                
+                // Reset form
+                formikHelpers.resetForm();
+                
+                // Navigate to profile page after a short delay
+                setTimeout(() => {
+                    naviage("/dashboard/profile");
+                }, 2000);
             })
             .catch(error => {
-                toast.error(error.response.data.message.general[0]);
+                setIsLoading(false);
+                
+                let errorMessage = "Failed to change password. Please try again later.";
+                
+                // Handle different error scenarios
+                if (error.response?.data?.message?.general && error.response.data.message.general.length > 0) {
+                    // Display specific error message from the server
+                    errorMessage = error.response.data.message.general[0];
+                } else if (error.response?.data?.message?.current_password) {
+                    // Handle current password validation errors
+                    errorMessage = error.response.data.message.current_password[0];
+                } else if (error.response?.data?.message?.password) {
+                    // Handle new password validation errors
+                    errorMessage = error.response.data.message.password[0];
+                } else if (error.response?.status === 401) {
+                    errorMessage = "Current password is incorrect. Please try again.";
+                } else if (error.response?.status === 400) {
+                    errorMessage = "Invalid input. Please check your entries and try again.";
+                }
+                
+                setStatusMessage({ 
+                    type: "error", 
+                    message: errorMessage 
+                });
+                
+                toast.error(errorMessage);
             });
     };
 
@@ -51,6 +102,7 @@ const Account = () => {
             });
     };
 
+    const [showOrHideCurrentPassword, setShowOrHideCurrentPassword] = useState("password");
     const [showOrHidePassword, setShowOrHidePassword] = useState("password");
     const [showOrHideConfirmPassword, setShowOrHideConfirmPassword] =
         useState("password");
@@ -64,18 +116,19 @@ const Account = () => {
                             Change Password
                         </p>
                         <p className={styles.changePasswordContainerTagline}>
-                            Enter in a new password, and confirm it to change.
+                            Enter your current password, then a new password, and confirm it to change.
                         </p>
                     </div>
 
                     <div className={styles.changePasswordInputContainer}>
                         <Formik
                             initialValues={{
+                                currentPassword: "",
                                 password: "",
                                 confirmPassword: ""
                             }}
                             validationSchema={scheme}
-                            onSubmit={onSubmit}
+                            onSubmit={(values, formikHelpers) => onSubmit(values, formikHelpers)}
                         >
                             {formik => (
                                 <div>
@@ -84,10 +137,44 @@ const Account = () => {
                                             <div className={styles.inputBox}>
                                                 <SimpleInput
                                                     value={
+                                                        formik.values.currentPassword
+                                                    }
+                                                    name="currentPassword"
+                                                    placeholder="Current Password"
+                                                    type={showOrHideCurrentPassword}
+                                                    onChange={
+                                                        formik.handleChange
+                                                    }
+                                                    style={{
+                                                        marginTop: "10px"
+                                                    }}
+                                                />
+                                                <span
+                                                    className={styles.eye}
+                                                    onClick={() => {
+                                                        setShowOrHideCurrentPassword(
+                                                            showOrHideCurrentPassword ===
+                                                                "password"
+                                                                ? "text"
+                                                                : "password"
+                                                        );
+                                                    }}
+                                                >
+                                                    <i
+                                                        className={`fa fa-eye${
+                                                            showOrHideCurrentPassword ===
+                                                            "password"
+                                                                ? "-slash"
+                                                                : ""
+                                                        }`}
+                                                    />
+                                                </span>
+                                                <SimpleInput
+                                                    value={
                                                         formik.values.password
                                                     }
                                                     name="password"
-                                                    placeholder="Password"
+                                                    placeholder="New Password"
                                                     type={showOrHidePassword}
                                                     onChange={
                                                         formik.handleChange
@@ -122,7 +209,7 @@ const Account = () => {
                                                             .confirmPassword
                                                     }
                                                     name="confirmPassword"
-                                                    placeholder="Confirm Password"
+                                                    placeholder="Confirm New Password"
                                                     type={
                                                         showOrHideConfirmPassword
                                                     }
@@ -154,8 +241,24 @@ const Account = () => {
                                                     />
                                                 </span>
                                                 <div className={styles.submit}>
-                                                    <PowerfulButton type="submit">
-                                                        Change Password
+                                                    {statusMessage.message && (
+                                                        <div 
+                                                            className={styles.statusMessage} 
+                                                            style={{ 
+                                                                color: statusMessage.type === 'success' ? 'green' : 'red',
+                                                                marginBottom: '10px',
+                                                                fontSize: '14px',
+                                                                fontWeight: 'bold'
+                                                            }}
+                                                        >
+                                                            {statusMessage.message}
+                                                        </div>
+                                                    )}
+                                                    <PowerfulButton 
+                                                        type="submit"
+                                                        isLoading={isLoading}
+                                                    >
+                                                        {isLoading ? "Please wait..." : "Change Password"}
                                                     </PowerfulButton>
                                                 </div>
                                             </div>
