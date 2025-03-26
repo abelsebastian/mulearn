@@ -255,8 +255,8 @@ const LearningPathPage: React.FC = () => {
   const [filter, setFilter] = useState<"all" | "completed" | "incomplete">("all");
 
   const fetchUserIGs = useCallback(async () => {
-    if(userProfile){
-      const userIGsData = userProfile.interest_groups || [];
+    if (userProfile && "interest_groups" in userProfile) {
+      const userIGsData = (userProfile as { interest_groups: any[] }).interest_groups || [];
       return;
     }
     setIsLoading(true);
@@ -269,8 +269,8 @@ const LearningPathPage: React.FC = () => {
         setIsLoading(false);
         return userIGsData;
 
-      }else if(userProfile.interest_groups){
-        userIGsData = userProfile.interest_groups;
+      }else if(userProfile as { interest_groups: any[] }){
+        userIGsData = (userProfile as { interest_groups: any[] }).interest_groups || [];
         return;
       }
        else if (!userIGsData.length) {
