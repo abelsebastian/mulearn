@@ -25,7 +25,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
-    const [userLevelData, setUserLevelData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
@@ -39,32 +38,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
       }
     const profilePic = userInfo?.profile_pic || null;
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await privateGateway.get(dashboardRoutes.getInfo);
-                const fetchedUserInfo = response.data.response;
-                setLocalUserInfo(fetchedUserInfo);
-                setUserInfo(fetchedUserInfo);
-                localStorage.setItem("userInfo", JSON.stringify(fetchedUserInfo));
-            } catch (err) {
-                console.error("Failed to fetch user info:", err);
-                const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
-                if (storedUserInfo) {
-                    setLocalUserInfo(storedUserInfo);
-                    setUserInfo(storedUserInfo); 
-                }
-            }
-        };
-
-        const storedUserInfo = fetchLocalStorage<UserInfo>("userInfo");
-        if (storedUserInfo) {
-            setLocalUserInfo(storedUserInfo);
-            setUserInfo(storedUserInfo);
-        } else {
-            fetchUserInfo();
-        }
-    }, [setUserInfo]);
+    
 
     // useEffect(() => {
     //     const fetchLevelData = async () => {
@@ -148,10 +122,10 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
                                 </span>
                             </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
-                    {/* {refreshToken &&(
+                    {refreshToken &&(
 
-                                <GameProgressBar levelData={userLevelData} userLevel={userLevel} />
-                    )} */}
+                                <GameProgressBar/>
+                    )}
                             </div>
                             {refreshToken && (
                                 <div id="profile" className={styles.profile}>

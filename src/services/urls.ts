@@ -135,6 +135,7 @@ export const dashboardRoutes = {
     getUserIgTasks: "/api/v1/dashboard/task/list/",
     getUserPreferences: "/api/v1/dashboard/user/preferences",
     updateUserPreferences: "/api/v1/dashboard/user/preferences",
+    getUserLevelFeed: "/api/v1/dashboard/profile/user-level-feed/",
 
     zonalStudentDetails: "/api/v1/dashboard/zonal/student-details/",
     zonalStudentData: "/api/v1/dashboard/zonal/student-details/csv/",
