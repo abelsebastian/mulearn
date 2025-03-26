@@ -7,9 +7,9 @@ import KarmaEarners from "../Components/KarmaEarners";
 import LearningCirclesSection from "../Components/LearningCirclesSection";
 import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
-import { getDomainBasedInterestGroups, getKarmaFeed, KarmaFeedItem } from "../services/api";
+import { getDomainBasedInterestGroups, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
-import { publicGateway } from "/src/services/apiGateways";
+import { useStatStore } from "/src/ZustandProvider"; // Import the Zustand store
 import axios from "axios";
 
 interface InterestGroup {
@@ -30,7 +30,10 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [interestGroups, setInterestGroups] = useState<InterestGroup[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
-  const [karmaFeed, setKarmaFeed] = useState<KarmaFeedItem[]>([]);
+
+  // Access karmaFeed and fetchKarmaFeed from Zustand
+  const { karmaFeed, isKarmaFeedLoading, fetchKarmaFeed } = useStatStore();
+
   let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
   const storedUserInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
   const userDomains: string[] = fetchLocalStorage<UserInfo>("userInfo")?.user_domains || [];
@@ -61,6 +64,13 @@ const DashboardPage = () => {
     fetchInterestGroups();
   }, [userDomains[0]]);
 
+  useEffect(() => {
+    // Fetch karma feed only if it doesn't exist in the store
+    if (!karmaFeed) {
+      fetchKarmaFeed();
+    }
+  }, [karmaFeed, fetchKarmaFeed]);
+
   const handleStartLearning = useCallback(() => {
     navigate("/dashboard/mujourney");
   }, [navigate]);
@@ -69,19 +79,6 @@ const DashboardPage = () => {
     navigate("/dashboard/learningcircle");
   }, [navigate]);
 
-  useEffect(() => {
-    async function fetchKarmaFeed() {
-      try {
-        const response = await getKarmaFeed();
-        if (!response) return;
-        setKarmaFeed(response);
-      } catch (error) {
-        console.error("Failed to fetch karma feed:", error);
-      }
-    }
-    fetchKarmaFeed();
-  }, []);
-
   const fetchEvents = async () => {
     try {
       const response = await axios.get("https://opensheet.elk.sh/19Os47FI_fAgpMk7lnhFWz9aRwyd72cB-4PKz7W8rF9g/1");
@@ -89,15 +86,7 @@ const DashboardPage = () => {
       if (!response) {
         throw new Error(`HTTP error! Status: ${response}`);
       }
-
       const data = await response.data;
-
-      // const convertDriveLink = (url: string) => {
-      //   if (!url) return "";
-      //   const match = url.match(/\/d\/(.*?)\/view/);
-      //   return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
-      // };
-
       const newEvents = data.map((event: any) => ({
         name: event.Name || "No Name",
         description: event.Description || "No Description",
@@ -112,14 +101,9 @@ const DashboardPage = () => {
     }
   };
 
-
-
   useEffect(() => {
     fetchEvents();
   }, []);
-
-console.log(events)
-
 
   const defaultImage = { src: "/assets/landing/others.png", alt: "General illustration" };
   const { src, alt } = imageMap[userDomains[0]] || defaultImage;
@@ -176,13 +160,10 @@ console.log(events)
               loading="lazy"
               className={styles.dashboardImage}
               initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
             />
           </motion.section>
-          {/* <div style={{width: '50%'}}> */}
-          {/* <LearningCircleLanding/> */}
-          {/* </div> */}
           <LearningCirclesSection />
         </motion.div>
 
@@ -210,8 +191,12 @@ console.log(events)
               </motion.div>
             </motion.section>
           )}
-          {karmaFeed.length > 1 && karmaFeed[0].user && karmaFeed[1].user && (
-            <KarmaEarners highestStudent={karmaFeed[0]} highestCollege={karmaFeed[1]} />
+          {isKarmaFeedLoading ? (
+            <div>Loading Karma Feed...</div>
+          ) : (
+            karmaFeed && karmaFeed.length > 1 && (
+              <KarmaEarners highestStudent={karmaFeed[0]} highestCollege={karmaFeed[1]} />
+            )
           )}
           <InterestGroups title={userDomains[0]} groups={interestGroups} />
         </motion.aside>
@@ -219,7 +204,5 @@ console.log(events)
     </motion.div>
   );
 };
-
-DashboardPage.displayName = "DashboardPage";
 
 export default DashboardPage;
