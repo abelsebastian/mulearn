@@ -224,3 +224,27 @@ export const updateVCURL = async (
         throw new Error(error.response?.data?.message || "Failed to update VC URL");
     }
 };
+
+
+export const getUserPreferences = async (): Promise<any> => {
+    try {
+        const response = await privateGateway.get(dashboardRoutes.getUserPreferences);
+        console.log(response.data.response);
+        return response.data.response;
+    } catch (error: any) {
+        console.error("Error fetching user preferences:", error.response?.data || error.message);
+        toast.error("Failed to fetch user preferences");
+        throw new Error(error.response?.data?.message || "Failed to fetch user preferences");
+    }
+}
+
+
+export const updateUserPreferences = async (preferences: any): Promise<void> => {
+    try {
+        await privateGateway.patch(dashboardRoutes.updateUserPreferences, preferences);
+    } catch (error: any) {
+        console.error("Error updating user preferences:", error.response?.data || error.message);
+        toast.error("Failed to update user preferences");
+        throw new Error(error.response?.data?.message || "Failed to update user preferences");
+    }
+}

@@ -133,6 +133,8 @@ export const dashboardRoutes = {
     getSocials: "/api/v1/dashboard/profile/socials/",
     postProfileImage: "/api/v1/dashboard/user/profile/update/",
     getUserIgTasks: "/api/v1/dashboard/task/list/",
+    getUserPreferences: "/api/v1/dashboard/user/preferences",
+    updateUserPreferences: "/api/v1/dashboard/user/preferences",
 
     zonalStudentDetails: "/api/v1/dashboard/zonal/student-details/",
     zonalStudentData: "/api/v1/dashboard/zonal/student-details/csv/",

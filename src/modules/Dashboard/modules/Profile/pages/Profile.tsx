@@ -17,8 +17,10 @@ import {
     getUserAchievements,
     getUserLevels,
     getUserLog,
+    getUserPreferences,
     getUserProfile,
-    putIsPublic
+    putIsPublic,
+    updateUserPreferences
 } from "../services/api";
 import styles from "./Profile.module.css";
 import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
@@ -128,10 +130,35 @@ const Profile = () => {
         }, 1000);
     };
 
+    const [userPreferences, setUserPreferences] = useState<any>(null);
+    const [preferencesLoading, setPreferencesLoading] = useState(false);
+
+    // Add a new useEffect to fetch user preferences
+    useEffect(() => {
+        const fetchUserPreferences = async () => {
+            if (!id) { // Only fetch preferences for the current user, not when viewing other profiles
+                setPreferencesLoading(true);
+                try {
+                    const preferences = await getUserPreferences();
+                    setUserPreferences(preferences);
+                } catch (error) {
+                    console.error("Error fetching user preferences:", error);
+                    toast.error("Failed to load user preferences");
+                } finally {
+                    setPreferencesLoading(false);
+                }
+            }
+        };
+
+        fetchUserPreferences();
+    }, [id]);
+
+
+
     useEffect(() => {
         const initializeProfileData = async () => {
             setAchievements([])
-            
+
             let newValue = "";
             if (id) {
                 newValue = id;
@@ -140,7 +167,7 @@ const Profile = () => {
                 newValue = useUserStore.getState().userInfo.muid;
             }
             setValue(newValue);
-    
+
             if (newValue) {
                 try {
                     const connectedUsersResponse = await getConnectedUsers(key, newValue);
@@ -154,7 +181,7 @@ const Profile = () => {
             } else {
                 console.warn("Value is not available for fetchConnectedUsers");
             }
-    
+
             // Step 3: Fetch achievements (only if value is available)
             if (newValue) {
                 setIsLoading(true);
@@ -171,7 +198,7 @@ const Profile = () => {
                 toast.error("Error fetching muid for achievements.");
             }
         };
-    
+
         initializeProfileData();
     }, [id, key]); // Dependencies: id (for value) and key (for fetchConnectedUsers)
 
@@ -603,9 +630,9 @@ const Profile = () => {
                                         <div className="bg-white rounded-xl w-full !p-4 ">
                                             <h2 className="!mb-8">Eligible Achievements</h2>
 
-                                            {achievements.length === 0 &&(
+                                            {achievements.length === 0 && (
                                                 <div className="text-center flex flex-col items-center justify-center text-gray-500">
-                                                    <Img src={emptyAchievements} alt="No achievements" w={400} h={400}/>
+                                                    <Img src={emptyAchievements} alt="No achievements" w={400} h={400} />
                                                     <p>No achievements available for you at the moment. Keep learning.</p>
 
                                                 </div>
@@ -635,7 +662,7 @@ const Profile = () => {
 
                                 <div className={styles.notification}>
                                     <div className={styles.existing_roles}>
-                                    {!id && (
+                                        {!id && (
                                             <div className={styles.head + " " + styles.profileStatus}>
                                                 <h2>Switch to public profile</h2>
                                                 <div className={styles.option}>
@@ -645,6 +672,70 @@ const Profile = () => {
                                                             setProfileStatus(e.target.checked);
                                                             putIsPublic(e.target.checked);
                                                         }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {!id && (
+                                            <div className={styles.head + " " + styles.profileStatus}>
+                                                <h2>Open to work</h2>
+                                                <div className={styles.option}>
+                                                    <Switch
+                                                        isChecked={userPreferences?.interested_in_work || false}
+                                                        onChange={async (e) => {
+                                                            try {
+                                                                // Create new preferences object with updated value
+                                                                const updatedPreferences = {
+                                                                    ...userPreferences,
+                                                                    interested_in_work: e.target.checked
+                                                                };
+
+                                                                // Update locally first for immediate UI feedback
+                                                                setUserPreferences(updatedPreferences);
+
+                                                                // Call API to update on server
+                                                                await updateUserPreferences(updatedPreferences);
+                                                                toast.success("Work preference updated successfully");
+                                                            } catch (error) {
+                                                                console.error("Error updating work preference:", error);
+                                                                // Revert to previous state if API call fails
+                                                                setUserPreferences(userPreferences);
+                                                                toast.error("Failed to update work preference");
+                                                            }
+                                                        }}
+                                                        isDisabled={preferencesLoading}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {!id && (
+                                            <div className={styles.head + " " + styles.profileStatus}>
+                                                <h2>Open to gigs</h2>
+                                                <div className={styles.option}>
+                                                    <Switch
+                                                        isChecked={userPreferences?.interested_in_gig_work || false}
+                                                        onChange={async (e) => {
+                                                            try {
+                                                                // Create new preferences object with updated value
+                                                                const updatedPreferences = {
+                                                                    ...userPreferences,
+                                                                    interested_in_gig_work: e.target.checked
+                                                                };
+
+                                                                // Update locally first for immediate UI feedback
+                                                                setUserPreferences(updatedPreferences);
+
+                                                                // Call API to update on server
+                                                                await updateUserPreferences(updatedPreferences);
+                                                                toast.success("Gig preference updated successfully");
+                                                            } catch (error) {
+                                                                console.error("Error updating gig preference:", error);
+                                                                // Revert to previous state if API call fails
+                                                                setUserPreferences(userPreferences);
+                                                                toast.error("Failed to update gig preference");
+                                                            }
+                                                        }}
+                                                        isDisabled={preferencesLoading}
                                                     />
                                                 </div>
                                             </div>
