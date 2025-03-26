@@ -28,6 +28,10 @@ interface LeaderboardProps {
   defaultFilter?: "monthly" | "overall";
   defaultCategory?: string;
   topPlayerCount?: number;
+  activeFilter: "monthly" | "overall";
+  setActiveFilter: (filter: "monthly" | "overall") => void;
+  activeCategory: "student" | "campus";
+  setActiveCategory: (category: "student" | "campus") => void;
 }
 
 export default function Leaderboard({
@@ -40,23 +44,13 @@ export default function Leaderboard({
   defaultFilter = "monthly",
   defaultCategory = "student",
   topPlayerCount = 3,
+  activeFilter,
   setActiveFilter,
+  activeCategory,
   setActiveCategory,
-}: LeaderboardProps & {
-  setActiveFilter: (filter: "monthly" | "overall") => void;
-  setActiveCategory: (category: "student" | "campus") => void;
-}) {
-  const [activeFilter, setLocalActiveFilter] = useState<"monthly" | "overall">(defaultFilter);
-  const [activeCategory, setLocalActiveCategory] = useState<"student" | "campus">(defaultCategory as "student" | "campus");
-
-  // Update parent state when local state changes
-  useEffect(() => {
-    setActiveFilter(activeFilter);
-  }, [activeFilter]);
-
-  useEffect(() => {
-    setActiveCategory(activeCategory);
-  }, [activeCategory]);
+}: LeaderboardProps) {
+  // Select the current leaderboard based on active category and filter
+  const currentLeaderboard = leaderboards[activeCategory]?.[activeFilter] || [];
 
   const currentLeaderboard = leaderboards[activeCategory]?.[activeFilter] || [];
   const topPlayers = currentLeaderboard.slice(0, topPlayerCount);
@@ -66,10 +60,10 @@ export default function Leaderboard({
     <div className={styles.container}>
       <div className={styles.leaderboard}>
         <FilterBar
-          activeFilter={activeFilter}
-          setActiveFilter={setLocalActiveFilter}
-          activeCategory={activeCategory}
-          setActiveCategory={setLocalActiveCategory}
+          activeFilter={activeFilter || defaultFilter}
+          setActiveFilter={setActiveFilter}
+          activeCategory={activeCategory || defaultCategory}
+          setActiveCategory={setActiveCategory}
           filterOptions={filterOptions}
           categoryOptions={categoryOptions}
         />
