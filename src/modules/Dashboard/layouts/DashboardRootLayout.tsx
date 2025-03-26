@@ -35,9 +35,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    // Only proceed if both userInfo and userProfile are not set
     if (userInfo || userProfile) {
-      console.log("User info and profile already set");
       setIsLoading(false);
       return;
     };

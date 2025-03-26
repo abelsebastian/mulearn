@@ -255,6 +255,10 @@ const LearningPathPage: React.FC = () => {
   const [filter, setFilter] = useState<"all" | "completed" | "incomplete">("all");
 
   const fetchUserIGs = useCallback(async () => {
+    if (userProfile && "interest_groups" in userProfile) {
+      const userIGsData = (userProfile as { interest_groups: any[] }).interest_groups || [];
+      return;
+    }
     setIsLoading(true);
     let userIGsData = useUserStore.getState().userProfile.interest_groups || [];
     const currentLevel = Number(useUserStore.getState().userProfile.level?.replace("lvl", "")) || 0;
@@ -264,7 +268,12 @@ const LearningPathPage: React.FC = () => {
         userIGsData = [];
         setIsLoading(false);
         return userIGsData;
-      } else if (!userIGsData.length) {
+
+      }else if(userProfile as { interest_groups: any[] }){
+        userIGsData = (userProfile as { interest_groups: any[] }).interest_groups || [];
+        return;
+      }
+       else if (!userIGsData.length) {
         const response = await privateGateway.get(dashboardRoutes.getUserProfile);
         console.log("Fetched user profile response:", response.data);
         setUserProfile(response.data.response);
@@ -281,7 +290,7 @@ const LearningPathPage: React.FC = () => {
     }
 
     return userIGsData;
-  }, [setUserProfile]);
+  }, []);
 
   const unlockedLevel = Number(userProfile.level?.replace("lvl", "")) || 0;
 
@@ -422,7 +431,7 @@ const LearningPathPage: React.FC = () => {
       }
     };
     fetchBasicLevels();
-  }, [unlockedLevel]);
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -440,7 +449,7 @@ const LearningPathPage: React.FC = () => {
       }
     };
     fetchUserData();
-  }, [setUserProfile, fetchUserIGs]);
+  }, []);
 
   useEffect(() => {
     const activeElement = tabRefs.current[activeTab];
