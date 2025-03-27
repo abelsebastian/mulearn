@@ -12,7 +12,6 @@ import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
 import { useUserStore } from "/src/ZustandProvider";
 
-
 interface TopNavBarProps {
     setUserInfo: (userInfo: UserInfo) => void;
     userInfo: UserInfo;
@@ -23,7 +22,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
-    const [localUserInfo, setLocalUserInfo] = useState<UserInfo>(userInfo);
 
     let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
     if (!userName) {
@@ -31,8 +29,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
         userName = storedUserInfo ? JSON.parse(storedUserInfo)?.full_name.split(" ")?.[0] : null;
     }
     const profilePic = userInfo?.profile_pic || null;
-
-
 
     // useEffect(() => {
     //     const fetchLevelData = async () => {
@@ -73,28 +69,32 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     const handleOnSubmit = async (data: string): Promise<void> => {
-        try {
-            await privateGateway.post(
-                `${onboardingRoutes.register}select-domains/`,
-                { domains: [data] }
-            );
-
-            selectDomainCategory({ domains: [data] });
-
-            const response = await privateGateway.get(dashboardRoutes.getInfo);
-            const updatedUserInfo = response.data.response;
-
-            localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
-            setLocalUserInfo(localUserInfo);
-            setUserInfo(localUserInfo); // Update store with new user info
-
-            toast.success("Domain updated successfully!");
-        } catch (error) {
-            console.error("Failed to update domain on server:", error);
-            toast.error("Failed to update domain. Please try again.");
-        } finally {
-            window.location.reload();
-        }
+        const update = new Promise(async (resolve, reject) => {
+            try {
+                await privateGateway.post(
+                    `${onboardingRoutes.register}select-domains/`,
+                    { domains: [data] }
+                );
+                selectDomainCategory({ domains: [data] });
+                const response = await privateGateway.get(dashboardRoutes.getInfo);
+                const updatedUserInfo = response.data.response;
+                localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
+                setUserInfo(updatedUserInfo);
+                resolve(true);
+            } catch (error) {
+                console.error("Failed to update domain on server:", error);
+                reject(error);
+            } finally {
+                setTimeout(() => {
+                    setSwitchDomainModal(false)
+                }, 500);
+            }
+        });
+        toast.promise(update, {
+            loading: "Updating domain...",
+            success: "Domain updated successfully!",
+            error: "Failed to update domain. Please try again.",
+        })
     };
 
     return (
@@ -117,7 +117,6 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                 </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
                                 {refreshToken && (
-
                                     <GameProgressBar />
                                 )}
                             </div>

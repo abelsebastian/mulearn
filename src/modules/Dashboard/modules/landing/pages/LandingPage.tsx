@@ -197,7 +197,6 @@ const MuLearnLanding = () => {
             <div></div>
             <div></div>
             <div></div>
-
           </div>
         </div>
       </motion.nav>
