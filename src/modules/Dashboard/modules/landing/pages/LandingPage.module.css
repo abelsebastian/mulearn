@@ -599,26 +599,18 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  border: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  /* Only right and bottom borders */
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
-
-/* Remove left border for the first column */
-.dataCard:nth-child(4n + 1) {
-  border-left: none;
-}
-
-/* Remove top border for the first row */
-.dataCard:nth-child(-n + 4) {
-  border-top: none;
-}
-
-/* Remove right border for the last column */
+/* Remove right border for last column */
 .dataCard:nth-child(4n) {
   border-right: none;
 }
 
-/* Remove bottom border for the last row */
+/* Remove bottom border for last row */
 .dataCard:nth-last-child(-n + 4) {
   border-bottom: none;
 }
@@ -735,33 +727,18 @@
     grid-template-columns: repeat(3, minmax(15rem, 2fr));
   }
 
-  .dataCard:nth-child(4n + 1),
-  .dataCard:nth-child(-n + 4),
+  .dataCard,
   .dataCard:nth-child(4n),
   .dataCard:nth-last-child(-n + 4) {
-    border: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
   }
 
-
-  /* Remove left border for the first column */
-  .dataCard:nth-child(3n + 1) {
-    border-left: none;
-  }
-
-  /* Remove top border for the first row */
-  .dataCard:nth-child(1),
-  .dataCard:nth-child(2),
-  .dataCard:nth-child(3) {
-    border-top: none;
-  }
-
-  /* Remove right border for the last column */
   .dataCard:nth-child(3n) {
     border-right: none;
   }
 
-  /* Remove bottom border for the last row */
-  .dataCard:nth-last-child(-n + 3):nth-child(n) {
+  .dataCard:nth-last-child(-n + 3) {
     border-bottom: none;
   }
 
@@ -1025,34 +1002,18 @@
     padding: 1rem;
   }
 
-
-  .dataCard:nth-child(3n + 1),
-  .dataCard:nth-child(1),
-  .dataCard:nth-child(2),
-  .dataCard:nth-child(3),
-  .dataCard:nth-child(3n){
-    border: 1px solid #ccc;
+  .dataCard, .dataCard:nth-child(3n), .dataCard:nth-last-child(-n + 3) {
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
   }
-
-  /* Remove left border for the first column */
-.dataCard:nth-child(2n + 1) {
-  border-left: none;
-}
-
-/* Remove top border for the first row */
-.dataCard:nth-child(-n + 2) {
-  border-top: none;
-}
-
-/* Remove right border for the last column */
-.dataCard:nth-child(2n) {
-  border-right: none;
-}
-
-/* Remove bottom border for the last row */
-.dataCard:nth-last-child(-n + 2) {
-  border-bottom: none;
-}
+  
+  .dataCard:nth-child(2n) {
+    border-right: none;
+  }
+  
+  .dataCard:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
 
   .dataCard h1 {
     font-size: 2rem;
