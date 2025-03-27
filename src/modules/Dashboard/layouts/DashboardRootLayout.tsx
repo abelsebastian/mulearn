@@ -34,14 +34,14 @@ const DashboardRootLayout = (props: { component?: any }) => {
     const initializeUserData = async () => {
       try {
         setIsLoading(true);
-        if (userInfo && userProfile) {
-          const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
-          const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
-          if (!hasDomains || !hasEndgoals) {
-            navigate("/register/pathfinder?ruri=/dashboard/home");
-          }
-          setIsLoading(false);
-        }
+        // if (userInfo && userProfile) {
+        //   const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
+        //   const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
+        //   if (!hasDomains || !hasEndgoals) {
+        //     navigate("/register/pathfinder?ruri=/dashboard/home");
+        //   }
+        //   setIsLoading(false);
+        // }
         
         const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
         if (!profileResponse?.data) {
@@ -92,8 +92,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
     return () => {
       isMounted = false;
     };
-  }, [navigate]);
-
+  }, []);
 
   const buttons = [
     {
