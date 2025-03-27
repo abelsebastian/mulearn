@@ -14,6 +14,15 @@
   justify-content: center;
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+.landingPaddingContainerTextCenter h1{
+  font-size: 3rem;
+  text-align: left;
+  max-width: 35rem;
+  font-weight: 800;
+  line-height: normal;
 }
 
 .landingPaddingContainerCustom {
@@ -1040,6 +1049,11 @@
   }
 
   .storyTitle h1 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .landingPaddingContainerTextCenter h1{
     font-size: 1.2rem;
     text-align: center;
   }
