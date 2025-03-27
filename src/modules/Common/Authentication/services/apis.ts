@@ -61,17 +61,21 @@ export const login = (
                 toast.success("Login Successful");
                 privateGateway
                     .get(dashboardRoutes.getInfo)
-                    .then((response: any) => {
+                    .then(async (response: any) => {
                         localStorage.setItem(
                             "userInfo",
                             JSON.stringify(response.data.response)
                         );
-                        useUserStore.getState().setUserProfile({
-                            ...response.data.response,
-                            first_name: response.data.response.full_name.split(" ")[0],
-                            college_id: response.data.response.college_id,
+                        await privateGateway.get(dashboardRoutes.getUserProfile).then(response => {
+                            useUserStore.setState((prev) => ({
+                                ...prev,
+                                userProfile: {
+                                    ...response.data.response,
+                                    first_name: response.data.response.full_name.split(" ")[0],
+                                    college_id: response.data.response.college_id,
+                                },
+                            }));
                         });
-
                         if (redirectPath) {
                             navigate(`/${redirectPath}`);
                         } else if (response.data.response.exist_in_guild) {
