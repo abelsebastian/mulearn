@@ -7,7 +7,7 @@ import KarmaEarners from "../Components/KarmaEarners";
 import LearningCirclesSection from "../Components/LearningCirclesSection";
 import styles from "./DashboardPage.module.css";
 import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
-import { getDomainBasedInterestGroups, KarmaFeedItem } from "../services/api";
+import { getDomainBasedInterestGroups, getInterestGroups, KarmaFeedItem } from "../services/api";
 import { useUserStore } from "/src/ZustandProvider";
 import { useStatStore } from "/src/ZustandProvider"; // Import the Zustand store
 import axios from "axios";
@@ -45,7 +45,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchInterestGroups = async () => {
       try {
-        const response = await getDomainBasedInterestGroups(userDomains[0]);
+        const response = await getInterestGroups();
         if (response) {
           const newGroups = response.map((group) => ({
             title: group.name,
@@ -53,16 +53,17 @@ const DashboardPage = () => {
             link: `interestgroups/${group.id}`,
             image: "/assets/IG/mobile_dev.jpg",
           }));
-          setInterestGroups((prev) =>
-            JSON.stringify(prev) === JSON.stringify(newGroups) ? prev : newGroups.slice(0, 5)
-          );
+          // setInterestGroups((prev) =>
+          //   JSON.stringify(prev) === JSON.stringify(newGroups) ? prev : newGroups.slice(0, 5)
+          // );
+          setInterestGroups(newGroups);
         }
       } catch (error) {
         console.error("Failed to fetch interest groups:", error);
       }
     };
     fetchInterestGroups();
-  }, [userDomains[0]]);
+  }, []);
 
   useEffect(() => {
     // Fetch karma feed only if it doesn't exist in the store
