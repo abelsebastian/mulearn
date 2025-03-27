@@ -34,41 +34,41 @@ const DashboardRootLayout = (props: { component?: any }) => {
     const initializeUserData = async () => {
       try {
         setIsLoading(true);
-        // if (userInfo && userProfile) {
-        //   const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
-        //   const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
-        //   if (!hasDomains || !hasEndgoals) {
-        //     navigate("/register/pathfinder?ruri=/dashboard/home");
-        //   }
-        //   setIsLoading(false);
-        // }
-        
-        const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
-        if (!profileResponse?.data) {
-          throw new Error('Invalid user profile API response');
-        }
-        const fetchedUserProfile: UserProfile = profileResponse.data.response;
-        setUserProfile(fetchedUserProfile);
+        if (!!userInfo.muid && !!userProfile.id) {
+          const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
+          const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
+          if (!hasDomains || !hasEndgoals) {
+            navigate("/register/pathfinder?ruri=/dashboard/home");
+          }
+          setIsLoading(false);
+        } else {
+          const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
+          if (!profileResponse?.data) {
+            throw new Error('Invalid user profile API response');
+          }
+          const fetchedUserProfile: UserProfile = profileResponse.data.response;
+          setUserProfile(fetchedUserProfile);
 
-        const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
-        if (!infoResponse?.data) {
-          throw new Error('Invalid user info API response');
-        }
-        const user_info: UserInfo = infoResponse.data.response;
-        const processedUserInfo = {
-          ...user_info,
-          first_name: user_info.full_name.split(" ")[0]
-        };
-        setUserInfo(processedUserInfo);
+          const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
+          if (!infoResponse?.data) {
+            throw new Error('Invalid user info API response');
+          }
+          const user_info: UserInfo = infoResponse.data.response;
+          const processedUserInfo = {
+            ...user_info,
+            first_name: user_info.full_name.split(" ")[0]
+          };
+          setUserInfo(processedUserInfo);
 
-        if ('exist_in_guild' in user_info) {
-          setConnected(user_info.exist_in_guild ?? false);
-        }
+          if ('exist_in_guild' in user_info) {
+            setConnected(user_info.exist_in_guild ?? false);
+          }
 
-        const hasDomains = Array.isArray(user_info.user_domains) && user_info.user_domains.length > 0;
-        const hasEndgoals = Array.isArray(user_info.user_endgoals) && user_info.user_endgoals.length > 0;
-        if (!hasDomains || !hasEndgoals) {
-          navigate("/register/pathfinder?ruri=/dashboard/home");
+          const hasDomains = Array.isArray(user_info.user_domains) && user_info.user_domains.length > 0;
+          const hasEndgoals = Array.isArray(user_info.user_endgoals) && user_info.user_endgoals.length > 0;
+          if (!hasDomains || !hasEndgoals) {
+            navigate("/register/pathfinder?ruri=/dashboard/home");
+          }
         }
       } catch (err) {
         console.error("Failed to fetch user data:", err);
@@ -203,7 +203,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
     <div className={styles.full_page}>
       <SideNavBar sidebarButtons={buttons} />
       <div className={styles.right_side}>
-        <TopNavBar setUserInfo={setUserInfo} userInfo={userInfo}/>
+        <TopNavBar setUserInfo={setUserInfo} userInfo={userInfo} />
         <div className={styles.main_content}>
           <Suspense fallback={<MuLoader />}>
             <Outlet />

@@ -9,10 +9,10 @@ import creative from "/assets/landing/creative.webp";
 import OnboardingTemplate from "../../../components/OnboardingTeamplate/OnboardingTemplate";
 import { IoCheckmarkSharp } from "react-icons/io5";
 import { privateGateway } from "@/MuLearnServices/apiGateways";
-import { onboardingRoutes } from "@/MuLearnServices/urls";
+import { dashboardRoutes, onboardingRoutes } from "@/MuLearnServices/urls";
 import { useNavigate } from "react-router-dom";
 import mu from "/src/modules/Common/Authentication/assets/µLearn.png";
-
+import { useUserStore } from "/src/ZustandProvider";
 
 // Define types for interests and endgoals
 type Pathway = {
@@ -44,6 +44,7 @@ const INITIAL_ENDGOALS: Endgoal[] = [
 ];
 
 export default function PathFinder() {
+  const { setUserInfo } = useUserStore();
   const [pathways, setPathways] = useState<string[]>([]);
   const [stepTwo, setStepTwo] = useState(false);
   const [recommendedPathways, setRecommendedPathways] = useState<string[]>(["Maker"]);
@@ -99,8 +100,19 @@ export default function PathFinder() {
       if (selectedEndgoals.length > 0) {
         await privateGateway.post(`${onboardingRoutes.register}select-endgoals/`, { endgoals: selectedEndgoals });
       }
-      toast.success("Pathways and endgoals saved successfully");
-      navigate("/dashboard/home");
+      privateGateway
+      .get(dashboardRoutes.getInfo)
+      .then(async (response: any) => {
+          localStorage.setItem(
+              "userInfo",
+              JSON.stringify(response.data.response)
+          );
+          setUserInfo(response.data.response);
+          toast.success("Pathways and endgoals saved successfully");
+          navigate("/dashboard/home");
+      }).catch((error) => {
+          toast.error("Something went wrong, please try again.");
+      });
     } catch (err: any) {
       console.error("Failed to submit pathways and endgoals:", err);
       toast.error(err.response?.data?.message?.general[0] || "Unexpected Error occurred");
