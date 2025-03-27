@@ -15,14 +15,15 @@ import { useUserStore } from "/src/ZustandProvider";
 
 interface TopNavBarProps {
     setUserInfo: (userInfo: UserInfo) => void;
+    userInfo: UserInfo;
 }
 
-const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
+const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [userSettings, setUserSettings] = useState(false);
     const [switchDomainModal, setSwitchDomainModal] = useState(false);
-    const [userInfo, setLocalUserInfo] = useState<UserInfo | null>(null);
+    const [localUserInfo, setLocalUserInfo] = useState<UserInfo>(userInfo);
 
     let userName = useUserStore((state) => state.userProfile.full_name.split(" ")[0]);
     if (!userName) {
@@ -84,8 +85,8 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo }) => {
             const updatedUserInfo = response.data.response;
 
             localStorage.setItem("userInfo", JSON.stringify(updatedUserInfo));
-            setLocalUserInfo(updatedUserInfo);
-            setUserInfo(updatedUserInfo); // Update store with new user info
+            setLocalUserInfo(localUserInfo);
+            setUserInfo(localUserInfo); // Update store with new user info
 
             toast.success("Domain updated successfully!");
         } catch (error) {
