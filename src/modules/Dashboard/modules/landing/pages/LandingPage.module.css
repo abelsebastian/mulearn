@@ -64,6 +64,15 @@
   font-weight: 600;
 }
 
+.navLinks li {
+  transition: all 0.25s linear;
+}
+
+.navLinks li:hover {
+  transform: scale(1.05);
+  color: black;
+}
+
 .navButtons button {
   margin-left: 10px;
 }
@@ -1002,15 +1011,17 @@
     padding: 1rem;
   }
 
-  .dataCard, .dataCard:nth-child(3n), .dataCard:nth-last-child(-n + 3) {
+  .dataCard,
+  .dataCard:nth-child(3n),
+  .dataCard:nth-last-child(-n + 3) {
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
   }
-  
+
   .dataCard:nth-child(2n) {
     border-right: none;
   }
-  
+
   .dataCard:nth-last-child(-n + 2) {
     border-bottom: none;
   }
