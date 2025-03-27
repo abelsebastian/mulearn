@@ -131,7 +131,7 @@ export function LearningCircleCard({
 
   const handleJoin = async () => {
     if (!isMeetJoinable) {
-      toast.error('The meeting hasn’t started yet. Please wait until the scheduled time.');
+      toast.error("The meeting hasn't started yet. Please wait until the scheduled time.");
       return;
     }
 
@@ -190,7 +190,13 @@ export function LearningCircleCard({
           </VisuallyHidden>
           <Card className={styles.card}>
             <CardContent className={styles.cardContent}>
-              <h2 className={styles.cardTitle}>{title}</h2>
+              <h2 className={styles.cardTitle}>
+                {title}
+                <span className={styles.memberCount}>
+                  <Users className={styles.memberIcon} />
+                  <span>{attendees?.length} {attendees?.length === 1 ? 'member' : 'members'}</span>
+                </span>
+              </h2>
               <p className={styles.cardDescription}>{description}</p>
 
               <div className={styles.badgeContainer}>

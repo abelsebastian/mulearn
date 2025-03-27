@@ -21,6 +21,15 @@ interface CreateLearningCircleFormProps {
 }
 
 export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateLearningCircleFormProps) {
+  // Calculate initial time value
+  const getInitialTimeValue = () => {
+    // Start with the meetUp time or current time
+    const date = meetUp?.meet_time ? new Date(meetUp.meet_time) : new Date();
+    
+    // Format it to the required format for datetime-local input (YYYY-MM-DDThh:mm)
+    return date.toISOString().slice(0, 16);
+  };
+
   const [formData, setFormData] = useState({
     title: meetUp?.title || "",
     description: meetUp?.description || "",
@@ -29,7 +38,7 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     imageUrl: "",
     meetLink: meetUp?.meet_link || "",
     location: meetUp?.meet_place || "",
-    time: new Date(meetUp?.meet_time || new Date()).toISOString().slice(0, 16),
+    time: getInitialTimeValue(),
   })
 
   const [interestOptions, setInterestOptions] = useState<{ label: string, value: string }[]>([]);
@@ -49,6 +58,14 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Convert local time to UTC for API submission
+    const convertToUTC = (localTimeStr: string) => {
+      const localDate = new Date(localTimeStr);
+      return localDate.toISOString();
+    };
+
+    const utcTime = convertToUTC(formData.time);
+
     const data = {
       ...(meetUp && meetUp.id ? { meetId: meetUp.id } : {}),
       title: formData.title,
@@ -56,7 +73,7 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
       meetingType: formData.isOnline ? "online" : "offline",
       meetLink: formData.isOnline ? formData.meetLink : "",
       location: formData.isOnline ? "Google Meet" : formData.location,
-      time: formData.time,
+      time: utcTime, // Use UTC time for API submission
       org,
       ig: formData.category,
       is_recurring: false,
@@ -66,11 +83,10 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     if (meetUp?.id) {
       editScheduleMeetup({
         meetId: data.meetId,
-        // circle_id: meetUp.circle_id.includes('LearningCircle object') ? meetUp.circle_id.match(/\(([^)]+)\)/)?.[1] : meetUp.circle_id,
         title: data.title,
         description: data.description,
         meet_place: data.location,
-        meet_time: data.time,
+        meet_time: utcTime, // Use UTC time
         duration: 4,
         mode: data.meetingType,
         coord_x: 0,
@@ -92,7 +108,7 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
             title: data.title,
             description: data.description,
             meet_place: data.location,
-            meet_time: data.time,
+            meet_time: utcTime, // Use UTC time
             duration: 4,
             mode: data.meetingType,
             coord_x: 0,
@@ -150,18 +166,6 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
         {/* Interest Group Selection */}
         <div className={styles.formField}>
           <Label htmlFor="category">Interest Group</Label>
-          {/* <Select onValueChange={(value) => handleChange("category", value)}>
-            <SelectTrigger id="category">
-              <SelectValue placeholder="Select an interest group" />
-            </SelectTrigger>
-            <SelectContent>
-              {interestOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select> */}
             <ReactSelect
                     options={interestOptions}
                     name="interestGroup"
@@ -170,12 +174,6 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
                     onChange={(selectedOption) => handleChange('category', selectedOption?.value || '')}
                     isDisabled={meetUp?.ig_id ? true : false}
                 />
-                {/* {meetUp?.ig_id && (
-                    <div className="helper-text" style={{ color: "red", marginTop: "4px", fontSize: '0.85rem' }}>
-                        {'Interest Group Cannot be modified'}
-                    </div>
-                )} */}
-
           {meetUp?.ig_id && (
             <p className={styles.helperText}>Interest Group Cannot be modified</p>
           )}
@@ -228,6 +226,7 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
             onChange={(e) => handleChange("time", e.target.value)}
             required
           />
+          <p className={styles.helperText}>Times are shown in your local timezone</p>
         </div>
       </div>
 

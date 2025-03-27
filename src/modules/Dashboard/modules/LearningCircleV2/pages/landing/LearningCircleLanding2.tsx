@@ -137,7 +137,7 @@ export default function LearningCircleLanding() {
       const meetupTime = new Date(circle.meet_time);
       if (isNaN(meetupTime.getTime())) return false;
       const twentyFourHoursAgo = new Date();
-      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24); // Changed from 2 to 24
+      twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 72); // Changed from 2 to 24
       // If showOld is true, show circles that are already in the past; otherwise show upcoming ones
       return showOld ? meetupTime < twentyFourHoursAgo : meetupTime >= twentyFourHoursAgo;
     })
