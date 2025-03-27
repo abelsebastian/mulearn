@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import SideNavBar from "../components/SideNavBar";
 import TopNavBar from "../components/TopNavBar";
 import { Suspense, useEffect, useState } from "react";
-import { FaUserFriends } from "react-icons/fa";
+import { FaUser, FaUserFriends } from "react-icons/fa";
 import { FaMagnifyingGlass, FaMapLocationDot, FaHouse, FaRankingStar } from "react-icons/fa6";
 import { IoGlobeOutline } from "react-icons/io5";
 import { roles, managementTypes } from "@/MuLearnServices/types";
@@ -100,6 +100,12 @@ const DashboardRootLayout = (props: { component?: any }) => {
       title: "Home",
       hasView: true,
       icon: <FaHouse />
+    },
+    {
+      url: "/dashboard/profile",
+      title: "Profile",
+      hasView: true,
+      icon: <FaUser />
     },
     {
       url: "/dashboard/mujourney",
