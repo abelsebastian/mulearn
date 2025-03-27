@@ -68,7 +68,7 @@ export function LearningCircleListItem({
       </CardContent>
 
       <CardFooter className={styles.cardFooter}>
-        <Button variant="outline" className={styles.viewDetailsButton} onClick={onClick}>
+        <Button className={styles.viewDetailsButton} onClick={onClick}>
           View Details
         </Button>
       </CardFooter>
