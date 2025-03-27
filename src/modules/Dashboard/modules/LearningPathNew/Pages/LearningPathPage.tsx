@@ -12,7 +12,6 @@ import { dashboardRoutes } from "@/MuLearnServices/urls";
 import { isEqual } from 'lodash';
 import toast from "react-hot-toast";
 
-
 interface OffCanvasProps {
   isOpen: boolean;
   onClose: () => void;
@@ -273,15 +272,15 @@ const LearningPathPage: React.FC = () => {
         userIGsData = (userProfile as { interest_groups: any[] }).interest_groups || [];
         return;
       }
-       else if (!userIGsData.length) {
-        const response = await privateGateway.get(dashboardRoutes.getUserProfile);
-        console.log("Fetched user profile response:", response.data);
-        setUserProfile(response.data.response);
-        userIGsData = response.data.response.interest_groups || [];
-        if (!userIGsData.length) {
-          console.error("User has no interest groups");
-        }
-      }
+      //  else if (!userIGsData.length) {
+      //   const response = await privateGateway.get(dashboardRoutes.getUserProfile);
+      //   console.log("Fetched user profile response:", response.data);
+      //   setUserProfile(response.data.response);
+      //   userIGsData = response.data.response.interest_groups || [];
+      //   if (!userIGsData.length) {
+      //     console.error("User has no interest groups");
+      //   }
+      // }
     } catch (error) {
       console.error("Failed to refetch user profile:", error);
       userIGsData = [];
@@ -438,8 +437,8 @@ const LearningPathPage: React.FC = () => {
     const fetchUserData = async () => {
       try {
         await Promise.all([
-          getUserProfile(setUserProfile, () => { }, () => { }),
-          getUserLog(setUserLog),
+          // getUserProfile(setUserProfile, () => { }, () => { }),
+          // getUserLog(setUserLog),
           fetchUserIGs(), // Fetch IG data here
         ]);
       } catch (error) {
@@ -515,9 +514,6 @@ const LearningPathPage: React.FC = () => {
             </button>
           </div> : <div></div>
         }
-
-
-
         {(
           <div className={styles.filterContainer}>
             <label htmlFor="filter">Filter by:</label>
@@ -533,8 +529,6 @@ const LearningPathPage: React.FC = () => {
             </select>
           </div>
         )}
-
-
       </div>
 
       {activeTab === "becomeExpert" && (
