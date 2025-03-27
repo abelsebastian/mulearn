@@ -272,7 +272,7 @@ const MuLearnLanding = () => {
             </motion.div>
           </div>
         </div>
-        <div className={styles.landingPaddingContainer}>
+        <div className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerTextCenter}`}>
           <h1>What <span>µLearn</span> offers</h1>
           <h6 className={styles.heroDescription}>
             µLearn offers a wide range of features and opportunities that help you learn, grow, and upskill yourself

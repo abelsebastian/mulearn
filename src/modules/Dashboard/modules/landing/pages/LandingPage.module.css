@@ -8,6 +8,14 @@
   text-wrap: balanced;
 }
 
+.landingPaddingContainerTextCenter {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
 .landingPaddingContainerCustom {
   padding-top: 8rem !important;
   background: #f1f2f7;
