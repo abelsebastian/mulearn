@@ -32,53 +32,48 @@ const DashboardRootLayout = (props: { component?: any }) => {
 
   useEffect(() => {
     const initializeUserData = async () => {
-      const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
-      if (!profileResponse || !profileResponse.data) {
-        throw new Error('Invalid user profile API response');
-      }
-      const fetchedUserProfile: UserProfile = profileResponse.data.response;
-      if (!fetchedUserProfile || typeof fetchedUserProfile !== 'object') {
-        throw new Error('Invalid userProfile data');
-      }
-      setUserProfile(fetchedUserProfile);
-      const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
-      if (!infoResponse || !infoResponse.data) {
-        throw new Error('Invalid user info API response');
-      }
-      const userInfo: UserInfo = infoResponse.data.response;
-      if (!userInfo || typeof userInfo !== 'object') {
-        throw new Error('Invalid userInfo data');
-      }
-      const processedUserInfo = {
-        ...userInfo,
-        first_name: userInfo.full_name.split(" ")[0]
-      };
-      setUserInfo(processedUserInfo);
-      localStorage.setItem("userInfo", JSON.stringify(processedUserInfo));
-      if ('exist_in_guild' in userInfo) {
-        setConnected(userInfo.exist_in_guild ?? false);
-      }
-      const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
-      const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
-      return !hasDomains && !hasEndgoals;
-    };
-
-    try {
-      setIsLoading(true);
-      const fetchData = async () => {
-        const result = await initializeUserData();
-        if (result) {
+      try {
+        setIsLoading(true)
+        const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
+        if (!profileResponse || !profileResponse.data) {
+          throw new Error('Invalid user profile API response');
+        }
+        const fetchedUserProfile: UserProfile = profileResponse.data.response;
+        if (!fetchedUserProfile || typeof fetchedUserProfile !== 'object') {
+          throw new Error('Invalid userProfile data');
+        }
+        setUserProfile(fetchedUserProfile);
+        const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
+        if (!infoResponse || !infoResponse.data) {
+          throw new Error('Invalid user info API response');
+        }
+        const userInfo: UserInfo = infoResponse.data.response;
+        if (!userInfo || typeof userInfo !== 'object') {
+          throw new Error('Invalid userInfo data');
+        }
+        const processedUserInfo = {
+          ...userInfo,
+          first_name: userInfo.full_name.split(" ")[0]
+        };
+        setUserInfo(processedUserInfo);
+        localStorage.setItem("userInfo", JSON.stringify(processedUserInfo));
+        if ('exist_in_guild' in userInfo) {
+          setConnected(userInfo.exist_in_guild ?? false);
+        }
+        const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
+        const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
+        if (!hasDomains && !hasEndgoals) {
           navigate("/register/pathfinder?ruri=/dashboard/home");
         }
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+        useUserStore.getState().resetUserInfo();
+      } finally {
+        setIsLoading(false);
       }
-      fetchData();
-    } catch (err) {
-      console.error("Failed to fetch user data:", err);
-      useUserStore.getState().resetUserInfo();
-    } finally {
-      setIsLoading(false);
-    }
-  }, [navigate, setUserInfo, userInfo, userProfile]);
+    };
+    initializeUserData();
+  }, [navigate]);
 
 
   const buttons = [
@@ -187,21 +182,17 @@ const DashboardRootLayout = (props: { component?: any }) => {
   }
 
   return (
-    <>
-      {isLoading && (
-        <div className={styles.full_page}>
-          <SideNavBar sidebarButtons={buttons} />
-          <div className={styles.right_side}>
-            <TopNavBar setUserInfo={setUserInfo} />
-            <div className={styles.main_content}>
-              <Suspense fallback={<MuLoader />}>
-                <Outlet />
-              </Suspense>
-            </div>
-          </div>
+    <div className={styles.full_page}>
+      <SideNavBar sidebarButtons={buttons} />
+      <div className={styles.right_side}>
+        <TopNavBar setUserInfo={setUserInfo} />
+        <div className={styles.main_content}>
+          <Suspense fallback={<MuLoader />}>
+            <Outlet />
+          </Suspense>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
