@@ -17,13 +17,12 @@ interface User {
   karma: string;
 }
 
+// First, simplify the User list component
 const UserList: React.FC<{
   search: string;
-  searchType: "name" | "college" | "interest";
   onSelect: (user: User) => void;
-}> = ({ search, searchType, onSelect }) => {
-  const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+}> = ({ search, onSelect }) => {
+  const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -31,6 +30,7 @@ const UserList: React.FC<{
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const latestRequestIdRef = useRef<number>(0);
 
+  // Simplified fetchUsers without search type logic
   const fetchUsers = useCallback(
     async (searchTerm: string, pageNum: number) => {
       const currentRequestId = Date.now();
@@ -39,36 +39,16 @@ const UserList: React.FC<{
       
       try {
         const response = await getUsers({
-          search: searchType === "name" ? searchTerm : "",
+          search: searchTerm, // Just pass the search term directly
           pageIndex: pageNum,
           perPage: 30,
         });
 
         if (currentRequestId === latestRequestIdRef.current) {
           const newUsers = response.data;
-          let filtered: User[] = newUsers;
           
-          if (searchType === "college" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.organizations.some(
-                (org) =>
-                  org.org_type === "College" &&
-                  org.title.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          } else if (searchType === "interest" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.interest_groups.some((ig) =>
-                ig.name.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          }
-
-          setAllUsers((prevUsers) =>
+          setUsers((prevUsers) =>
             pageNum === 1 ? newUsers : [...prevUsers, ...newUsers]
-          );
-          setFilteredUsers((prevFiltered) =>
-            pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
           );
           setTotalPages(response.pagination.totalPages);
         }
@@ -80,7 +60,7 @@ const UserList: React.FC<{
         }
       }
     },
-    [searchType]
+    []
   );
 
   const debouncedFetchUsers = useMemo(
@@ -90,15 +70,17 @@ const UserList: React.FC<{
     [fetchUsers]
   );
 
+  // Reset page and fetch on search change
   useEffect(() => {
-      setPage(1);
-      debouncedFetchUsers(search, 1);
-      setIsFetching(true);
+    setPage(1);
+    debouncedFetchUsers(search, 1);
+    setIsFetching(true);
     return () => {
       debouncedFetchUsers.cancel();
     };
-  }, [search, searchType]);
+  }, [search, debouncedFetchUsers]);
 
+  // Setup intersection observer for infinite scroll
   useEffect(() => {
     if (observerRef.current) observerRef.current.disconnect();
 
@@ -118,13 +100,12 @@ const UserList: React.FC<{
     };
   }, [isFetching, page, totalPages]);
 
+  // Fixed: Remove the search condition so pagination works for empty search
   useEffect(() => {
-    if (page > 1 && search) {
+    if (page > 1) { // Removed the search condition
       fetchUsers(search, page);
     }
   }, [page, search, fetchUsers]);
-
-  const displayUsers = searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
     <div>
@@ -133,8 +114,8 @@ const UserList: React.FC<{
           <div className={styles.loadingContainer}>
             <MuLoader />
           </div>
-        ) : displayUsers.length > 0 ? (
-          displayUsers.map((user, index) => (
+        ) : users.length > 0 ? (
+          users.map((user, index) => (
             <UserCard
               key={`${user.muid}-${index}`}
               data={{
@@ -164,19 +145,10 @@ const UserList: React.FC<{
   );
 };
 
-interface User {
-  full_name: string;
-  muid: string;
-  interest_groups: { id: string; name: string }[];
-  organizations: { id: string; title: string; code: string; org_type: string }[];
-  profile_pic: string | null;
-  karma: string;
-}
-
+// Update the main component to remove searchType
 const MuLearnersSearchPage: React.FC = () => {
   const StackComponent = useBreakpointValue({ base: VStack, md: HStack }) || VStack;
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchType, setSearchType] = useState<"name" | "college" | "interest">("name");
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -201,51 +173,20 @@ const MuLearnersSearchPage: React.FC = () => {
           <FiSearch className={styles.searchIcon} />
           <input
             type="text"
-            // placeholder={`Search public profiles by ${searchType === "name"
-            //     ? "name"
-            //     : searchType === "college"
-            //       ? "college"
-            //       : "interest group"
-            //   }`}
-            placeholder={`Search public profiles by name, college`}
+            placeholder="Search public profiles"
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* <div className={styles.searchTypeButtons}>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""
-              }`}
-            onClick={() => setSearchType("name")}
-          >
-            Name
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""
-              }`}
-            onClick={() => setSearchType("college")}
-          >
-            College
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "interest" ? styles.active : ""
-              }`}
-            onClick={() => setSearchType("interest")}
-          >
-            Interest Group
-          </button>
-        </div> */}
       </StackComponent>
 
       {error && <p className={styles.errorText}>{error}</p>}
       <Suspense fallback={<MuLoader />}>
-        <UserList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
+        <UserList search={searchTerm} onSelect={handleUserSelect} />
       </Suspense>
-
     </div>
   );
 };
-
 
 export default MuLearnersSearchPage;

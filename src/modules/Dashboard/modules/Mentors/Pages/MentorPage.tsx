@@ -19,11 +19,9 @@ interface User {
 
 const MentorList: React.FC<{
   search: string;
-  searchType: "name" | "college" | "expertise" | "enabler" | "mentor";
   onSelect: (user: User) => void;
-}> = ({ search, searchType, onSelect }) => {
-  const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+}> = ({ search, onSelect }) => {
+  const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -31,6 +29,7 @@ const MentorList: React.FC<{
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const latestRequestIdRef = useRef<number>(0);
 
+  // Simplified fetchUsers without complex filtering
   const fetchUsers = useCallback(
     async (searchTerm: string, pageNum: number) => {
       const currentRequestId = Date.now();
@@ -38,59 +37,20 @@ const MentorList: React.FC<{
       setIsFetching(true);
 
       try {
-        const role =
-          searchType === "enabler" ? "enabler" :
-            searchType === "mentor" ? "mentor" :
-              "mentor";
-
+        // Always fetch mentor role
         const response = await getUsers({
-          search: searchType === "name" ? searchTerm : "",
-          role,
+          search: searchTerm, // Pass search term directly to API
+          role: "mentor", // Always fetch mentors
           pageIndex: pageNum,
-          perPage: 9,
+          perPage: 30,
         });
 
         if (currentRequestId === latestRequestIdRef.current) {
           const newUsers = response.data;
-          let filtered: User[] = newUsers;
-
-          if (searchType === "college" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.organizations.some(
-                (org) =>
-                  org.org_type === "College" &&
-                  org.title.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          } else if (searchType === "expertise" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.interest_groups.some((ig) =>
-                ig.name.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          } else if (searchType === "enabler" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.organizations.some(
-                (org) =>
-                  org.org_type === "College" &&
-                  org.title.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          } else if (searchType === "mentor" && searchTerm) {
-            filtered = newUsers.filter((user) =>
-              user.organizations.some(
-                (org) =>
-                  org.org_type === "Company" &&
-                  org.title.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-            );
-          }
-
-          setAllUsers((prevUsers) =>
+          
+          // Update users with new data (for first page) or append (for pagination)
+          setUsers((prevUsers) =>
             pageNum === 1 ? newUsers : [...prevUsers, ...newUsers]
-          );
-          setFilteredUsers((prevFiltered) =>
-            pageNum === 1 ? filtered : [...prevFiltered, ...filtered]
           );
           setTotalPages(response.pagination.totalPages);
         }
@@ -102,7 +62,7 @@ const MentorList: React.FC<{
         }
       }
     },
-    [searchType]
+    []
   );
 
   const debouncedFetchUsers = useMemo(
@@ -112,6 +72,7 @@ const MentorList: React.FC<{
     [fetchUsers]
   );
 
+  // Reset page and fetch on search change
   useEffect(() => {
     setPage(1);
     debouncedFetchUsers(search, 1);
@@ -119,8 +80,9 @@ const MentorList: React.FC<{
     return () => {
       debouncedFetchUsers.cancel();
     };
-  }, [search, searchType]);
+  }, [search, debouncedFetchUsers]);
 
+  // Setup intersection observer for infinite scroll
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -140,13 +102,12 @@ const MentorList: React.FC<{
     };
   }, [isFetching, page, totalPages]);
 
+  // Fixed: Remove conditional search check so pagination works for empty search
   useEffect(() => {
-    if (page > 1) {
+    if (page > 1) { // Now this will work for both empty and non-empty search
       fetchUsers(search, page);
     }
   }, [page, search, fetchUsers]);
-
-  const displayUsers = searchType === "name" || !search ? allUsers : filteredUsers;
 
   return (
     <div>
@@ -155,8 +116,8 @@ const MentorList: React.FC<{
           <div className={styles.loadingContainer}>
             <MuLoader />
           </div>
-        ) : displayUsers.length > 0 ? (
-          displayUsers.map((user, index) => (
+        ) : users.length > 0 ? (
+          users.map((user, index) => (
             <UserCard
               key={`${user.muid}-${index}`}
               data={{
@@ -191,7 +152,6 @@ const MentorList: React.FC<{
 const MentorSearchPage: React.FC = () => {
   const Stack = useBreakpointValue({ base: VStack, md: HStack }) || VStack;
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchType, setSearchType] = useState<"name" | "college" | "expertise" | "enabler" | "mentor">("name");
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -200,17 +160,7 @@ const MentorSearchPage: React.FC = () => {
     window.open(`/profile/${user.muid}`, "_blank");
   };
 
-  const getDisplayOrganization = (user: User) => {
-    const hasCompany = user.organizations.some(org => org.org_type === "Company");
-    if (hasCompany) {
-      const firstCompany = user.organizations.find(org => org.org_type === "Company");
-      return firstCompany ? firstCompany.title : "N/A";
-    }
-    const firstCollege = user.organizations.find(org => org.org_type === "College");
-    return firstCollege ? firstCollege.title : "N/A";
-  };
   return (
-
     <div className={styles.pageContainer}>
       <div className={styles.Banner}>
         <div className={styles.BannerContent}>
@@ -227,49 +177,17 @@ const MentorSearchPage: React.FC = () => {
           <FiSearch className={styles.searchIcon} />
           <input
             type="text"
-            placeholder={`Search public profiles by ${searchType === "name" ? "name" : searchType === "college" ? "college" : searchType === "expertise" ? "expertise" : searchType === "enabler" ? "enabler" : "mentor"}`}
+            placeholder={`Search public profiles by name`}
             className={styles.searchInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* <div className={styles.searchTypeButtons}>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "name" ? styles.active : ""}`}
-            onClick={() => setSearchType("name")}
-          >
-            Name
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "college" ? styles.active : ""}`}
-            onClick={() => setSearchType("college")}
-          >
-            College
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "expertise" ? styles.active : ""}`}
-            onClick={() => setSearchType("expertise")}
-          >
-            Expertise
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "enabler" ? styles.active : ""}`}
-            onClick={() => setSearchType("enabler")}
-          >
-            Role Enabler
-          </button>
-          <button
-            className={`${styles.searchTypeButton} ${searchType === "mentor" ? styles.active : ""}`}
-            onClick={() => setSearchType("mentor")}
-          >
-            Role Mentor
-          </button>
-        </div> */}
       </Stack>
 
       {error && <p className={styles.errorText}>{error}</p>}
       <Suspense fallback={<MuLoader />}>
-        <MentorList search={searchTerm} searchType={searchType} onSelect={handleUserSelect} />
+        <MentorList search={searchTerm} onSelect={handleUserSelect} />
       </Suspense>
     </div>
   );
