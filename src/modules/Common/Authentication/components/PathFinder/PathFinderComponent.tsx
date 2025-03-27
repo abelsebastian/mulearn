@@ -7,8 +7,7 @@ import toast from "react-hot-toast";
 import { BiChevronRight, BiRightArrow, BiRocket } from "react-icons/bi";
 import { originalQuestions } from "./questions";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import quizImg from "../../assets/quiz.png";
-import exploreImg from "../../assets/explore.png";
+
 import { ArrowUpRight } from "lucide-react";
 
 const shuffleQuestions = (questions: Question[]): Question[] => {
@@ -65,7 +64,6 @@ export default function PathFinderComponent({
         if (currentQuestionIndex + 1 < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-            // console.log("getRecommendedPathways", getRecommendedPathways());
             onContinue(getRecommendedPathways());
         }
     };
@@ -83,9 +81,9 @@ export default function PathFinderComponent({
             ];
             if (updatedOptions.includes(category)) {
                 const index = updatedOptions.indexOf(category);
-                updatedOptions.splice(index, 1); // Remove category
+                updatedOptions.splice(index, 1); 
             } else {
-                updatedOptions.push(category); // Add category
+                updatedOptions.push(category);
             }
             return {
                 ...prevSelectedOptions,
@@ -102,14 +100,24 @@ export default function PathFinderComponent({
             { pathway: "manager", score: scores.D }
         ];
 
+        console.log("Pathways with scores:", pathwaysWithScores);
+        console.log("Scores:", scores);
+    
+        // Check if all scores are zero
+        const allZero = pathwaysWithScores.every(pathway => pathway.score === 0);
+        if (allZero) {
+            toast.error("Select atleast one option to get recommendations.");
+            return []; 
+        }
+    
         pathwaysWithScores.sort((a, b) => a.score - b.score);
-
+    
         const maxScore = pathwaysWithScores[pathwaysWithScores.length - 1].score;
-
+    
         const recommendedPathways = pathwaysWithScores
             .filter(pathway => pathway.score === maxScore)
             .map(pathway => pathway.pathway);
-
+    
         return recommendedPathways;
     };
 

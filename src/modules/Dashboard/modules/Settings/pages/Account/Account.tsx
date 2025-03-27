@@ -62,6 +62,7 @@ const Account = () => {
                 setIsLoading(false);
                 
                 let errorMessage = "Failed to change password. Please try again.";
+                console.log(error.response.data.message);
                 
                 if (error.message.general) {
                     toast.error(error.message.general[0]);

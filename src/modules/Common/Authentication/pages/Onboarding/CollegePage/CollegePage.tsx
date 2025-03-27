@@ -382,7 +382,7 @@ export default function CollegePage() {
                                         isLoading={isloading}
                                     >
                                         {isloading
-                                            ? "Please wait..."
+                                            ? (<div className="flex items-center justify-center !text-sm">Please wait</div>)
                                             : "Submit"}
                                     </PowerfulButton>
                                 </div>
