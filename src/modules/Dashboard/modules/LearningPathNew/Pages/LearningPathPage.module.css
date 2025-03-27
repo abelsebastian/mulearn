@@ -20,7 +20,7 @@
 
 .levelSubtitle {
   margin-top: 0;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
   color: #666;
 }
 
@@ -191,7 +191,7 @@
 .card {
   width: 300px;
   /* Fixed width for consistency */
-  min-height: 320px;
+  max-height: 320px;
   /* Minimum height to avoid uneven cards */
   /* height: 100%; */
   background-color: #ffffff;
@@ -205,6 +205,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap:18px;
 }
 
 .pendingCard:hover {

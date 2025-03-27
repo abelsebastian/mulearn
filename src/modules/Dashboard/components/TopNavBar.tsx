@@ -117,7 +117,9 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                 </div>)}
                             <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
                                 {refreshToken && (
-                                    <GameProgressBar />
+                                    <div className={styles.hideOnMobile}>
+                                        <GameProgressBar />
+                                    </div>
                                 )}
                             </div>
                             {refreshToken && (
