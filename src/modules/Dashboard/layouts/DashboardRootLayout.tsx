@@ -33,47 +33,66 @@ const DashboardRootLayout = (props: { component?: any }) => {
   useEffect(() => {
     const initializeUserData = async () => {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
+        if (userInfo && userProfile) {
+          const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
+          const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
+          if (!hasDomains || !hasEndgoals) {
+            navigate("/register/pathfinder?ruri=/dashboard/home");
+          }
+          setIsLoading(false);
+        }
+        
         const profileResponse = await privateGateway.get(dashboardRoutes.getUserProfile);
-        if (!profileResponse || !profileResponse.data) {
+        if (!profileResponse?.data) {
           throw new Error('Invalid user profile API response');
         }
         const fetchedUserProfile: UserProfile = profileResponse.data.response;
-        if (!fetchedUserProfile || typeof fetchedUserProfile !== 'object') {
-          throw new Error('Invalid userProfile data');
-        }
         setUserProfile(fetchedUserProfile);
+
         const infoResponse = await privateGateway.get(dashboardRoutes.getInfo);
-        if (!infoResponse || !infoResponse.data) {
+        if (!infoResponse?.data) {
           throw new Error('Invalid user info API response');
         }
-        const userInfo: UserInfo = infoResponse.data.response;
-        if (!userInfo || typeof userInfo !== 'object') {
-          throw new Error('Invalid userInfo data');
-        }
+        const user_info: UserInfo = infoResponse.data.response;
         const processedUserInfo = {
-          ...userInfo,
-          first_name: userInfo.full_name.split(" ")[0]
+          ...user_info,
+          first_name: user_info.full_name.split(" ")[0]
         };
         setUserInfo(processedUserInfo);
-        localStorage.setItem("userInfo", JSON.stringify(processedUserInfo));
-        if ('exist_in_guild' in userInfo) {
-          setConnected(userInfo.exist_in_guild ?? false);
+
+        if ('exist_in_guild' in user_info) {
+          setConnected(user_info.exist_in_guild ?? false);
         }
-        const hasDomains = Array.isArray(userInfo.user_domains) && userInfo.user_domains.length > 0;
-        const hasEndgoals = Array.isArray(userInfo.user_endgoals) && userInfo.user_endgoals.length > 0;
-        if (!hasDomains && !hasEndgoals) {
+
+        const hasDomains = Array.isArray(user_info.user_domains) && user_info.user_domains.length > 0;
+        const hasEndgoals = Array.isArray(user_info.user_endgoals) && user_info.user_endgoals.length > 0;
+        if (!hasDomains || !hasEndgoals) {
           navigate("/register/pathfinder?ruri=/dashboard/home");
         }
       } catch (err) {
         console.error("Failed to fetch user data:", err);
-        useUserStore.getState().resetUserInfo();
+        // if (err?.response?.status === 401) {
+        //   useUserStore.getState().resetUserInfo();
+        //   useUserStore.getState().resetUserProfile();
+        // }
       } finally {
         setIsLoading(false);
       }
     };
-    initializeUserData();
-  }, [navigate]);
+
+    let isMounted = true;
+    const fetchData = async () => {
+      if (isMounted) {
+        await initializeUserData();
+      }
+    };
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate, userInfo, userProfile, setUserInfo, setUserProfile]);
 
 
   const buttons = [
