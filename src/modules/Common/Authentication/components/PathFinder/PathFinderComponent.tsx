@@ -64,7 +64,8 @@ export default function PathFinderComponent({
         if (currentQuestionIndex + 1 < questions.length) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-            onContinue(getRecommendedPathways());
+            // Pass the updated scores directly instead of using the state
+            onContinue(getRecommendedPathways(updatedScores));
         }
     };
 
@@ -92,16 +93,20 @@ export default function PathFinderComponent({
         });
     };
 
-    const getRecommendedPathways = () => {
+    // Update the getRecommendedPathways function to accept an optional scores parameter
+    const getRecommendedPathways = (customScores?: typeof scores) => {
+        // Use provided scores or fall back to state scores
+        const currentScores = customScores || scores;
+        
         const pathwaysWithScores = [
-            { pathway: "maker", score: scores.A },
-            { pathway: "coder", score: scores.B },
-            { pathway: "creative", score: scores.C },
-            { pathway: "manager", score: scores.D }
+            { pathway: "maker", score: currentScores.A },
+            { pathway: "coder", score: currentScores.B },
+            { pathway: "creative", score: currentScores.C },
+            { pathway: "manager", score: currentScores.D }
         ];
-
+    
         console.log("Pathways with scores:", pathwaysWithScores);
-        console.log("Scores:", scores);
+        console.log("Scores:", currentScores);
     
         // Check if all scores are zero
         const allZero = pathwaysWithScores.every(pathway => pathway.score === 0);
@@ -110,9 +115,9 @@ export default function PathFinderComponent({
             return []; 
         }
     
-        pathwaysWithScores.sort((a, b) => a.score - b.score);
+        pathwaysWithScores.sort((a, b) => b.score - a.score); // Sort in descending order
     
-        const maxScore = pathwaysWithScores[pathwaysWithScores.length - 1].score;
+        const maxScore = pathwaysWithScores[0].score;
     
         const recommendedPathways = pathwaysWithScores
             .filter(pathway => pathway.score === maxScore)
