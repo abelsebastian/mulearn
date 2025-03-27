@@ -131,10 +131,21 @@ const SideNavBarBody: React.FC<SideNavBarBodyProps> = ({ sidebarButtons, toggleS
                                 backgroundColor: "#fff",
                                 color: "#FF7676"
                             }}
-                            onClick={() => {
-                                localStorage.clear();
-                                toast.error("Logged Out, Redirecting to login page.");
-                                setTimeout(() => window.location.reload(), 900);
+                            onClick={async () => {
+                                const logout = new Promise(async (resolve, reject) => {
+                                    try {
+                                        localStorage.clear();
+                                        await new Promise(() => setTimeout(() => window.location.reload(), 1000));
+                                        resolve(true);
+                                    } catch (err) {
+                                        reject(err);
+                                    }
+                                });
+                                await toast.promise(logout, {
+                                    loading: "Logging out...",
+                                    success: "Logged out successfully",
+                                    error: "Failed to logout"
+                                });
                             }}
                         />
                     ) : (
