@@ -24,6 +24,26 @@
     font-weight: bold;
     color: #1f2937;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.memberCount {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.memberIcon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    color: rgb(0, 106, 255);
 }
 
 .cardDescription {
@@ -86,4 +106,11 @@
 .viewDetailsButton {
     width: 100%;
     color: #1f2937;
+    transition: all 0.3s ease;
+}
+
+.viewDetailsButton:hover {
+    color: #456ff6;
+    border-color: #456ff6;
+    background-color: rgba(69, 111, 246, 0.05);
 }

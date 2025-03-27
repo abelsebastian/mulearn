@@ -34,19 +34,18 @@ const KarmaEarners: React.FC<KarmaEarnersProps> = ({
             <div className={styles.earnerPartConnector}>
               <div className={styles.earnerTitle}>Highest Karma Earner (Student)</div>
               <div className={styles.earnerDetails}>
-                <span className={styles.earnerName}>{highestStudent.user}</span>
-                <span className={styles.earnerName}>{highestStudent.muid}</span>
-                <span className={styles.currentKarma}>{highestStudent.karma}</span>
+                <p className={styles.earnerName}>{highestStudent.user}</p>
+                <p className={styles.earnerName}>{highestStudent.muid}</p>
+                <span className={styles.currentKarma}>Karma :{highestStudent.karma}</span>
               </div>
             </div>
-            <img className={styles.earnerProfile} src={profileImage} alt="Profile" />
           </div>
         </div>
         <div className={`${styles.earnerItem} ${styles.collegeCard}`}>
           <div className={styles.earnerTitle}>Highest Karma Earner (College/Organisation)</div>
           <div className={styles.earnerDetails}>
             <span className={styles.earnerName}>{highestCollege.user}</span>
-            <span className={styles.currentKarma}>{highestCollege.karma}</span>
+            <span className={styles.currentKarma}>Karma: {highestCollege.karma}</span>
             {/* <span className={styles.earnedYesterday}>
               +{highestCollege.earnedYesterday} yesterday
             </span> */}

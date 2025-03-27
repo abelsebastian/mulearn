@@ -108,6 +108,25 @@
     font-weight: 600;
     color: #1f2937;
     text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.memberCount {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.memberIcon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    color: rgb(0, 106, 255);
 }
 
 .cardDescription {
@@ -122,6 +141,8 @@
     flex-wrap: wrap;
     gap: 8px;
     padding-top: 8px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .categoryBadge,
