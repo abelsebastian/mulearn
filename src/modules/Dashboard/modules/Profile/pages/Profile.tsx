@@ -663,83 +663,83 @@ const Profile = () => {
                                 <div className={styles.notification}>
                                     <div className={styles.existing_roles}>
                                         {!id && (
-                                            <div className={styles.head + " " + styles.profileStatus}>
-                                                <h2>Switch to public profile</h2>
-                                                <div className={styles.option}>
-                                                    <Switch
-                                                        isChecked={profileStatus}
-                                                        onChange={e => {
-                                                            setProfileStatus(e.target.checked);
-                                                            putIsPublic(e.target.checked);
-                                                        }}
-                                                    />
+                                            <div className={styles.head + " " + styles.profileSettingsContainer}>
+                                                <h2>Profile Settings</h2>
+                                                <div className={styles.head + " " + styles.profileStatus}>
+                                                    <h4>Switch to public profile</h4>
+                                                    <div className={styles.option}>
+                                                        <Switch
+                                                            isChecked={profileStatus}
+                                                            onChange={e => {
+                                                                setProfileStatus(e.target.checked);
+                                                                putIsPublic(e.target.checked);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className={styles.head + " " + styles.profileStatus}>
+                                                    <h4>Open to work</h4>
+                                                    <div className={styles.option}>
+                                                        <Switch
+                                                            isChecked={userPreferences?.interested_in_work || false}
+                                                            onChange={async (e) => {
+                                                                try {
+                                                                    // Create new preferences object with updated value
+                                                                    const updatedPreferences = {
+                                                                        ...userPreferences,
+                                                                        interested_in_work: e.target.checked
+                                                                    };
+
+                                                                    // Update locally first for immediate UI feedback
+                                                                    setUserPreferences(updatedPreferences);
+
+                                                                    // Call API to update on server
+                                                                    await updateUserPreferences(updatedPreferences);
+                                                                    toast.success("Work preference updated successfully");
+                                                                } catch (error) {
+                                                                    console.error("Error updating work preference:", error);
+                                                                    // Revert to previous state if API call fails
+                                                                    setUserPreferences(userPreferences);
+                                                                    toast.error("Failed to update work preference");
+                                                                }
+                                                            }}
+                                                            isDisabled={preferencesLoading}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className={styles.head + " " + styles.profileStatus}>
+                                                    <h4>Open to gigs</h4>
+                                                    <div className={styles.option}>
+                                                        <Switch
+                                                            isChecked={userPreferences?.interested_in_gig_work || false}
+                                                            onChange={async (e) => {
+                                                                try {
+                                                                    // Create new preferences object with updated value
+                                                                    const updatedPreferences = {
+                                                                        ...userPreferences,
+                                                                        interested_in_gig_work: e.target.checked
+                                                                    };
+
+                                                                    // Update locally first for immediate UI feedback
+                                                                    setUserPreferences(updatedPreferences);
+
+                                                                    // Call API to update on server
+                                                                    await updateUserPreferences(updatedPreferences);
+                                                                    toast.success("Gig preference updated successfully");
+                                                                } catch (error) {
+                                                                    console.error("Error updating gig preference:", error);
+                                                                    // Revert to previous state if API call fails
+                                                                    setUserPreferences(userPreferences);
+                                                                    toast.error("Failed to update gig preference");
+                                                                }
+                                                            }}
+                                                            isDisabled={preferencesLoading}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
-                                        {!id && (
-                                            <div className={styles.head + " " + styles.profileStatus}>
-                                                <h2>Open to work</h2>
-                                                <div className={styles.option}>
-                                                    <Switch
-                                                        isChecked={userPreferences?.interested_in_work || false}
-                                                        onChange={async (e) => {
-                                                            try {
-                                                                // Create new preferences object with updated value
-                                                                const updatedPreferences = {
-                                                                    ...userPreferences,
-                                                                    interested_in_work: e.target.checked
-                                                                };
-
-                                                                // Update locally first for immediate UI feedback
-                                                                setUserPreferences(updatedPreferences);
-
-                                                                // Call API to update on server
-                                                                await updateUserPreferences(updatedPreferences);
-                                                                toast.success("Work preference updated successfully");
-                                                            } catch (error) {
-                                                                console.error("Error updating work preference:", error);
-                                                                // Revert to previous state if API call fails
-                                                                setUserPreferences(userPreferences);
-                                                                toast.error("Failed to update work preference");
-                                                            }
-                                                        }}
-                                                        isDisabled={preferencesLoading}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {!id && (
-                                            <div className={styles.head + " " + styles.profileStatus}>
-                                                <h2>Open to gigs</h2>
-                                                <div className={styles.option}>
-                                                    <Switch
-                                                        isChecked={userPreferences?.interested_in_gig_work || false}
-                                                        onChange={async (e) => {
-                                                            try {
-                                                                // Create new preferences object with updated value
-                                                                const updatedPreferences = {
-                                                                    ...userPreferences,
-                                                                    interested_in_gig_work: e.target.checked
-                                                                };
-
-                                                                // Update locally first for immediate UI feedback
-                                                                setUserPreferences(updatedPreferences);
-
-                                                                // Call API to update on server
-                                                                await updateUserPreferences(updatedPreferences);
-                                                                toast.success("Gig preference updated successfully");
-                                                            } catch (error) {
-                                                                console.error("Error updating gig preference:", error);
-                                                                // Revert to previous state if API call fails
-                                                                setUserPreferences(userPreferences);
-                                                                toast.error("Failed to update gig preference");
-                                                            }
-                                                        }}
-                                                        isDisabled={preferencesLoading}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
+                                        
                                         <div className={styles.head}>
                                             <Socials />
                                         </div>
