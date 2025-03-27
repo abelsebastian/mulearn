@@ -17,7 +17,7 @@
   gap: 16px;
 }
 
-.landingPaddingContainerTextCenter h1{
+.landingPaddingContainerTextCenter h1 {
   font-size: 3rem;
   text-align: left;
   max-width: 35rem;
@@ -443,21 +443,21 @@
   max-width: 800px;
 }
 
-.camparison table tr th:nth-child(odd){
+.camparison table tr th:nth-child(odd) {
   text-align: right;
   padding-right: 1rem;
 }
 
-.camparison table tr th:nth-child(even){
+.camparison table tr th:nth-child(even) {
   text-align: left;
   padding-left: 1rem;
 }
 
-.camparison table tr td:nth-child(odd){
+.camparison table tr td:nth-child(odd) {
   text-align: right;
 }
 
-.camparison table tr td:nth-child(even){
+.camparison table tr td:nth-child(even) {
   text-align: left;
 }
 
@@ -590,7 +590,7 @@
   display: grid;
   padding: 2rem 10rem;
   grid-template-columns: repeat(4, minmax(15rem, 2fr));
-  gap: 1.5rem;
+  /* gap: 1.5rem; */
 }
 
 .dataCard {
@@ -599,6 +599,28 @@
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  border: 1px solid #ccc;
+}
+
+
+/* Remove left border for the first column */
+.dataCard:nth-child(4n + 1) {
+  border-left: none;
+}
+
+/* Remove top border for the first row */
+.dataCard:nth-child(-n + 4) {
+  border-top: none;
+}
+
+/* Remove right border for the last column */
+.dataCard:nth-child(4n) {
+  border-right: none;
+}
+
+/* Remove bottom border for the last row */
+.dataCard:nth-last-child(-n + 4) {
+  border-bottom: none;
 }
 
 .dataCard h1 {
@@ -709,10 +731,38 @@
     font-size: 0.8rem;
   }
 
-
-
   .dataGrid {
     grid-template-columns: repeat(3, minmax(15rem, 2fr));
+  }
+
+  .dataCard:nth-child(4n + 1),
+  .dataCard:nth-child(-n + 4),
+  .dataCard:nth-child(4n),
+  .dataCard:nth-last-child(-n + 4) {
+    border: 1px solid #ccc;
+  }
+
+
+  /* Remove left border for the first column */
+  .dataCard:nth-child(3n + 1) {
+    border-left: none;
+  }
+
+  /* Remove top border for the first row */
+  .dataCard:nth-child(1),
+  .dataCard:nth-child(2),
+  .dataCard:nth-child(3) {
+    border-top: none;
+  }
+
+  /* Remove right border for the last column */
+  .dataCard:nth-child(3n) {
+    border-right: none;
+  }
+
+  /* Remove bottom border for the last row */
+  .dataCard:nth-last-child(-n + 3):nth-child(n) {
+    border-bottom: none;
   }
 
   .dataGrid .dataCard h1 {
@@ -975,6 +1025,35 @@
     padding: 1rem;
   }
 
+
+  .dataCard:nth-child(3n + 1),
+  .dataCard:nth-child(1),
+  .dataCard:nth-child(2),
+  .dataCard:nth-child(3),
+  .dataCard:nth-child(3n){
+    border: 1px solid #ccc;
+  }
+
+  /* Remove left border for the first column */
+.dataCard:nth-child(2n + 1) {
+  border-left: none;
+}
+
+/* Remove top border for the first row */
+.dataCard:nth-child(-n + 2) {
+  border-top: none;
+}
+
+/* Remove right border for the last column */
+.dataCard:nth-child(2n) {
+  border-right: none;
+}
+
+/* Remove bottom border for the last row */
+.dataCard:nth-last-child(-n + 2) {
+  border-bottom: none;
+}
+
   .dataCard h1 {
     font-size: 2rem;
   }
@@ -1071,7 +1150,7 @@
     text-align: center;
   }
 
-  .landingPaddingContainerTextCenter h1{
+  .landingPaddingContainerTextCenter h1 {
     font-size: 1.2rem;
     text-align: center;
   }
