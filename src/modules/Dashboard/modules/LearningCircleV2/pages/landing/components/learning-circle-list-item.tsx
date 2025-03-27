@@ -31,7 +31,13 @@ export function LearningCircleListItem({
   return (
     <Card className={styles.card}>
       <CardContent className={styles.cardContent}>
-        <h3 className={styles.cardTitle}>{title}</h3>
+        <h3 className={styles.cardTitle}>
+          {title}
+          <span className={styles.memberCount}>
+            <Users className={styles.memberIcon} />
+            <span>{attendees_count}</span>
+          </span>
+        </h3>
         <p className={styles.cardDescription}>
           {description.length > 150 ? description.substring(0, 150) + "..." : description}
         </p>
@@ -47,10 +53,6 @@ export function LearningCircleListItem({
             )}
           </Badge>
 
-          <Badge variant="outline" className={styles.membersBadge}>
-            <Users className={styles.icon} />
-            <span>{attendees_count} {attendees_count === 1 ? 'member' : 'members'}</span>
-          </Badge>
 
           {hasJoined && (
             <Badge className={styles.joinedBadge}>Joined</Badge>
@@ -66,7 +68,7 @@ export function LearningCircleListItem({
       </CardContent>
 
       <CardFooter className={styles.cardFooter}>
-        <Button variant="outline" className={styles.viewDetailsButton} onClick={onClick}>
+        <Button className={styles.viewDetailsButton} onClick={onClick}>
           View Details
         </Button>
       </CardFooter>
