@@ -92,7 +92,7 @@ const DashboardRootLayout = (props: { component?: any }) => {
     return () => {
       isMounted = false;
     };
-  }, [navigate, userInfo, userProfile, setUserInfo, setUserProfile]);
+  }, [navigate]);
 
 
   const buttons = [
