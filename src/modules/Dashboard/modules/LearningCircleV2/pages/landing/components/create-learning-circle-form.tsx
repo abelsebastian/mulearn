@@ -22,15 +22,10 @@ interface CreateLearningCircleFormProps {
 
 export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateLearningCircleFormProps) {
   const getInitialTimeValue = () => {
-    // Start with the meetUp time or current time
     const date = meetUp?.meet_time ? new Date(meetUp.meet_time) : new Date();
-    
-    // Convert UTC to local time
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-    
-    // Format it to the required format for datetime-local input (YYYY-MM-DDThh:mm)
-    return localDate.toISOString().slice(0, 16);
+    return date.toLocaleString("sv-SE").replace(" ", "T").slice(0, 16);
   };
+
   const [formData, setFormData] = useState({
     title: meetUp?.title || "",
     description: meetUp?.description || "",
@@ -56,17 +51,15 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     }))
   }
 
+  // Convert local time to UTC for API submission
+  const convertToUTC = (localTimeStr: string) => {
+    const localDate = new Date(localTimeStr);
+    return localDate.toISOString();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Convert local time to UTC for API submission
-    const convertToUTC = (localTimeStr: string) => {
-      const localDate = new Date(localTimeStr);
-      // Add timezone offset to convert to UTC
-      const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-      return utcDate.toISOString();
-    };
-
+    
     const utcTime = convertToUTC(formData.time);
 
     const data = {
