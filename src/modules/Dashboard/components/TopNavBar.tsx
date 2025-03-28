@@ -149,6 +149,8 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                             const logout = new Promise(async (resolve, reject) => {
                                                 try {
                                                     localStorage.clear();
+                                                    useUserStore.getState().resetUserInfo();
+                                                    useUserStore.getState().resetUserProfile();
                                                     await new Promise(() => setTimeout(() => window.location.reload(), 1000));
                                                     resolve(true);
                                                 } catch (err) {
