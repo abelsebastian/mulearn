@@ -273,13 +273,13 @@ const MuLearnLanding = () => {
           </div>
         </div>
         <div className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerTextCenter}`}>
-          <h1>What <span>µLearn</span> offers</h1>
+          <div className={styles.mulearnTopPad}><h1>What <span>µLearn</span> offers</h1></div>
           <h6 className={styles.heroDescription}>
             µLearn offers a wide range of features and opportunities that help you learn, grow, and upskill yourself
             in a fun and engaging way. Here are some of the key features that µLearn offers.
           </h6>
         </div>
-        <div className={styles.landingPaddingContainer}>
+        <div className={`${styles.landingPaddingContainer} ${styles.mulearnTopPad}`}>
           <FeatureGrid />
         </div>
       </motion.header>
@@ -325,7 +325,7 @@ const MuLearnLanding = () => {
       </motion.section> */}
 
       {/* Story Section */}
-      <div className={styles.landingPaddingContainer}>
+      <div className={`${styles.landingPaddingContainer} ${styles.mulearnTopPad}`}>
         <motion.section
           className={styles.leftRightGrid}
           variants={fadeInUp}
