@@ -695,7 +695,7 @@ const Profile = () => {
 
                                                                     // Call API to update on server
                                                                     await updateUserPreferences(updatedPreferences);
-                                                                    toast.success("Work preference updated successfully");
+                                                                    toast.success("Work preference updated");
                                                                 } catch (error) {
                                                                     console.error("Error updating work preference:", error);
                                                                     // Revert to previous state if API call fails
