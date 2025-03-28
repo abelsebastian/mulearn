@@ -84,6 +84,7 @@ const DiscordModerationPage = lazy(() => import("./modules/Dashboard/modules/Dis
 const MentorSearchPage = lazy(() => import("./modules/Dashboard/modules/Mentors/Pages/MentorPage"));
 const InterestGroupsPage = lazy(() => import("./modules/Dashboard/modules/InterestGroups/pages/InterestGroupsPage"));
 const InterestGroupOne = lazy(() => import("./modules/Dashboard/modules/InterestGroups/pages/One/InterestGroupOne"));
+const InterestGroupManage = lazy(()=> import("./modules/Dashboard/modules/InterestGroup/InterestGroup"));
 const SpecialEvents = lazy(() => import("./modules/Dashboard/modules/SpecialEvents/pages/SpecialEvents"));
 const Leaderboard = lazy(() => import("./modules/Dashboard/modules/LeaderBoard/components/Leaderboard"));
 const CampusPage = lazy(() => import("./modules/Dashboard/modules/Campus/components/CampusForum/CampusPage-demo"));
@@ -211,6 +212,7 @@ function App() {
             { path: "management/organization/affiliation", element: <AuthChecker roles={[roles.ADMIN]} children={<AffiliationPage />} /> },
             { path: "management/organization/organization-transfer", element: <AuthChecker roles={[roles.ADMIN]} children={<OrganizationTransferPage />} /> },
             { path: "management/organization/manage-departments", element: <AuthChecker roles={[roles.ADMIN]} children={<ManageDepartmentsPage />} /> },
+            { path: "management/manage-interest-groups", element: <AuthChecker roles={[roles.ADMIN]} children={<InterestGroupManage />} /> },
             { path: "management/organization/organizations", element: <AuthChecker roles={[roles.ADMIN]} children={<OrganizationsPage />} /> },
             { path: "management/interest-groups", element: <AuthChecker roles={[roles.ADMIN]} children={<InterestGroupsPage />} /> },
             { path: "management/lc-meetup-verification", element: <AuthChecker roles={[roles.ADMIN]} children={<LCMeetupVerificationPage />} /> },

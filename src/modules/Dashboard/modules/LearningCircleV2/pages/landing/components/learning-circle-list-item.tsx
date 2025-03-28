@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Users, Wifi, WifiOff, CheckCircle } from "lucide-react"
 import styles from "./learning-circle-list-item.module.css";
+import { submitRSVP } from "../../../services/LearningCircleAPIs";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface LearningCircleListItemProps {
   id: string
@@ -15,10 +18,15 @@ interface LearningCircleListItemProps {
   attendees_count: number
   hasJoined?: boolean
   hasCompleted?: boolean
+  hasRSVP?: boolean
+  coord_x: number
+  coord_y: number
   onClick: () => void
+  onRSVPSuccess?: () => void
 }
 
 export function LearningCircleListItem({
+  id,
   title,
   description = '',
   ig_name,
@@ -26,8 +34,44 @@ export function LearningCircleListItem({
   attendees_count,
   hasJoined,
   hasCompleted,
+  hasRSVP = false,
+  coord_x,
+  coord_y,
   onClick,
+  onRSVPSuccess,
 }: LearningCircleListItemProps) {
+  const [isRSVPing, setIsRSVPing] = useState(false);
+  const [hasRSVPed, setHasRSVPed] = useState(hasRSVP);
+
+  const getDirections = () => { 
+    const coordx = coord_x || 0;
+    const coordy = coord_y || 0;
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${coordx},${coordy}`, '_blank');
+  }
+
+  const handleRSVP = async () => {
+    if (hasRSVPed) {
+      toast.success("You've already RSVPed to this learning circle.");
+      return;
+    }
+
+    setIsRSVPing(true);
+    try {
+      const success = await submitRSVP(id);
+      if (success) {
+        setHasRSVPed(true);
+        if (onRSVPSuccess) {
+          onRSVPSuccess();
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting RSVP:", error);
+      toast.error("Failed to submit RSVP. Please try again.");
+    } finally {
+      setIsRSVPing(false);
+    }
+  };
+
   return (
     <Card className={styles.card}>
       <CardContent className={styles.cardContent}>
@@ -53,9 +97,15 @@ export function LearningCircleListItem({
             )}
           </Badge>
 
-
           {hasJoined && (
             <Badge className={styles.joinedBadge}>Joined</Badge>
+          )}
+
+          {hasRSVPed && (
+            <Badge className={styles.rsvpBadge}>
+              <CheckCircle className={styles.icon} />
+              RSVP Confirmed
+            </Badge>
           )}
 
           {hasCompleted && (
@@ -68,7 +118,22 @@ export function LearningCircleListItem({
       </CardContent>
 
       <CardFooter className={styles.cardFooter}>
-        <Button className={styles.viewDetailsButton} onClick={onClick}>
+        <div className="flex gap-[4px]">
+          <Button 
+            className={styles.secondaryButton} 
+            variant="outline" 
+            onClick={handleRSVP}
+            disabled={isRSVPing || hasRSVPed}
+          >
+            {isRSVPing ? "Submitting..." : hasRSVPed ? "RSVP Confirmed" : "RSVP"}
+          </Button>
+          {mode === 'offline' && (
+            <Button className={styles.secondaryButton} variant="outline" onClick={getDirections}>
+              Get directions
+            </Button>
+          )}
+        </div>
+        <Button className={styles.secondaryButton} onClick={onClick}>
           View Details
         </Button>
       </CardFooter>
