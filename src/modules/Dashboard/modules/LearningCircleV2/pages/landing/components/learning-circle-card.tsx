@@ -38,6 +38,7 @@ interface LearningCircleCardProps {
   attendees: CircleMeetingAttendee[] | null;
   hasJoined?: boolean;
   hasCompleted?: boolean;
+  is_rsvp: boolean;
   members?: Member[];
   open: boolean;
   setOpen: (value: boolean) => void;
@@ -49,12 +50,12 @@ interface LearningCircleCardProps {
 // Helper function to format attendees display
 const formatAttendeesDisplay = (attendees: CircleMeetingAttendee[]) => {
   if (!attendees || attendees.length === 0) return "No attendees yet";
-  
+
   const visibleAttendees = attendees.slice(0, 5);
   const remainingCount = attendees.length - 5;
-  
+
   const attendeeNames = visibleAttendees.map(attendee => attendee.full_name).join(", ");
-  
+
   if (remainingCount > 0) {
     return `${attendeeNames} +${remainingCount} others`;
   }
@@ -75,6 +76,7 @@ export function LearningCircleCard({
   meet_code = 'U145K4',
   hasJoined = false,
   hasCompleted = false,
+  is_rsvp,
   open,
   setOpen,
   handleDelete,
@@ -93,7 +95,6 @@ export function LearningCircleCard({
   const [learningSummary, setLearningSummary] = useState("");
   const [showMembersList, setShowMembersList] = useState(false);
   const [showQrScanner, setShowQrScanner] = useState(false);
-  console.log(meet_time)
 
   const [isMeetJoinable, setIsMeetJoinable] = useState(false);
 
@@ -207,13 +208,13 @@ export function LearningCircleCard({
                 </Badge>
 
                 {/* <Sheet open={showMembersList} onOpenChange={setShowMembersList}> */}
-                  {/* <SheetTrigger asChild> */}
-                    <Badge variant="outline" className={styles.membersBadge}>
-                      <Users className={styles.icon} />
-                      <span>{attendees?.length} {attendees?.length === 1 ? 'member' : 'members'}</span>
-                    </Badge>
-                  {/* </SheetTrigger> */}
-                  {/* <SheetContent>
+                {/* <SheetTrigger asChild> */}
+                <Badge variant="outline" className={styles.membersBadge}>
+                  <Users className={styles.icon} />
+                  <span>{attendees?.length} {attendees?.length === 1 ? 'member' : 'members'}</span>
+                </Badge>
+                {/* </SheetTrigger> */}
+                {/* <SheetContent>
                     <SheetHeader>
                       <SheetTitle>Members</SheetTitle>
                       <SheetDescription>People who have joined this learning circle.</SheetDescription>
@@ -239,8 +240,14 @@ export function LearningCircleCard({
                 </Badge>
                 <Badge variant="outline" className={styles.onlineBadge}>
                   <Clock className={styles.clockIcon} />
-                  <span>{new Date(meet_time).toLocaleString()}</span>
+                  <span>{(new Date(meet_time).toLocaleString("en-IN", { hour12: true })).toUpperCase()}</span>
                 </Badge>
+                {is_rsvp && (
+                <Badge className={styles.onlineBadge}>
+                  <CheckCircle className={styles.icon} />
+                  RSVP Confirmed
+                </Badge>
+              )}
               </div>
 
               {/* Attendees Section */}

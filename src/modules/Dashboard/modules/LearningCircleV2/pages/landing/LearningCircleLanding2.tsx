@@ -103,8 +103,8 @@ export default function LearningCircleLanding() {
         if (data) {
           setisLoading(true);
           onRefresh();
-        setSelectedCircle(null);
-        setOpen(false);
+          setSelectedCircle(null);
+          setOpen(false);
         }
       })
     }
@@ -268,9 +268,9 @@ export default function LearningCircleLanding() {
         {isLoading && <MuLoader />}
 
         <div className={styles.gridContainer}>
-          {filteredCircles.map((circle) => (
-            <LearningCircleListItem key={circle.id} {...circle} attendees_count={circle.attendees?.length || 1} onClick={() => handleClick(circle.id)} />
-          ))}
+          {filteredCircles.map((circle) => {
+            return <LearningCircleListItem key={circle.id} {...circle} attendees_count={circle.attendees?.length || 1} onClick={() => handleClick(circle.id)} />
+          })}
         </div>
 
         {filteredCircles.length === 0 && !isLoading && (

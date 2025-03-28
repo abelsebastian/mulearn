@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Users, Wifi, WifiOff, CheckCircle } from "lucide-react"
 import styles from "./learning-circle-list-item.module.css";
 import { submitRSVP } from "../../../services/LearningCircleAPIs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 interface LearningCircleListItemProps {
@@ -18,7 +18,7 @@ interface LearningCircleListItemProps {
   attendees_count: number
   hasJoined?: boolean
   hasCompleted?: boolean
-  hasRSVP?: boolean
+  is_rsvp?: boolean
   coord_x: number
   coord_y: number
   onClick: () => void
@@ -34,14 +34,14 @@ export function LearningCircleListItem({
   attendees_count,
   hasJoined,
   hasCompleted,
-  hasRSVP = false,
+  is_rsvp,
   coord_x,
   coord_y,
   onClick,
   onRSVPSuccess,
 }: LearningCircleListItemProps) {
   const [isRSVPing, setIsRSVPing] = useState(false);
-  const [hasRSVPed, setHasRSVPed] = useState(hasRSVP);
+  const [hasRSVPed, setHasRSVPed] = useState(is_rsvp);
 
   const getDirections = () => { 
     const coordx = coord_x || 0;

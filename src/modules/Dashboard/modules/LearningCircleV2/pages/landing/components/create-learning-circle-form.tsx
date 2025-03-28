@@ -25,8 +25,11 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     // Start with the meetUp time or current time
     const date = meetUp?.meet_time ? new Date(meetUp.meet_time) : new Date();
     
+    // Convert UTC to local time
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    
     // Format it to the required format for datetime-local input (YYYY-MM-DDThh:mm)
-    return date.toISOString().slice(0, 16);
+    return localDate.toISOString().slice(0, 16);
   };
   const [formData, setFormData] = useState({
     title: meetUp?.title || "",
@@ -59,7 +62,9 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     // Convert local time to UTC for API submission
     const convertToUTC = (localTimeStr: string) => {
       const localDate = new Date(localTimeStr);
-      return localDate.toISOString();
+      // Add timezone offset to convert to UTC
+      const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+      return utcDate.toISOString();
     };
 
     const utcTime = convertToUTC(formData.time);
@@ -242,44 +247,97 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
           )}
         </div>
 
-    {/* Meeting Type */ }
-    < div className = { styles.switchContainer } >
+        {/* Meeting Type */}
+        {/* < div className={styles.switchContainer} >
           <Label htmlFor="isOnline" className={styles.switchLabel}>Online Learning Circle</Label>
           <Switch
             id="isOnline"
             checked={formData.isOnline}
             onCheckedChange={(checked) => handleChange("isOnline", checked)}
           />
-        </div >
+        </div > */}
 
-    {/* Conditional Fields for Online/Offline */ }
-  {
-    formData.isOnline ? (
-      <div className={styles.formField}>
-        <Label htmlFor="meetLink">Online Meeting Link</Label>
-        <Input
-          id="meetLink"
-          type="url"
-          placeholder="Enter meeting link"
-          value={formData.meetLink}
-          onChange={(e) => handleChange("meetLink", e.target.value)}
-          required
-        />
-      </div>
-    ) : (
-    <div className={styles.formField}>
-      <Label htmlFor="location">Location</Label>
-      <Input
-        id="location"
-        type="text"
-        placeholder="Enter location"
-        value={formData.location}
-        onChange={(e) => handleChange("location", e.target.value)}
-        required
-      />
-    </div>
-  )
-  }
+        <div className={styles.formField}>
+          <Label>Meeting Type</Label>
+          <div
+            className={styles.toggleWrapper}
+            onClick={() => handleChange("isOnline", !formData.isOnline)}
+          >
+            <div className={`${styles.toggleSlider} ${formData.isOnline ? styles.online : ''}`} />
+            <span className={`${styles.toggleOption} ${!formData.isOnline ? styles.active : ''}`}>
+              Offline
+            </span>
+            <span className={`${styles.toggleOption} ${formData.isOnline ? styles.active : ''}`}>
+              Online
+            </span>
+          </div>
+        </div>
+
+        {/* Conditional Fields for Online/Offline */}
+        {
+          formData.isOnline ? (
+            <>
+              <div className={styles.formField}>
+                <Label htmlFor="location">Meeting Platform</Label>
+                <Input
+                  id="location"
+                  type="text"
+                  placeholder="Enter meeting platform"
+                  value={formData.location}
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  required
+                />
+              </div>
+              <div className={styles.formField}>
+                <Label htmlFor="meetLink">Meeting Link</Label>
+                <Input
+                  id="meetLink"
+                  type="url"
+                  placeholder="Enter meeting link"
+                  value={formData.meetLink}
+                  onChange={(e) => handleChange("meetLink", e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.formField}>
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  type="text"
+                  placeholder="Enter location"
+                  value={formData.location}
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  required
+                />
+              </div>
+              {/* <div className={styles.formField}>
+                <Label htmlFor="coord_x">Coordinate X</Label>
+                <Input
+                  id="coord_x"
+                  type="text"
+                  placeholder="Enter coordinate X"
+                  value={formData.location}
+                  onChange={(e) => handleChange("coord_x", e.target.value)}
+                  required
+                />
+              </div>
+              <div className={styles.formField}>
+                <Label htmlFor="coord_y">Coordinate Y</Label>
+                <Input
+                  id="coord_y"
+                  type="text"
+                  placeholder="Enter coordinate Y"
+                  value={formData.location}
+                  onChange={(e) => handleChange("coord_y", e.target.value)}
+                  required
+                />
+              </div> */}
+            </>
+          )
+        }
 
         {/* Meeting Time */}
         <div className={styles.formField}>
@@ -294,8 +352,8 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
         </div>
       </div>
 
-    {/* Buttons */ }
-    < DialogFooter >
+      {/* Buttons */}
+      < DialogFooter >
         <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
