@@ -1,14 +1,13 @@
-/* Learning Circles Page */
 .main {
     min-height: 100vh;
-    background-color: #f9fafb;
     padding-bottom: 4rem;
     max-width: 83vw;
 }
 
 .container {
     max-width: 100%;
-    width: 95vw;
+    background-color: #f9fafb;
+    /* width: 95vw; */
     margin: 0 auto;
     padding: 2rem 1rem;
 }
@@ -19,14 +18,17 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
+    gap: 1rem;
 }
 
 .dialogOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4); /* Slightly adjust transparency */
+    background: rgba(0, 0, 0, 0.4);
+    /* Slightly adjust transparency */
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px); /* Safari Support */
+    -webkit-backdrop-filter: blur(12px);
+    /* Safari Support */
     z-index: 999;
     display: flex;
     align-items: center;
@@ -116,47 +118,47 @@
     display: flex;
     width: 100%;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: baseline;
     gap: 1rem;
     margin: 1rem 0;
-  }
-  
-  .filterControls {
+}
+
+.filterControls {
     /* flex: 1 1 100%; */
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
-  }
-  
-  /* Desktop layout */
-  @media (min-width: 768px) {
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
     .searchContainer {
-      flex: 0 0 50%;
+        flex: 0 0 50%;
     }
+
     .filterControls {
-      flex: 0 0 50%;
-      justify-content: flex-start;
+        flex: 0 0 50%;
+        justify-content: flex-start;
     }
+
     .container {
         margin: 0 auto;
         padding: 1rem 1rem;
     }
-    
-    
-  }
-  
-  .filterItem {
+}
+
+.filterItem {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
     color: #333;
     height: 100%;
-  }
-  
+}
 
-  .gridContainer {
+
+.gridContainer {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: 2rem;
@@ -174,7 +176,7 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 2.5rem;
     }
-    
+
     .container {
         width: 90vw;
     }
@@ -211,32 +213,31 @@
     margin: 1rem 0;
     align-items: center;
     flex-wrap: wrap;
-  }
-  
-  .filterItem {
+}
+
+.filterItem {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
     color: #333;
-  }
-  
-  .filterItem label {
+}
+
+.filterItem label {
     display: flex;
     align-items: center;
     cursor: pointer;
-  }
-  
-  .filterItem input[type="checkbox"] {
+}
+
+.filterItem input[type="checkbox"] {
     margin-right: 0.5rem;
     width: 16px;
     height: 16px;
-  }
-  
-  .filterItem select {
+}
+
+.filterItem select {
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     background: #fff;
     font-size: 0.9rem;
-  }
-  
+}

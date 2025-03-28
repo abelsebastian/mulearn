@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Users, Wifi, WifiOff, CheckCircle } from "lucide-react"
 import styles from "./learning-circle-list-item.module.css";
 import { submitRSVP } from "../../../services/LearningCircleAPIs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 interface LearningCircleListItemProps {
@@ -18,7 +18,7 @@ interface LearningCircleListItemProps {
   attendees_count: number
   hasJoined?: boolean
   hasCompleted?: boolean
-  hasRSVP?: boolean
+  is_rsvp?: boolean
   coord_x: number
   coord_y: number
   onClick: () => void
@@ -34,16 +34,16 @@ export function LearningCircleListItem({
   attendees_count,
   hasJoined,
   hasCompleted,
-  hasRSVP = false,
+  is_rsvp,
   coord_x,
   coord_y,
   onClick,
   onRSVPSuccess,
 }: LearningCircleListItemProps) {
   const [isRSVPing, setIsRSVPing] = useState(false);
-  const [hasRSVPed, setHasRSVPed] = useState(hasRSVP);
+  const [hasRSVPed, setHasRSVPed] = useState(is_rsvp);
 
-  const getDirections = () => { 
+  const getDirections = () => {
     const coordx = coord_x || 0;
     const coordy = coord_y || 0;
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${coordx},${coordy}`, '_blank');
@@ -119,15 +119,17 @@ export function LearningCircleListItem({
 
       <CardFooter className={styles.cardFooter}>
         <div className="flex gap-[4px]">
-          <Button 
-            className={styles.secondaryButton} 
-            variant="outline" 
-            onClick={handleRSVP}
-            disabled={isRSVPing || hasRSVPed}
-          >
-            {isRSVPing ? "Submitting..." : hasRSVPed ? "RSVP Confirmed" : "RSVP"}
-          </Button>
-          {mode === 'offline' && (
+          {!hasRSVPed && (
+            <Button
+              className={styles.secondaryButton}
+              variant="outline"
+              onClick={handleRSVP}
+              disabled={isRSVPing || hasRSVPed}
+            >
+              {isRSVPing ? "Submitting..." : "RSVP"}
+            </Button>
+          )}
+          {mode === 'offline' && coord_x !== 0.0 && coord_y !== 0.0 && (
             <Button className={styles.secondaryButton} variant="outline" onClick={getDirections}>
               Get directions
             </Button>
