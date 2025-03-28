@@ -516,7 +516,7 @@
 }
 
 /* Hide elements on mobile devices */
-.hideOnMobile {
+.hideOnMobile { 
     display: block;
 }
 
