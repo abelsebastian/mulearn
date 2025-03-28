@@ -90,7 +90,7 @@ export interface CircleMeetupInfo {
     is_ended: boolean;
     attendee: CircleMeetingAttendee; 
     attendees: CircleMeetingAttendee[] | null; 
-    meet_link: string
+    meet_link: string;
 ​​}
 
 interface CircleMeetingAttendee {

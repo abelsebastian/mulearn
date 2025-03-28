@@ -196,7 +196,7 @@ export const submitAttendeeReport = async ({
 
 export const getMeetupInfo = async (
     meetId: string
-): Promise<LCMeetup | null> => {
+): Promise<CircleMeetupInfo | null> => {
     try {
         const response = await privateGateway.get(
             learningCircleRoutes.getMeetupInfo + meetId
