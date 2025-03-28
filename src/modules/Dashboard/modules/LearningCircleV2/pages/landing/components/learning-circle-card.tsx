@@ -81,6 +81,7 @@ export function LearningCircleCard({
   setOpen,
   handleDelete,
   handleEdit,
+  created_by_id,
   members = [],
   onClose,
   ...data
@@ -104,17 +105,18 @@ export function LearningCircleCard({
     setIsMeetJoinable(currentTime >= meetTime);
   }, [meet_time]);
 
-
   useEffect(() => {
     fetchURLQRCode(
       setBlob,
       meet_code as string,
     );
-    console.log("meet_code", meet_code);
   }, [meet_code]);
 
+
+  console.log(data)
+
   const currentLoggedInUser = useUserStore((state) => state.userProfile.id);
-  const isCreator = data.created_by_id === currentLoggedInUser;
+  const isCreator = created_by_id === currentLoggedInUser;
 
   const handleClose = () => {
     setOpen(false);

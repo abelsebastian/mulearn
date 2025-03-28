@@ -78,8 +78,9 @@ export interface CircleMeetupInfo {
     report_description: string;
     meet_link: string;
     mode: string;
+    meet_code: string;
     is_rsvp: boolean;
-    created_by_id?: string;
+    created_by_id: string;
     coord_x: number;
     coord_y: number;
     meet_place: string;

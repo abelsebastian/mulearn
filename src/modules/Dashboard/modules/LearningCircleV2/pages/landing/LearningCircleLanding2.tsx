@@ -69,7 +69,6 @@ export default function LearningCircleLanding() {
   const [selectedInterest, setSelectedInterest] = useState<Option | null>(INITIAL_INTERESTS[0]);
   const [showOld, setShowOld] = useState(false);
 
-  // Fetch interests from API and update options
   useEffect(() => {
     getInterests().then((interests) => {
       // Assuming interests is an array of { label, value }
@@ -292,7 +291,7 @@ export default function LearningCircleLanding() {
       </div>
 
       <LearningCircleCard
-        {...meetups.find((circle) => circle.id === selectedCircle)!}
+        {...selectedMeetup!}
         onClose={() => setSelectedCircle(null)}
         open={open}
         setOpen={setOpen}
