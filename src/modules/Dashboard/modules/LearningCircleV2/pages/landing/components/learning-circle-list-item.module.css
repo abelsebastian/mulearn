@@ -100,6 +100,8 @@
 .cardFooter {
     padding: 16px;
     display: flex;
+    flex-direction: column;
+    gap: 4px;
     justify-content: center;
 }
 
@@ -110,6 +112,20 @@
 }
 
 .viewDetailsButton:hover {
+    color: #456ff6;
+    border-color: #456ff6;
+    background-color: rgba(69, 111, 246, 0.05);
+}
+
+
+
+.secondaryButton {
+    width: 100%;
+    color: #ebebeb; 
+    transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
     color: #456ff6;
     border-color: #456ff6;
     background-color: rgba(69, 111, 246, 0.05);
