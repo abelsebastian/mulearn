@@ -115,7 +115,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                         {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                     </span>
                                 </div>)}
-                            <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
+                            <div >
                                 {refreshToken && (
                                     <GameProgressBar />
                                 )}
@@ -149,6 +149,8 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                             const logout = new Promise(async (resolve, reject) => {
                                                 try {
                                                     localStorage.clear();
+                                                    useUserStore.getState().resetUserInfo();
+                                                    useUserStore.getState().resetUserProfile();
                                                     await new Promise(() => setTimeout(() => window.location.reload(), 1000));
                                                     resolve(true);
                                                 } catch (err) {

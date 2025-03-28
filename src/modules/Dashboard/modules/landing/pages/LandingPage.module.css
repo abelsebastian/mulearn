@@ -27,7 +27,8 @@
 
 .landingPaddingContainerCustom {
   padding-top: 8rem !important;
-  background: #f1f2f7;
+  /* background: #f1f2f7; */
+  background: linear-gradient(#ffff 0%, #f1f2f7 30%,  #dce0f4 100%);
 }
 
 .landingPaddingContainer {
@@ -163,7 +164,7 @@
 }
 
 .heroLeft h1 {
-  font-size: 3.1rem;
+  font-size: 3.5rem;
   font-weight: 800;
   text-align: center;
   max-width: 700px;
@@ -269,11 +270,16 @@
   text-align: center;
 }
 
+.mulearnTopPad{
+  padding-top: 3rem;
+}
+
 .leftRightGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-top: 20px;
   gap: 20px;
+  padding: 3rem 0rem;
 }
 
 .leftRightGridCustom {
@@ -316,7 +322,7 @@
   display: flex;
   flex-direction: column;
   justify-items: center;
-  padding: 10rem 0rem;
+  padding: 6rem 0rem;
   align-items: center;
 }
 
@@ -345,7 +351,7 @@
   display: flex;
   flex-direction: column;
   justify-items: center;
-  padding-top: 10rem;
+  padding-top: 3rem;
   align-items: center;
 }
 
@@ -464,10 +470,12 @@
 
 .camparison table tr td:nth-child(odd) {
   text-align: right;
+  padding-right: 2rem;
 }
 
 .camparison table tr td:nth-child(even) {
   text-align: left;
+  padding-left: 2rem;
 }
 
 .cards {
@@ -983,7 +991,9 @@
   }
 
   .cards span img {
-    max-width: 100px;
+    height: auto;
+    width: 170px;
+    max-width: 170px;
   }
 
   .impact {
@@ -1161,8 +1171,8 @@
   .cards span img,
   .cards span {
     height: auto;
-    width: 140px;
-    max-width: 140px;
+    width: 160px;
+    max-width: 160px;
   }
 
   .impact h1 {

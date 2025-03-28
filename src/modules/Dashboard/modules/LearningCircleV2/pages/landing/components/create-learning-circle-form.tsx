@@ -21,15 +21,16 @@ interface CreateLearningCircleFormProps {
 }
 
 export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateLearningCircleFormProps) {
-  // Calculate initial time value
   const getInitialTimeValue = () => {
     // Start with the meetUp time or current time
     const date = meetUp?.meet_time ? new Date(meetUp.meet_time) : new Date();
     
+    // Convert UTC to local time
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    
     // Format it to the required format for datetime-local input (YYYY-MM-DDThh:mm)
-    return date.toISOString().slice(0, 16);
+    return localDate.toISOString().slice(0, 16);
   };
-
   const [formData, setFormData] = useState({
     title: meetUp?.title || "",
     description: meetUp?.description || "",
@@ -61,7 +62,9 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
     // Convert local time to UTC for API submission
     const convertToUTC = (localTimeStr: string) => {
       const localDate = new Date(localTimeStr);
-      return localDate.toISOString();
+      // Add timezone offset to convert to UTC
+      const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+      return utcDate.toISOString();
     };
 
     const utcTime = convertToUTC(formData.time);
@@ -81,49 +84,96 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
       recurrence: 1,
     }
     if (meetUp?.id) {
-      editScheduleMeetup({
-        meetId: data.meetId,
-        title: data.title,
-        description: data.description,
-        meet_place: data.location,
-        meet_time: utcTime, // Use UTC time
-        duration: 4,
-        mode: data.meetingType,
-        coord_x: 0,
-        coord_y: 0,
-        is_report_needed: false,
-        report_description: '',
-        meet_link: data.meetLink || "https://meet.google.com",
-      }).then((response) => {
-        if (response) {  
-          if (onRefresh) onRefresh();
-          onClose();
-        }
-      });
-    } else {
-      createLearningCircle(data).then(status => {
-        if (status) {
-          scheduleMeetup({
-            circle_id: status as string,
-            title: data.title,
-            description: data.description,
-            meet_place: data.location,
-            meet_time: utcTime, // Use UTC time
-            duration: 4,
-            mode: data.meetingType,
-            coord_x: 0,
-            coord_y: 0,
-            is_report_needed: false,
-            report_description: '',
-            meet_link: data.meetLink || "https://meet.google.com"
-          }).then((data) => {
-            if(data){
-              if (onRefresh) onRefresh();
-            }
+      if (data.meetingType === "online") {
+        editScheduleMeetup({
+          meetId: data.meetId,
+          // circle_id: meetUp.circle_id.includes('LearningCircle object') ? meetUp.circle_id.match(/\(([^)]+)\)/)?.[1] : meetUp.circle_id,
+          title: data.title,
+          description: data.description,
+          meet_time: data.time,
+          duration: 4,
+          mode: data.meetingType,
+          coord_x: 0,
+          coord_y: 0,
+          is_report_needed: false,
+          report_description: '',
+          meet_link: data.meetLink,
+          meet_place: data.location,
+        }).then((response) => {
+          if (response) {
+            if (onRefresh) onRefresh();
             onClose();
-          });
-        }
-      });
+          }
+        });
+      } else {
+        editScheduleMeetup({
+          meetId: data.meetId,
+          title: data.title,
+          description: data.description,
+          meet_place: data.location,
+          meet_time: data.time,
+          duration: 4,
+          mode: data.meetingType,
+          coord_x: 0,
+          coord_y: 0,
+          is_report_needed: false,
+          report_description: '',
+        }).then((response) => {
+          if (response) {
+            if (onRefresh) onRefresh();
+            onClose();
+          }
+        });
+      }
+    } else {
+      if (data.meetingType === "online") {
+        createLearningCircle(data).then(status => {
+          if (status) {
+            scheduleMeetup({
+              circle_id: status as string,
+              title: data.title,
+              description: data.description,
+              meet_time: data.time,
+              duration: 4,
+              mode: data.meetingType,
+              coord_x: 0,
+              coord_y: 0,
+              is_report_needed: false,
+              report_description: '',
+              meet_link: data.meetLink,
+              meet_place: data.location, // platform
+            }).then((data) => {
+              if (data) {
+                if (onRefresh) onRefresh();
+              }
+              onClose();
+            });
+          }
+        });
+      } else {
+        createLearningCircle(data).then(status => {
+          if (status) {
+            scheduleMeetup({
+              circle_id: status as string,
+              title: data.title,
+              description: data.description,
+              meet_place: data.location,
+              meet_time: data.time,
+              duration: 4,
+              mode: data.meetingType,
+              coord_x: 0,
+              coord_y: 0,
+              is_report_needed: false,
+              report_description: '',
+            }).then((data) => {
+              if (data) {
+                if (onRefresh) onRefresh();
+              }
+              onClose();
+            });
+          }
+        });
+      }
     }
     onClose();
   };
@@ -166,55 +216,128 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
         {/* Interest Group Selection */}
         <div className={styles.formField}>
           <Label htmlFor="category">Interest Group</Label>
-            <ReactSelect
-                    options={interestOptions}
-                    name="interestGroup"
-                    placeholder="Select Interest Group"
-                    value={interestOptions.find((option) => option.value === formData.category)}
-                    onChange={(selectedOption) => handleChange('category', selectedOption?.value || '')}
-                    isDisabled={meetUp?.ig_id ? true : false}
-                />
+          {/* <Select onValueChange={(value) => handleChange("category", value)}>
+            <SelectTrigger id="category">
+              <SelectValue placeholder="Select an interest group" />
+            </SelectTrigger>
+            <SelectContent>
+              {interestOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select> */}
+          <ReactSelect
+            options={interestOptions}
+            name="interestGroup"
+            placeholder="Select Interest Group"
+            value={interestOptions.find((option) => option.value === formData.category)}
+            onChange={(selectedOption) => handleChange('category', selectedOption?.value || '')}
+            isDisabled={meetUp?.ig_id ? true : false}
+          />
+          {/* {meetUp?.ig_id && (
+                    <div className="helper-text" style={{ color: "red", marginTop: "4px", fontSize: '0.85rem' }}>
+                        {'Interest Group Cannot be modified'}
+                    </div>
+                )} */}
+
           {meetUp?.ig_id && (
             <p className={styles.helperText}>Interest Group Cannot be modified</p>
           )}
         </div>
 
         {/* Meeting Type */}
-        <div className={styles.switchContainer}>
+        {/* < div className={styles.switchContainer} >
           <Label htmlFor="isOnline" className={styles.switchLabel}>Online Learning Circle</Label>
           <Switch
             id="isOnline"
             checked={formData.isOnline}
             onCheckedChange={(checked) => handleChange("isOnline", checked)}
           />
+        </div > */}
+
+        <div className={styles.formField}>
+          <Label>Meeting Type</Label>
+          <div
+            className={styles.toggleWrapper}
+            onClick={() => handleChange("isOnline", !formData.isOnline)}
+          >
+            <div className={`${styles.toggleSlider} ${formData.isOnline ? styles.online : ''}`} />
+            <span className={`${styles.toggleOption} ${!formData.isOnline ? styles.active : ''}`}>
+              Offline
+            </span>
+            <span className={`${styles.toggleOption} ${formData.isOnline ? styles.active : ''}`}>
+              Online
+            </span>
+          </div>
         </div>
 
         {/* Conditional Fields for Online/Offline */}
-        {formData.isOnline ? (
-          <div className={styles.formField}>
-            <Label htmlFor="meetLink">Online Meeting Link</Label>
-            <Input
-              id="meetLink"
-              type="url"
-              placeholder="Enter meeting link"
-              value={formData.meetLink}
-              onChange={(e) => handleChange("meetLink", e.target.value)}
-              required
-            />
-          </div>
-        ) : (
-          <div className={styles.formField}>
-            <Label htmlFor="location">Location</Label>
-            <Input
-              id="location"
-              type="text"
-              placeholder="Enter location"
-              value={formData.location}
-              onChange={(e) => handleChange("location", e.target.value)}
-              required
-            />
-          </div>
-        )}
+        {
+          formData.isOnline ? (
+            <>
+              <div className={styles.formField}>
+                <Label htmlFor="location">Meeting Platform</Label>
+                <Input
+                  id="location"
+                  type="text"
+                  placeholder="Enter meeting platform"
+                  value={formData.location}
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  required
+                />
+              </div>
+              <div className={styles.formField}>
+                <Label htmlFor="meetLink">Meeting Link</Label>
+                <Input
+                  id="meetLink"
+                  type="url"
+                  placeholder="Enter meeting link"
+                  value={formData.meetLink}
+                  onChange={(e) => handleChange("meetLink", e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.formField}>
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  type="text"
+                  placeholder="Enter location"
+                  value={formData.location}
+                  onChange={(e) => handleChange("location", e.target.value)}
+                  required
+                />
+              </div>
+              {/* <div className={styles.formField}>
+                <Label htmlFor="coord_x">Coordinate X</Label>
+                <Input
+                  id="coord_x"
+                  type="text"
+                  placeholder="Enter coordinate X"
+                  value={formData.location}
+                  onChange={(e) => handleChange("coord_x", e.target.value)}
+                  required
+                />
+              </div>
+              <div className={styles.formField}>
+                <Label htmlFor="coord_y">Coordinate Y</Label>
+                <Input
+                  id="coord_y"
+                  type="text"
+                  placeholder="Enter coordinate Y"
+                  value={formData.location}
+                  onChange={(e) => handleChange("coord_y", e.target.value)}
+                  required
+                />
+              </div> */}
+            </>
+          )
+        }
 
         {/* Meeting Time */}
         <div className={styles.formField}>
@@ -226,17 +349,16 @@ export function CreateLearningCircleForm({ onClose, meetUp, onRefresh }: CreateL
             onChange={(e) => handleChange("time", e.target.value)}
             required
           />
-          <p className={styles.helperText}>Times are shown in your local timezone</p>
         </div>
       </div>
 
       {/* Buttons */}
-      <DialogFooter>
+      < DialogFooter >
         <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
         <Button type="submit">{meetUp ? "Update" : "Create"} Learning Circle</Button>
-      </DialogFooter>
-    </form>
+      </DialogFooter >
+    </form >
   );
 }

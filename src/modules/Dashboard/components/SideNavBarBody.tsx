@@ -13,6 +13,7 @@ import { fetchLocalStorage } from "@/MuLearnServices/common_functions";
 import styles from "./SideNavBar.module.css";
 import MuLogOut from "../assets/svg/MuLogOut";
 import MuSettings from "../assets/svg/MuSettings";
+import { useUserStore } from "/src/ZustandProvider";
 
 type SideNavBarButton = {
     url: string;
@@ -135,6 +136,8 @@ const SideNavBarBody: React.FC<SideNavBarBodyProps> = ({ sidebarButtons, toggleS
                                 const logout = new Promise(async (resolve, reject) => {
                                     try {
                                         localStorage.clear();
+                                         useUserStore.getState().resetUserInfo();
+                                         useUserStore.getState().resetUserProfile();
                                         await new Promise(() => setTimeout(() => window.location.reload(), 1000));
                                         resolve(true);
                                     } catch (err) {
