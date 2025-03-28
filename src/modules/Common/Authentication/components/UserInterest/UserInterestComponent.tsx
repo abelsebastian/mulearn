@@ -23,8 +23,21 @@ type InterestGroup = {
     name: string;
     category: string;
 };
+
+type EndGoal = {
+    title: string;
+    value: string;
+    checked: boolean;
+};
 type InterestGroups = {
     [key: string]: InterestGroup[];
+};
+
+type Interest = {
+    title: string;
+    value: string;
+    img: string;
+    checked: boolean;
 };
 // const INITIAL_INTERESTS = [
 //     { title: "Coder", value: "coder", img: software, checked: false },
@@ -215,7 +228,7 @@ export default function UserInterestSelectionComponent({
                             <div className={styles.interestInfo}>
                                 <h4>This category includes:</h4>
                                 <ul>
-                                    {INTEREST_DESCRIPTIONS[item.value]?.map((desc, index) => (
+                                    {INTEREST_DESCRIPTIONS[item.value as keyof typeof INTEREST_DESCRIPTIONS]?.map((desc, index) => (
                                         <li key={index}>{desc}</li>
                                     ))}
                                 </ul>

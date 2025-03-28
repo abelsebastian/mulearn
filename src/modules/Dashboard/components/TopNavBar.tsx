@@ -115,7 +115,7 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                         {userInfo?.user_domains?.[0]?.toUpperCase() || ""}
                                     </span>
                                 </div>)}
-                            <div className="cursor-pointer" onClick={() => navigate("/dashboard/leaderboard")}>
+                            <div >
                                 {refreshToken && (
                                     <div className={styles.hideOnMobile}>
                                         <GameProgressBar />

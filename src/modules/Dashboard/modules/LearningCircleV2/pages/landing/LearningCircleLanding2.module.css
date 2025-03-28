@@ -3,11 +3,12 @@
     min-height: 100vh;
     background-color: #f9fafb;
     padding-bottom: 4rem;
+    max-width: 83vw;
 }
 
 .container {
     max-width: 100%;
-    width: 80vw;
+    width: 95vw;
     margin: 0 auto;
     padding: 2rem 1rem;
 }
@@ -143,6 +144,7 @@
         padding: 1rem 1rem;
     }
     
+    
   }
   
   .filterItem {
@@ -157,7 +159,7 @@
   .gridContainer {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1.5rem;
+    gap: 2rem;
     min-height: 400px;
 }
 
@@ -170,11 +172,24 @@
 @media (min-width: 1024px) {
     .gridContainer {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+    
+    .container {
+        width: 90vw;
     }
 }
 
 .noResultsContainer {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: flex-start;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 4rem 0;
     width: 80vw;
 }
