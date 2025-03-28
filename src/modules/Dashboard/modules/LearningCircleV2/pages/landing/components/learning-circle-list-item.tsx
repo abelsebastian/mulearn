@@ -43,7 +43,7 @@ export function LearningCircleListItem({
   const [isRSVPing, setIsRSVPing] = useState(false);
   const [hasRSVPed, setHasRSVPed] = useState(is_rsvp);
 
-  const getDirections = () => { 
+  const getDirections = () => {
     const coordx = coord_x || 0;
     const coordy = coord_y || 0;
     window.open(`https://www.google.com/maps/dir/?api=1&destination=${coordx},${coordy}`, '_blank');
@@ -119,15 +119,17 @@ export function LearningCircleListItem({
 
       <CardFooter className={styles.cardFooter}>
         <div className="flex gap-[4px]">
-          <Button 
-            className={styles.secondaryButton} 
-            variant="outline" 
-            onClick={handleRSVP}
-            disabled={isRSVPing || hasRSVPed}
-          >
-            {isRSVPing ? "Submitting..." : hasRSVPed ? "RSVP Confirmed" : "RSVP"}
-          </Button>
-          {mode === 'offline' && (
+          {!hasRSVPed && (
+            <Button
+              className={styles.secondaryButton}
+              variant="outline"
+              onClick={handleRSVP}
+              disabled={isRSVPing || hasRSVPed}
+            >
+              {isRSVPing ? "Submitting..." : "RSVP"}
+            </Button>
+          )}
+          {mode === 'offline' && coord_x !== 0.0 && coord_y !== 0.0 && (
             <Button className={styles.secondaryButton} variant="outline" onClick={getDirections}>
               Get directions
             </Button>

@@ -207,7 +207,7 @@ export default function LearningCircleLanding() {
           <div className={styles.searchContainer}>
             <Search className={styles.searchIcon} />
             <Input
-              placeholder="Search learning circles by title, description or category..."
+              placeholder="Search by title, description or category..."
               className={styles.searchInput}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
