@@ -58,7 +58,7 @@ export default function AccountCreationComponent({
         password: ""
     });
     const [dwmsData, setDWMSData] = useState<DWMSData>();
-    const [isVisible, setVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [isTncChecked, setTncChecked] = useState(false);
     const [isPrivacyChecked, setPrivacyChecked] = useState(false);
 
@@ -205,10 +205,9 @@ export default function AccountCreationComponent({
                                                 disabled={isLoading}
                                             />
                                         </div>
-
                                         <button
                                             type="button"
-                                            onClick={() => setVisible(e => !e)}
+                                            onClick={() => setIsVisible(e => !e)}
                                         >
                                             {isVisible ? (
                                                 <HiEye size={26} />
