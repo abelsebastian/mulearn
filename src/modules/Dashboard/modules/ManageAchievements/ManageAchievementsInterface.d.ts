@@ -1,10 +1,10 @@
 export interface AchievementData {
-    title?: string;
+    title: string;
     level_based?: boolean; // Used in form and request
-    levelBased?: boolean;  // Used in ManageAchievements
+    levelBased: boolean;  // Used in ManageAchievements
     description: string;
     has_vc?: boolean;      // Used in form and request
-    vcToken?: boolean;     // Used in ManageAchievements
+    vcToken: boolean;     // Used in ManageAchievements
     tags: string[];
     type: string;
     achievement_name?: string;
@@ -16,5 +16,6 @@ export interface AchievementData {
     updated_at?: string;   // Added from API response
     updated_by?: string;   // Added from API response
     created_by?: string;   // Added from API response
+    level_id?: string; // Add this field
     [key: string]: any;    // Index signature to satisfy Data type
 }
