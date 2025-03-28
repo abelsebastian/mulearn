@@ -48,6 +48,10 @@ function ManageAchievements() {
         { column: "tags", Label: "Tags", isSortable: false },
         { column: "type", Label: "Type", isSortable: true },
         { column: "created_at", Label: "Created On", isSortable: true },
+        { column: "updated_at", Label: "Updated On", isSortable: true },
+        { column: "updated_by", Label: "Updated By", isSortable: false },
+        { column: "created_by", Label: "Created By", isSortable: false },
+        { column: "level_id", Label: "Level ID", isSortable: true },
         { column: "template_id", Label: "Template ID", isSortable: true } 
     ];
 
@@ -60,9 +64,13 @@ function ManageAchievements() {
                     ...achievement,
                     id: achievement.id,
                     name: achievement.name,
+                    title: achievement.name || "",  // Ensure title is set
                     levelBased: achievement.level_based ?? false,
+                    level_based: achievement.level_based ?? false,  // Keep both for consistency
                     vcToken: achievement.has_vc ?? false,
-                    template_id: achievement.template_id || "" 
+                    has_vc: achievement.has_vc ?? false,  // Keep both for consistency
+                    template_id: achievement.template_id || "",
+                    level_id: achievement.level_id || ""  // Ensure level_id is included
                 }));
                 setData(transformedData);
                 setTotalPages(Math.ceil(transformedData.length / perPage));
@@ -133,8 +141,15 @@ function ManageAchievements() {
     const handleEdit = (id: string | Number | Boolean) => {
         const achievement = data.find((item) => item.id === id); 
         if (achievement) {
-            console.log(achievement, "found ")
-            setSelectedAchievement(achievement);
+            // Make sure all necessary fields are properly prepared
+            const preparedAchievement = {
+                ...achievement,
+                title: achievement.name || achievement.title || "",
+                level_based: achievement.level_based ?? achievement.levelBased ?? false,
+                has_vc: achievement.has_vc ?? achievement.vcToken ?? false,
+                level_id: achievement.level_id || ""  // Ensure level_id is included
+            };
+            setSelectedAchievement(preparedAchievement);
             setIsEditModalOpen(true); 
         }
     };
@@ -275,6 +290,18 @@ function ManageAchievements() {
                                 ) : (
                                     <span style={{ fontSize: "24px" }}>{row.icon}</span>
                                 )}
+                            </div>
+                        );
+                    }
+                    if (column === "level_id") {
+                        return <div>{row.level_id || (row.levelBased ? "Not set" : "-")}</div>;
+                    }
+                    if (column === "tags") {
+                        return (
+                            <div>
+                                {Array.isArray(row.tags) && row.tags.length > 0
+                                    ? row.tags.join(", ")
+                                    : "-"}
                             </div>
                         );
                     }

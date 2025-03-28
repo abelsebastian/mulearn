@@ -1,4 +1,3 @@
-// CreateAchievementForm.tsx
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import styles from "../../utils/modalForm.module.css";
 import toast from "react-hot-toast";
@@ -8,9 +7,12 @@ import { Switch } from "@chakra-ui/react";
 import { createAchievements } from "./services/api";
 import { AchievementData } from "./ManageAchievementsInterface";
 import { getQSCredentials } from "../Profile/services/api";
+import { getUUID } from "../Tasks/TaskApis";
+import { AxiosError } from "axios";
 
 interface ExtendedAchievementData extends AchievementData {
     template_id?: string;
+    level_id?: string; // Added level_id to the interface
 }
 
 type Props = {
@@ -40,8 +42,11 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
         has_vc: false,
         tags: [],
         type: "",
+        levelBased: false,
+        vcToken: false,
         icon: "",
-        template_id: ""
+        template_id: "",
+        level_id: "" // Added level_id to initial state
     });
     const [qsTemplates, setQstemplates] = useState<any>([]);
     const [selectedPreset, setSelectedPreset] = useState<any>(null);
@@ -49,8 +54,19 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [useQSeverse, setUseQSeverse] = useState(false);
     const [tagInput, setTagInput] = useState("");
+    const [uuidData, setUuidData] = useState<{ [index: string]: any[] } | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    useEffect(() => {
+        (async () => {
+            try {
+                setUuidData(await getUUID());
+            } catch (err) {
+                console.log(err as AxiosError);
+            }
+        })();
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setData(prev => ({ ...prev, [name]: value } as ExtendedAchievementData));
     };
@@ -94,10 +110,14 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 type: "",
                 tags: [],
                 has_vc: false,
+                levelBased: false,
+                vcToken: false,
                 level_based: false,
                 icon: "",
                 template_id: "",
-                description: ""
+                description: "",
+                level_id: "", // Reset level_id
+              
             });
         }
         setUseQSeverse(prev => !prev);
@@ -116,7 +136,7 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 toast.error("Failed to fetch QSeverse credentials");
                 console.error("Error fetching QSeverse credentials:", error);
             }
-        }
+        };
         getQSCredentialsList();
     }, []);
 
@@ -128,10 +148,13 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 type: "",
                 tags: [],
                 has_vc: false,
+                levelBased: false,
+                vcToken: false,
                 level_based: false,
                 icon: "",
                 template_id: "",
-                description: ""
+                description: "",
+                level_id: "" // Reset level_id
             });
             return;
         }
@@ -150,7 +173,8 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
             level_based: isLevelBased,
             icon: selectedTemplate.banner_image_url || "",
             template_id: selectedTemplate.id || "",
-            description: selectedTemplate.description || ""
+            description: selectedTemplate.description || "",
+            level_id: "" // Reset level_id when template changes
         }));
     };
 
@@ -166,21 +190,31 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
             }
         });
 
+        // Optional: Add validation for level_id if level_based is true
+        if (data.level_based && !data.level_id) {
+            isValid = false;
+            newErrors.level_id = "Level is required when Level Based is enabled";
+        }
+
         setErrors(newErrors);
 
         if (!isValid) return;
 
         setIsSubmitting(true);
         try {
-            const achievementData = {
+            const achievementData: AchievementData = {
+                title: data.title || "",
                 name: data.title || "",
                 level_based: data.level_based ?? false,
+                levelBased: data.level_based ?? false,
                 description: data.description,
                 has_vc: data.has_vc ?? false,
+                vcToken: data.has_vc ?? false,
                 type: data.type,
                 tags: data.tags,
                 icon: data.icon || "",
-                template_id: data.template_id || ""
+                template_id: data.template_id || "",
+                level_id: data.level_id || "" // Include level_id in submission
             };
 
             const response = await createAchievements(achievementData);
@@ -191,12 +225,14 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 vcToken: response?.has_vc ?? false,
                 id: response?.id,
                 created_at: response?.created_at || new Date().toISOString(),
+                title: response?.title ?? data.title, // Ensure title is always a string
                 name: response?.title ?? data.title,
                 description: response?.description ?? data.description,
                 type: response?.type ?? data.type,
                 tags: response?.tags ?? data.tags,
                 icon: response?.icon ?? data.icon,
-                template_id: response?.template_id ?? data.template_id
+                template_id: response?.template_id ?? data.template_id,
+                level_id: response?.level_id ?? data.level_id // Include level_id in response
             };
 
             toast.success("Achievement created successfully");
@@ -211,7 +247,10 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                 tags: [],
                 type: "",
                 icon: "",
-                template_id: ""
+                template_id: "",
+                levelBased: false,
+                vcToken: false,
+                level_id: "" // Reset level_id
             });
             setUseQSeverse(false);
             setTagInput("");
@@ -288,6 +327,28 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                     </label>
                 </div>
 
+                {data.level_based && uuidData && (
+                    <div className={styles.inputContainer}>
+                        <label>
+                            Level
+                            <select
+                                name="level_id"
+                                value={data.level_id}
+                                onChange={handleChange}
+                                disabled={isSubmitting || isFieldDisabled("level_id")}
+                            >
+                                <option value="">Select a level</option>
+                                {uuidData?.level.map(val => (
+                                    <option key={val.id} value={val.id}>
+                                        {val.name}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.level_id && <div style={{ color: "red" }}>{errors.level_id}</div>}
+                        </label>
+                    </div>
+                )}
+
                 <div className={styles.inputContainer}>
                     <label>
                         Has VC?
@@ -361,7 +422,7 @@ const CreateAchievementForm = forwardRef((props: Props, ref: any) => {
                         placeholder="Icon URL"
                         value={data.icon}
                         onChange={handleChange}
-                        // disabled={isSubmitting || isFieldDisabled("icon")}
+                        disabled={isSubmitting || isFieldDisabled("icon")}
                     />
                 </div>
 

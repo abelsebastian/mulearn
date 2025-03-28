@@ -73,7 +73,7 @@ export function LearningCircleCard({
   meet_link,
   meet_time,
   imageUrl,
-  meet_code = 'U145K4',
+  meet_code,
   hasJoined = false,
   hasCompleted = false,
   is_rsvp,
@@ -81,6 +81,7 @@ export function LearningCircleCard({
   setOpen,
   handleDelete,
   handleEdit,
+  created_by_id,
   members = [],
   onClose,
   ...data
@@ -104,16 +105,18 @@ export function LearningCircleCard({
     setIsMeetJoinable(currentTime >= meetTime);
   }, [meet_time]);
 
-
   useEffect(() => {
     fetchURLQRCode(
       setBlob,
-      meet_code
+      meet_code as string,
     );
   }, [meet_code]);
 
+
+  console.log(data)
+
   const currentLoggedInUser = useUserStore((state) => state.userProfile.id);
-  const isCreator = data.created_by_id === currentLoggedInUser;
+  const isCreator = created_by_id === currentLoggedInUser;
 
   const handleClose = () => {
     setOpen(false);
