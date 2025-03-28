@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   deleteScheduleMeetup,
+  getMeetupInfo,
   getMeetups,
 } from "../../services/LearningCircleAPIs";
 import { CircleMeetupInfo } from "../../services/LearningCircleInterface";
@@ -83,6 +84,15 @@ export default function LearningCircleLanding() {
       setisLoading(false);
     });
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (selectedCircle) {
+      getMeetupInfo(selectedCircle as string).then(res => {
+        console.log(res);
+        setSelectedMeetup(res as CircleMeetupInfo);
+      });
+    }
+  }, [selectedCircle]);
 
   const handleModalOpen = (event: CircleMeetupInfo) => {
     setSelectedMeetup(event)

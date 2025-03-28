@@ -73,7 +73,7 @@ export function LearningCircleCard({
   meet_link,
   meet_time,
   imageUrl,
-  meet_code = 'U145K4',
+  meet_code,
   hasJoined = false,
   hasCompleted = false,
   is_rsvp,
@@ -108,8 +108,9 @@ export function LearningCircleCard({
   useEffect(() => {
     fetchURLQRCode(
       setBlob,
-      meet_code
+      meet_code as string,
     );
+    console.log("meet_code", meet_code);
   }, [meet_code]);
 
   const currentLoggedInUser = useUserStore((state) => state.userProfile.id);
