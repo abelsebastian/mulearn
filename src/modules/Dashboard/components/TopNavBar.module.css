@@ -1,9 +1,0 @@
-.hideOnMobile {
-    display: block;
-}
-
-@media screen and (max-width: 768px) {
-    .hideOnMobile {
-        display: none;
-    }
-} 

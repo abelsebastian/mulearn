@@ -347,7 +347,7 @@ const LearningPathPage: React.FC = () => {
       const response = await getUserIGFormattedTasks(userIGIDs, unlockedLevel);
       let processedLevels: FormattedLevel[] = [];
 
-      if (selectedIg.id) {
+      if (selectedIg.id) { 
         processedLevels = response[selectedIg.id] || [];
       } else {
         const levelMap: Record<number, FormattedLevel> = {
