@@ -70,6 +70,7 @@ export interface CircleMeetupInfo {
     circle_id: string;
     id: string;
     ig_name: string;
+    ig?: string;
     description?: string;
     created_by: string;
     ig_id: string
@@ -89,6 +90,7 @@ export interface CircleMeetupInfo {
     is_approved: boolean;
     is_started: boolean;
     is_ended: boolean;
+    is_joined?: boolean;
     attendee: CircleMeetingAttendee; 
     attendees: CircleMeetingAttendee[] | null; 
     meet_link: string;
