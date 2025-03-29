@@ -188,12 +188,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-items: flex-start;
+    justify-items: center;
     position: absolute;
     top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
-    margin-top: 10rem;
     padding: 4rem 0;
     width: 80vw;
 }
@@ -270,6 +269,7 @@
         flex: 1 1 65%;
         margin-bottom: 0;
     }
+   
 
     .filterItem {
         flex: 1 1 auto;
