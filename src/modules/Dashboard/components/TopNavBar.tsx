@@ -121,7 +121,9 @@ const TopNavBar: React.FC<TopNavBarProps> = ({ setUserInfo, userInfo }) => {
                                 </div>)}
                             <div >
                                 {refreshToken && (
-                                    <GameProgressBar />
+                                    <div className={styles.hideOnMobile}>
+                                        <GameProgressBar />
+                                    </div>
                                 )}
                             </div>
                             {refreshToken && (
