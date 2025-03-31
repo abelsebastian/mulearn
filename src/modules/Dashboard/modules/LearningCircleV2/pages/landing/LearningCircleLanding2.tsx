@@ -288,7 +288,7 @@ export default function LearningCircleLanding() {
 
         <div className={styles.gridContainer}>
           {filteredCircles.map((circle) => {
-            return <LearningCircleListItem key={circle.id} {...circle} attendees_count={circle.attendees_count} onClick={() => handleClick(circle.id)} />
+            return <LearningCircleListItem key={circle.id} {...circle} onClick={() => handleClick(circle.id)} />
           })}
         </div>
 

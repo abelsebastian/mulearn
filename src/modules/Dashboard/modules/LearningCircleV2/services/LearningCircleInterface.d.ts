@@ -96,8 +96,9 @@ export interface CircleMeetupInfo {
     is_started: boolean;
     is_ended: boolean;
     is_joined?: boolean;
-    attendee: CircleMeetingAttendee;
+    attendee: CircleMeetingAttendee; 
     attendees: CircleMeetingAttendee[] | null;
+    attendees_count: number;
     meet_link: string;
 }
 
