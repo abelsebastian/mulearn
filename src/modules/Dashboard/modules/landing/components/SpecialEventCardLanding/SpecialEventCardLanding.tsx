@@ -96,18 +96,22 @@ const SpecialEventCardLanding: React.FC<{ specialevent: SpecialEvent }> = ({ spe
                           </Text>
                         </HStack>
                       )}
+                      {specialevent.time && (
                       <HStack spacing={3}>
                         <Box className={`${styles["icon-circle"]} ${styles["icon-clock"]}`}>
                           <Icon as={FiClock} boxSize={5} />
                         </Box>
-                        <Text fontSize="md">{specialevent.time || "10:00 AM"}</Text>
-                      </HStack>
+
+                        <Text fontSize="md">{specialevent.time}</Text>
+                      </HStack>)}
+                      {specialevent.location && (
                       <HStack spacing={3}>
                         <Box className={`${styles["icon-circle"]} ${styles["icon-location"]}`}>
                           <Icon as={FaMapMarkerAlt} boxSize={5} />
                         </Box>
-                        <Text fontSize="md">{specialevent.location || "mulearn"}</Text>
+                        <Text fontSize="md">{specialevent.location}</Text>
                       </HStack>
+                      )}
                     </VStack>
                   </VStack>
                 </ModalBody>
@@ -126,7 +130,7 @@ const SpecialEventCardLanding: React.FC<{ specialevent: SpecialEvent }> = ({ spe
                   }}
                   onClick={() => window.open(specialevent.link, "_blank")}
                   >
-                  Register for Event
+                  Explore More
                 </Button>
 
                 </ModalFooter>
