@@ -112,12 +112,23 @@ const SpecialEventCardLanding: React.FC<{ specialevent: SpecialEvent }> = ({ spe
                   </VStack>
                 </ModalBody>
                 <ModalFooter className={styles["modal-footer-custom"]}>
-                  <Button
-                    className={styles["register-button"]}
-                    onClick={() => window.open(specialevent.link, "_blank")}
+                <Button
+                  sx={{
+                    backgroundColor: "#4285f4",
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: "1rem",
+                    borderRadius: "0.375rem",
+                    padding: "0.75rem 1.5rem",
+                    height: "50px",
+                    width: "100%",
+                    _hover: { backgroundColor: "#3367d6" }
+                  }}
+                  onClick={() => window.open(specialevent.link, "_blank")}
                   >
-                    Register for Event
-                  </Button>
+                  Register for Event
+                </Button>
+
                 </ModalFooter>
               </ModalContent>
             </Modal>
