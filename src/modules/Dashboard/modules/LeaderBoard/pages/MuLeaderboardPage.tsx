@@ -4,7 +4,8 @@ import { privateGateway, publicGateway } from '@/MuLearnServices/apiGateways';
 import { dashboardRoutes } from '@/MuLearnServices/urls';
 import Leaderboard from '../components/Leaderboard';
 import styles from './leaderboard.module.css';
-import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader"; 
+import MuLoader from "@/MuLearnComponents/MuLoader/MuLoader";
+import { Helmet } from "react-helmet";
 
 interface LeaderboardEntry {
   name: string;
@@ -32,7 +33,7 @@ const MuLeaderboardPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<"monthly" | "overall">("monthly");
   const [activeCategory, setActiveCategory] = useState<"student" | "campus">("student");
-  
+
   const [fetchedData, setFetchedData] = useState<FetchedDataState>({
     student: {
       monthly: false,
@@ -50,16 +51,16 @@ const MuLeaderboardPage = () => {
         setIsLoading(true);
 
         if (activeCategory === "student") {
-          const apiRoute = activeFilter === "monthly" 
-            ? dashboardRoutes.getMonthlyStudentLeaderBoard 
+          const apiRoute = activeFilter === "monthly"
+            ? dashboardRoutes.getMonthlyStudentLeaderBoard
             : dashboardRoutes.getStudentLeaderBoard;
-          
+
           const response = await publicGateway.get(apiRoute);
-          
+
           if (response?.data?.response) {
-            const mappedData = response.data.response.map((student: { 
-              full_name: string; 
-              total_karma: number 
+            const mappedData = response.data.response.map((student: {
+              full_name: string;
+              total_karma: number
             }) => ({
               name: student.full_name,
               [activeFilter]: student.total_karma,
@@ -84,14 +85,14 @@ const MuLeaderboardPage = () => {
           const apiRoute = activeFilter === "monthly"
             ? dashboardRoutes.getCollegeMonthlyLeaderBoard
             : dashboardRoutes.getCollegeLeaderBoard;
-          
+
           const response = await publicGateway.get(apiRoute);
-          
+
           if (response?.data?.response) {
-            const mappedData = response.data.response.map((campus: { 
-              title?: string; 
-              code?: string; 
-              total_karma: number 
+            const mappedData = response.data.response.map((campus: {
+              title?: string;
+              code?: string;
+              total_karma: number
             }) => ({
               name: activeFilter === "monthly" ? campus.code : campus.title,
               [activeFilter]: campus.total_karma,
@@ -128,38 +129,53 @@ const MuLeaderboardPage = () => {
   }, [activeFilter, activeCategory, fetchedData]);
 
   return (
-    <div className={styles.pageWrapper}>
-      {isLoading ? (
-        <div className={styles.loadingContainer}>
-          <MuLoader /> 
-        </div>
-      ) : (
-        <Leaderboard
-          leaderboards={{
-            student: {
-              overall: studentLeaderboardData,
-              monthly: monthlyStudentLeaderBoard,
-            },
-            campus: {
-              overall: campusLeaderboardData,
-              monthly: monthlyCampusLeaderboard,
-            },
-          }}
-          filterOptions={["monthly", "overall"]}
-          categoryOptions={[
-            { label: "Student", value: "student" },
-            { label: "Campus", value: "campus" },
-          ]}
-          defaultFilter="monthly"
-          defaultCategory="student"
-          topPlayerCount={3}
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+    <>
+      <Helmet>
+        <title>Leaderboard | µLearn</title>
+        <meta
+          name="description"
+          content="Explore the leaderboard to see top µLearners and campuses."
         />
-      )}
-    </div>
+        <meta property="og:title" content="Leaderboard | µLearn" />
+        <meta property="og:url" content="https://app.mulearn.org/dashboard/leaderboard" />
+        <meta
+          property="og:description"
+          content="Explore the leaderboard to see top µLearners and campuses."
+        />
+      </Helmet>
+      <div className={styles.pageWrapper}>
+        {isLoading ? (
+          <div className={styles.loadingContainer}>
+            <MuLoader />
+          </div>
+        ) : (
+          <Leaderboard
+            leaderboards={{
+              student: {
+                overall: studentLeaderboardData,
+                monthly: monthlyStudentLeaderBoard,
+              },
+              campus: {
+                overall: campusLeaderboardData,
+                monthly: monthlyCampusLeaderboard,
+              },
+            }}
+            filterOptions={["monthly", "overall"]}
+            categoryOptions={[
+              { label: "Student", value: "student" },
+              { label: "Campus", value: "campus" },
+            ]}
+            defaultFilter="monthly"
+            defaultCategory="student"
+            topPlayerCount={3}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
