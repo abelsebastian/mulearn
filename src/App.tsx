@@ -164,11 +164,11 @@ function App() {
     { path: "register/", children: [{ path: "", element: <RegisterPage /> }] },
     { path: "login", element: <SignIn /> },
     { path: "forgot-password", element: <ForgetPassword /> },
-    { path: "reset-password", element: <ResetPassword /> },
+    // { path: "reset-password", element: <ResetPassword /> },
     { path: "/register/interests", element: <UserInterest /> },
     { path: "/register/organization", element: <CollegePage /> },
     { path: "/register/pathfinder", element: <PathFinder /> },
-    { path: "/signin", element: <SignIn /> },
+    // { path: "/signin", element: <SignIn /> },
     { path: "register/about", element: <Rolepage /> },
     {
       path: "/dashboard",
