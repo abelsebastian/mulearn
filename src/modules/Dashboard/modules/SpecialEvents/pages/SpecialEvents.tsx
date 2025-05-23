@@ -3,7 +3,7 @@ import styles from "./SpecialEvents.module.css";
 import top100coders from ".././assets/top-100.webp";
 import launchpad from "../assets/launchpad.webp";
 import trivialideas from "../assets/trivialideas.webp";
-import SpecialEventCardLanding from "../../landing/components/SpecialEventCardLanding/SpecialEventCardLanding";
+import SpecialEventCardLanding from "../../../../Public/Home/components/SpecialEventCardLanding/SpecialEventCardLanding";
 import { Helmet } from "react-helmet";
 
 const SpecialEventsList: SpecialEvent[] = [

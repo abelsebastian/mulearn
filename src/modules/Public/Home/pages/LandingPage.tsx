@@ -3,21 +3,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import styles from "./LandingPage.module.css";
-import LearningPathList from "../../LearningPaths/services/LearningPathList";
-import { FaLinkedin, FaInstagram, FaYoutube, FaFacebook } from "react-icons/fa";
-import LearningPathCard from "../../LearningPaths/components/LearningPathCard";
-import MulearnBrand from "../../../assets/MulearnBrand";
-import RolesSection from "../components/RolesSection";
+import LearningPathList from "../../../Dashboard/modules/LearningPaths/services/LearningPathList";
+import LearningPathCard from "../../../Dashboard/modules/LearningPaths/components/LearningPathCard";
+import MulearnBrand from "../../../Dashboard/assets/MulearnBrand";
+import RolesSection from "../components/RolesSection/RolesSection";
 import CountUp from "react-countup";
 import { Helmet } from "react-helmet";
 
 // Images for the special events cards
-import top100coders from "../../SpecialEvents/assets/top-100.webp";
-import launchpad from "../../SpecialEvents/assets/launchpad.webp";
-import trivialideas from "../../SpecialEvents/assets/trivialideas.webp";
+import top100coders from "../assets/top-100.webp";
+import launchpad from "../assets/launchpad.webp";
+import trivialideas from "../assets/trivialideas.webp";
 import SpecialEventCardLanding from "../components/SpecialEventCardLanding/SpecialEventCardLanding";
 import illustration from "../assets/illustration.webp"
-import FeatureGrid from "./components/FeatureGrid";
+import FeatureGrid from "../components/FeatureGrid/FeatureGrid";
+import Footer from "../components/Footer/Footer";
+import Navbar from "../components/Navbar/Navbar";
 
 
 /**
@@ -245,25 +246,7 @@ const MuLiveCounter = () => {
 
 const MuLearnLanding = () => {
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const refreshToken = localStorage.getItem("refreshToken");
-
-  function NavLinks() {
-    return (
-      <>
-        <li className="cursor-pointer" onClick={() => navigate("/")}>Home</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
-        <li className="cursor-pointer" onClick={() => window.open("https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be", "_blank")}>
-          Why μLearn
-        </li>
-        <li className="cursor-pointer" onClick={() => window.open("https://mulearn.org", "_blank")}>
-          Visit the Old Site
-        </li>
-      </>
-    );
-  }
 
   return (
     <>
@@ -287,83 +270,7 @@ const MuLearnLanding = () => {
         animate="visible"
         variants={containerVariants}
       >
-        {/* Navbar */}
-        <div className={styles.landingPaddingContainer}>
-          <motion.nav
-            className={styles.navbar}
-            variants={fadeInUp}
-            viewport={{ once: true, amount: 0.5 }}
-          >
-            <div className={styles.logo}>
-              <MulearnBrand />
-            </div>
-            <ul className={styles.navLinks}>
-              <NavLinks />
-            </ul>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className={styles.navButtons}>
-                {refreshToken ? (
-                  <button
-                    className={`${styles.loginBtn} ${styles.logInDesktop}`}
-                    onClick={() => navigate("/dashboard/home")}
-                  >
-                    Dashboard
-                  </button>
-                ) : (
-                  <button
-                    className={`${styles.loginBtn} ${styles.logInDesktop}`}
-                    onClick={() => navigate("/login")}
-                  >
-                    Login
-                  </button>
-                )}
-              </div>
-              {isMenuOpen && (
-                <motion.div
-                  className={`${styles.mobileNavLinks} ${isMenuOpen ? styles.sh : ""}`}
-                  initial={{ x: "100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "100%" }}
-                >
-                  <button
-                    className={styles.closeBtn}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    ×
-                  </button>
-                  <ul>
-                    <NavLinks />
-                  </ul>
-                  <div className={styles.navButtons}>
-                    {refreshToken ? (
-                      <button
-                        className={styles.loginBtn}
-                        onClick={() => navigate("/dashboard/home")}
-                      >
-                        Dashboard
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.loginBtn}
-                        onClick={() => navigate("/login")}
-                      >
-                        Login
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-              <div
-                className={styles.hamburger}
-                onClick={() => setIsMenuOpen(true)}
-              >
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </div>
-          </motion.nav>
-        </div>
+        <Navbar refreshToken={refreshToken} />
 
         {/* Hero Section */}
         <motion.header
@@ -731,48 +638,9 @@ const MuLearnLanding = () => {
           </motion.section>
 
         </div>
-        {/* Footer */}
-        <div className={styles.landingPaddingContainer}>
-          <motion.footer
-            className={styles.footer}
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className={styles.footerContainer}>
-              <div className={styles.footerSection}>
-                <h3>Quick Links</h3>
-                <ul>
-                  <li><a href="https://mulearn.org/careers">Career Labs</a></li>
-                  <li><a href="https://gtechmulearn.medium.com/">Blog</a></li>
-                  <li><a className="cursor-pointer" onClick={() => (navigate("dashboard/interestgroups"))}>Interest Groups</a></li>
-                </ul>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Legal</h3>
-                <ul>
-                  <li><a href="https://mulearn.org/termsandconditions">Terms and Conditions</a></li>
-                  <li><a href="https://mulearn.org/privacypolicy">Privacy Policy</a></li>
-                </ul>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Follow Us</h3>
-                <div className={styles.socialIcons}>
-                  <a href="http://www.linkedin.com/company/gtechmulearn/"><FaLinkedin /></a>
-                  <a href="https://www.instagram.com/mulearn.official/"><FaInstagram /></a>
-                  <a href="https://www.youtube.com/c/mulearn"><FaYoutube /></a>
-                  <a href="http://www.facebook.com/gtechmulearn"><FaFacebook /></a>
-                </div>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Contact</h3>
-                <p>Technopark Trivandrum, Kazhakkoottam,</p>
-                <p>Trivandrum - 695581, Kerala, India</p>
-              </div>
-            </div>
-          </motion.footer>
-        </div>
+
+        <Footer />
+
       </motion.div>
     </>
 
