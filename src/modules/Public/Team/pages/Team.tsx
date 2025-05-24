@@ -6,20 +6,25 @@ import Footer from "../../Home/components/Footer/Footer";
 import styles from "./Team.module.css";
 import TeamCard from "../components/TeamCard/TeamCard";
 
-// Data
-import execom from "../data/execom.json";
-import core from "../data/core.json";
-import zonal from "../data/zonal.json";
-import district from "../data/district.json";
-import ca from "../data/ca.json";
-import pillars from "../data/pillars.json";
-import pillarsQ1 from "../data/pillarsQ1.json";
-import mulearnhq from "../data/mulearnhq.json";
-import communityteam from "../data/communityteam.json";
-import associates from "../data/associates.json";
-import enablerhq from "../data/enablerhq.json";
-import yipteam from "../data/yip-team.json";
-import techTeam from "../data/tech-contributors.json";
+// Team
+import execom from "../data/team/execom.json";
+import core from "../data/team/core.json";
+import zonal from "../data/team/zonal.json";
+import district from "../data/team/district.json";
+import ca from "../data/team/ca.json";
+
+// 2023
+import pillars from "../data/2023/pillars.json";
+import pillarsQ1 from "../data/2023/pillarsQ1.json";
+import mulearnhq from "../data/2023/mulearnhq.json";
+import communityteam from "../data/2023/communityteam.json";
+import associates from "../data/2023/associates.json";
+import enablerhq from "../data/2023/enablerhq.json";
+import techTeam from "../data/2023/tech.json";
+import yipteam from "../data/2023/yip.json";
+
+// 2024
+import pillars2024 from "../data/2024/pillars.json";
 
 const containerVariants = {
   hidden: { opacity: 0 },
