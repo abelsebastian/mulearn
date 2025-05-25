@@ -6,20 +6,20 @@ import Footer from "../../Home/components/Footer/Footer";
 import styles from "./Team.module.css";
 import TeamCard from "../components/TeamCard/TeamCard";
 
-// Team
-import execom from "../data/team/execom.json";
-import core from "../data/team/core.json";
-import zonal from "../data/team/zonal.json";
-import district from "../data/team/district.json";
-import ca from "../data/team/ca.json";
+// muteam
+import execom from "../data/muteam/execom.json";
+import core from "../data/muteam/core.json";
+import zonal from "../data/muteam/zonal.json";
+import district from "../data/muteam/district.json";
+import ca from "../data/muteam/ca.json";
 
 // 2023
 import pillars from "../data/2023/pillars.json";
 import pillarsQ1 from "../data/2023/pillarsQ1.json";
-import mulearnhq from "../data/2023/mulearnhq.json";
-import communityteam from "../data/2023/communityteam.json";
+import mulearnhq from "../data/2023/mulearn.json";
+import communityteam from "../data/2023/community.json";
 import associates from "../data/2023/associates.json";
-import enablerhq from "../data/2023/enablerhq.json";
+import enablerhq from "../data/2023/enabler.json";
 import techTeam from "../data/2023/tech.json";
 import yipteam from "../data/2023/yip.json";
 
@@ -104,43 +104,45 @@ const Teams = () => {
       >
         <Navbar refreshToken={null} />
 
-        <div className={styles.first_view}>
-          <div className={styles.fv_texts}>
-            <motion.p
-              variants={textVariant}
+        <div className={styles.first_view_container}>
+          <div className={styles.first_view}>
+            <div className={styles.fv_texts}>
+              <motion.p
+                variants={textVariant}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className={styles.fv_heading}
+              >
+                The <span>Gears</span> Behind The Machine.
+              </motion.p>
+              <motion.p
+                variants={textVariant}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className={styles.fv_tagline}
+              >
+                The 'µLearn' community's growth to this moment would not have
+                been possible without the team's soul and heart. Our team has a
+                big impact on how well we do our work. Here is the team to which
+                we are addressing.
+              </motion.p>
+            </div>
+            <motion.div
+              variants={fadeInUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className={styles.fv_heading}
+              className={styles.fv_illustration}
             >
-              The <span>Gears</span> Behind The Machine.
-            </motion.p>
-            <motion.p
-              variants={textVariant}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className={styles.fv_tagline}
-            >
-              The 'µLearn' community's growth to this moment would not have
-              been possible without the team's soul and heart. Our team has a
-              big impact on how well we do our work. Here is the team to which
-              we are addressing.
-            </motion.p>
+              <img
+                className={styles.fv_image}
+                src="assets/team/illustration.webp"
+                alt=""
+              />
+            </motion.div>
           </div>
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className={styles.fv_illustration}
-          >
-            <img
-              className={styles.fv_image}
-              src="assets/team/illustration.gif"
-              alt=""
-            />
-          </motion.div>
         </div>
 
         <motion.div
@@ -300,11 +302,7 @@ const Teams = () => {
                     <TeamCard
                       name={member.name}
                       designation={member.team}
-                      image={
-                        member.image
-                          ? member.image
-                          : `assets/team/pillarsq3/${member.name}.webp`
-                      }
+                      image={member.image}
                       linkedIn={member.linkedin ? member.linkedin : ""}
                       github={member.github ? member.github : ""}
                       twitter={member.twitter ? member.twitter : ""}
@@ -389,7 +387,7 @@ const Teams = () => {
                     <TeamCard
                       name={member.name}
                       designation={member.designation}
-                      image={`/assets/team/yip-team/${member.name}.webp`}
+                      image={member.image}
                       linkedIn={member.linkedin ? member.linkedin : ""}
                     />
                   </motion.div>
@@ -494,7 +492,7 @@ const Teams = () => {
                   >
                     <TeamCard
                       name={member.name}
-                      image={`/assets/team/tech-contributors/${member.name}.webp`}
+                      image={member.image}
                       designation={member.team ? member.team : ""}
                       linkedIn={member.linkedin ? member.linkedin : ""}
                     />
