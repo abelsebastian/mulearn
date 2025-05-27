@@ -61,7 +61,8 @@ const RegisterPage = lazy(() => import("./modules/Common/Authentication/pages/On
 const LearningPaths = lazy(() => import("./modules/Dashboard/modules/LearningPaths/pages/LearningPaths"));
 const LearningPathOne = lazy(() => import("./modules/Dashboard/modules/LearningPaths/pages/LearningPathOne/LearningPathOne"));
 const ComingSoonPage = lazy(() => import("./modules/Common/Authentication/pages/ComingSoon"));
-const MuLearnLanding = lazy(() => import("./modules/Dashboard/modules/landing/pages/LandingPage"));
+const MuLearnLanding = lazy(() => import("./modules/Public/Home/pages/LandingPage"));
+const TeamsPage = lazy(() => import("./modules/Public/Team/pages/Team"));
 const CoursesMainPage = lazy(() => import("./modules/Dashboard/modules/Courses/Pages/CoursesMainPage"));
 const ManagementPage = lazy(() => import("./modules/Dashboard/modules/Management/Pages/ManagementPage"));
 const ManageUsersPage = lazy(() => import("./modules/Dashboard/modules/ManageUsers/ManageUsers"));
@@ -170,6 +171,7 @@ function App() {
     { path: "/register/pathfinder", element: <PathFinder /> },
     // { path: "/signin", element: <SignIn /> },
     { path: "register/about", element: <Rolepage /> },
+    { path: "team", element: <TeamsPage /> },
     {
       path: "/dashboard",
       element: <DashboardRootLayout />,

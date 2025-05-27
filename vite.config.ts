@@ -23,6 +23,9 @@ const sitemapRoutes = [
 ]
 
 export default defineConfig({
+    server: {
+        allowedHosts: true,
+    },
     // css: {
     //     postcss: {
     //         plugins: [postcssNesting]
