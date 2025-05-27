@@ -20,6 +20,7 @@ const Navbar = ({ refreshToken }: { refreshToken: string | null }) => {
         <li className="cursor-pointer" onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
         <li className="cursor-pointer" onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
         <li className="cursor-pointer" onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
+        <li className="cursor-pointer" onClick={() => navigate("/team")}>Team</li>
         <li className="cursor-pointer" onClick={() => window.open("https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be", "_blank")}>
           Why μLearn
         </li>
