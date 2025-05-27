@@ -2,7 +2,7 @@ import { FaLinkedin, FaInstagram, FaYoutube, FaFacebook, FaGithub, FaTwitter } f
 import styles from "./TeamCard.module.css";
 import { FaX } from "react-icons/fa6";
 
-const img = 'https://t3.ftcdn.net/jpg/01/18/01/98/360_F_118019822_6CKXP6rXmVhDOzbXZlLqEM2ya4HhYzSV.jpg'
+const img = "assets/team/default.webp";
 
 const TeamCard = ({ name, designation, image, linkedIn, github, twitter, muid, leadDesignation }: any) => {
   return (
