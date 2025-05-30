@@ -295,6 +295,8 @@ export const PublicRoutes = {
 } as const;
 
 export const googleSheetRoutes = {
+    getLcData:
+        "https://opensheet.elk.sh/1jzmjBxINQrrIf2dNke4EsGwmI9zmAOCrvFwBqG12RIs/Sheet1",
     getHackathonData:
         "https://opensheet.elk.sh/1w2Ax918fkkumNiCJ42tc5T9fJeidVGL9_9B-2j7klDM/Sheet1/",
     getHackathonDashboardData:
