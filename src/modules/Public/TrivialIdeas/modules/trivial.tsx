@@ -6,7 +6,6 @@ import Button from "../components/botton/button";
 import Price from "./price";
 import ProcessDiagram from "./process/process";
 import Faqs from "./faq";
-import Footer from "../components/footer/footer";
 import pattern1 from "../assets/pattern1.png";
 import pattern2 from "../assets/pattern2.png";
 import pattern3 from "../assets/pattern3.png";
@@ -20,28 +19,10 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { motion } from "framer-motion"
 import { Helmet } from "react-helmet";
+import navbar from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";
 
 
-const navbar = (handelClick: any) => {
-
-    return (
-        <div className={styles.navbar}>
-            <div className={styles.logo}>
-                <img src={logo} alt="" />
-            </div>
-            <div className={styles.navbarLinks}>
-                <a href="#">About</a>
-                <a href="#">Questions</a>
-                <a href="">
-                    <Button text={null} color={"black"} name={"Join Us"} />
-                </a>
-            </div>
-            <div onClick={handelClick} className={styles.hamburger}>
-                <IoMenu size={35} />
-            </div>
-        </div>
-    );
-}
 
 const patterns = [
     {
