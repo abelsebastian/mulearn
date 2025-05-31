@@ -21,6 +21,7 @@
 .footerSection h3 {
   font-size: 1rem;
   margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .footerSection ul {
@@ -39,12 +40,13 @@
 }
 
 .footerSection ul li a:hover {
-  color: rgb(53, 53, 53);
+    color: var(--Primary);
+
 }
 
 .socialIcons {
   display: flex;
-  justify-content: left;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -55,7 +57,7 @@
 }
 
 .socialIcons a:hover {
-  color: #facc15;
+  color: var(--Primary);
 }
 
 
