@@ -8,11 +8,12 @@ import MuLoader from '@/MuLearnComponents/MuLoader/MuLoader';
 import { InterestGroupData, interestGroups } from "../data/interestGroups";
 import { Helmet } from 'react-helmet';
 
+
 function InterestGroupsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
+  const itemsPerPage = 12;
   const navigate = useNavigate();
   const [interestgroups, setInterestGroups] = useState<any[]>([]);
 
@@ -39,7 +40,8 @@ function InterestGroupsPage() {
     { title: "Cloud and DevOps", image: "/assets/IG/Cover/6.webp" },
     { title: "Product Management", image: "/assets/IG/Cover/7.webp" },
     { title: "Internet Of Things (IOT) And Robotics", image: "/assets/IG/Cover/8.webp" },
-    { title: "Entrepreneurship", image: "/assets/IG/Cover/9.webp" }
+    { title: "Entrepreneurship", image: "/assets/IG/Cover/9.webp" },
+    { title: "AR/VR", image: "/assets/IG/Cover/10.webp" },
 
   ];
 
@@ -57,9 +59,13 @@ function InterestGroupsPage() {
     firstFetch.current = false;
   }, []);
 
-  const mappedData: InterestGroupData[] = interestGroups.filter(e =>
-    data.some(d => d.id === e.id)
-  );
+  const mappedData: InterestGroupData[] = interestGroups
+    .filter(e => data.some(d => d.id === e.id))
+    .map(e => ({
+      ...e,
+      members: data.find(d => d.id === e.id)?.members
+    }));
+
 
 
   const filteredGroups = mappedData.filter(group => {
@@ -182,10 +188,10 @@ function InterestGroupsPage() {
 
                   <h3 className={styles.GroupTitle}>{group.title}</h3>
                   <div className={styles.GroupOverlay}>
-                    {/* <span className={styles.GroupParticipantsBadge}>
-                  <FiUsers className={styles.GroupParticipantsIcon} />
-                  {group.memberCount} members
-                </span> */}
+                    <span className={styles.GroupParticipantsBadge}>
+                      <FiUsers className={styles.GroupParticipantsIcon} />
+                      {group.members} members
+                    </span>
                   </div>
                 </div>
               </div>
