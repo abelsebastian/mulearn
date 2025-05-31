@@ -42,6 +42,32 @@
 
 }
 
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navLinks {
+  list-style: none;
+  display: flex;
+  gap: 20px; /* Increased gap for better spacing */
+  font-size: 1rem; /* Adjusted font size */
+}
+
+.navLinks li {
+  transition: all 0.25s linear;
+}
+
+.navLinks li:hover {
+  transform: scale(1.05);
+  color: black;
+}
+
+.navButtons button {
+  margin-left: 15px; /* Adjusted spacing */
+  padding: 10px 20px; /* Improved button size */
+}
+
 .hero-section {
   margin-top: 20px;
 }
@@ -480,17 +506,21 @@
 }
 
 .specialEventsSection .specialEvents .specialEventsCards {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards in a single row for laptops */
+  gap: 2rem;
   justify-content: center;
-  gap: 4rem;
+}
+
+@media (max-width: 1024px) {
+  .specialEventsSection .specialEvents .specialEventsCards {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row for tablets */
+  }
 }
 
 @media (max-width: 768px) {
   .specialEventsSection .specialEvents .specialEventsCards {
-    flex-direction: column;
-    gap: 2rem;
+    grid-template-columns: 1fr; /* 1 card per row for mobile */
   }
 }
 
@@ -822,6 +852,7 @@
 }
 
 @media (max-width: 1024px) {
+
   .landingContainer {
     padding: 1rem 0rem;
   }
@@ -1125,6 +1156,12 @@
 
   .community button {
     width: 100%;
+  }
+
+
+
+  .socialIcons a {
+    font-size: 1.2rem;
   }
 }
 

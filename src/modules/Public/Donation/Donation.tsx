@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
+import Footer from "@/modules/Common/Footer/Footer";
+import Navbar from "@/modules/Common/HomeNav/HomeNav";
 import { submitForm } from "./services/api";
 import styles from "./Donation.module.css";
 import Marquee from "react-fast-marquee";
@@ -109,9 +109,9 @@ const Donation = () => {
                 />
             </Helmet>
             <main>
-                <div className={styles.LClandingPage}>
                     <Navbar />
-
+                <div className={styles.LClandingPage}>
+                    
                     <div className={styles.DonationHero}>
                         <div className={styles.HeroLeft}>
                             <h1>Help us sustain</h1>
@@ -248,47 +248,37 @@ const Donation = () => {
                                     <button
                                         type="button"
                                         className={
-                                            selectedAmount === 10000
+                                            selectedAmount === 50000
                                                 ? styles.selectedButton
                                                 : ""
                                         }
-                                        onClick={() => handleAmountClick(10000)}
+                                        onClick={() => handleAmountClick(50000)}
                                     >
-                                        10,000
+                                        50,000
                                     </button>
                                     <button
                                         type="button"
                                         className={
-                                            selectedAmount === 15000
+                                            selectedAmount === 100000
                                                 ? styles.selectedButton
                                                 : ""
                                         }
-                                        onClick={() => handleAmountClick(15000)}
+                                        onClick={() => handleAmountClick(100000)}
                                     >
-                                        15,000
+                                        1,00,000
                                     </button>
                                     <button
                                         type="button"
                                         className={
-                                            selectedAmount === 20000
+                                            selectedAmount === 300000
                                                 ? styles.selectedButton
                                                 : ""
                                         }
-                                        onClick={() => handleAmountClick(20000)}
+                                        onClick={() => handleAmountClick(300000)}
                                     >
-                                        20,000
+                                        3,00,000
                                     </button>
-                                    <button
-                                        type="button"
-                                        className={
-                                            selectedAmount === 25000
-                                                ? styles.selectedButton
-                                                : ""
-                                        }
-                                        onClick={() => handleAmountClick(25000)}
-                                    >
-                                        25,000
-                                    </button>
+                                    
                                 </div>
                                 <h4>OR</h4>
                                 <div className={styles.CurrencyContainer}>
