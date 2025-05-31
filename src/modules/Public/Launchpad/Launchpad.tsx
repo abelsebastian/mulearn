@@ -1,4 +1,6 @@
 import React from "react";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";
 
 // import styles from "./Launchpad.module.css";
 import "./steps.css";
@@ -169,7 +171,8 @@ const Launchpad = () => {
           </div>
         </div>
       </div>*/}
-
+      <HomeNav />
+      <div className="launchpad-header">
       <iframe
         title="launchpad leaderboard"
         style={{
@@ -179,6 +182,10 @@ const Launchpad = () => {
         src="https://mu-3.vercel.app/launchpad"
         frameBorder="0"
       ></iframe>
+      </div>
+      <Footer navigate={function (path: string): void {
+        throw new Error("Function not implemented.");
+      } } />
     </>
   );
 };

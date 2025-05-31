@@ -1,8 +1,8 @@
 import React from "react";
-
 import styles from "./Company.module.css";
-
 import fvimg from "./assets/Connecting teams.gif";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";
 
 //@ts-ignore
 import companiesonboarded from "./data/companiesonboarded";
@@ -11,6 +11,7 @@ import CommunityCard from "../CommPartners/CommunityCard/CommunityCard";
 const CompanyPartners = () => {
   return (
     <>
+      <HomeNav />
       <div className={styles.mmain_container}>
         <div className={styles.first_view_container}>
           <div className={styles.first_view}>
@@ -52,6 +53,7 @@ const CompanyPartners = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

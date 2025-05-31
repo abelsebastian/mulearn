@@ -4,10 +4,12 @@ import heroImage from "./heroimg.png";
 import supporters from "./supporters.png";
 import makemyPass from "./makemypass.png";
 import tsimg from "./tsimg.png";
-
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";    
 const In50Hours = () => {
   return (
     <>
+      <HomeNav />
       <div className={styles.mainContainer}>
         <div className={styles.firstSectionContainer}>
           <img src={heroImage} alt="" className={styles.fsImage} />
@@ -106,6 +108,7 @@ const In50Hours = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

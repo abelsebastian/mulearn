@@ -3,9 +3,14 @@ import styles from "./Manifesto.module.css";
 import muLogoBg from "./assets/µ.png";
 import muLogo from "./assets/µLearn-logo.svg";
 import handImg from "./assets/hand.png";
+
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";  
+
 export default function Manifesto() {
   return (
     <>
+      <HomeNav />
       <div className={styles.main}>
         <div className={styles.head}>
           <img src={muLogoBg} alt="" className={styles.muLogoBg} />
@@ -52,6 +57,9 @@ export default function Manifesto() {
           </a>
         </div>
       </div>
+      <Footer navigate={function (path: string): void {
+        throw new Error("Function not implemented.");
+      } } />
     </>
   );
 }

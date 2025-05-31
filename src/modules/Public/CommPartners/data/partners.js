@@ -17,8 +17,7 @@ const partners = [
   {
     name: "ASAP",
     image: asap,
-    link: "",
-    customlink: "/community-partners/asap",
+    link: "https://asapkerala.gov.in/",
   },
 
   {
@@ -26,44 +25,45 @@ const partners = [
     image: ksum,
     link: "https://startupmission.kerala.gov.in/",
     // customlink: "/community-partners/iedc",
+    customlink: "",
   },
 
   {
     name: "Blockchain",
     image: blockchain,
-    link: "",
-    customlink: "/community-partners/kba",
+    link: "https://kba.ai/",
+    customlink: "",
   },
 
   {
     name: "Foxlabs",
     image: foxlab,
     link: "",
-    customlink: "/community-partners/foxlab",
+    // customlink: "/community-partners/foxlab",
   },
   {
     name: "Institute of Electrical and Electronics Engineers",
     image: ieee,
-    link: "",
-    customlink: "/community-partners/ieee",
+    link: "https://www.ieee.org/",
+    customlink: "",
   },
   {
     name: "Kites Foundation",
     image: kites,
-    link: "",
-    customlink: "/community-partners/kites",
+    link: "https://kitesfoundation.org/",
+    customlink: "",
   },
   {
     name: "Pygrammers",
     image: pygrammers,
-    link: "",
-    customlink: "/community-partners/pygrammers",
+    link: "https://pygrammers.org/",
+    customlink: "",
   },
   {
     name: "XtrudAR",
     image: xtrudar,
-    link: "",
-    customlink: "/community-partners/xtrudar",
+    link: "https://xtrudar.riglabs.co/",
+    customlink: "",
   },
   {
     name: "Kerala Development and Innovation Strategic Council",

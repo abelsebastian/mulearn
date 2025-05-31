@@ -9,6 +9,8 @@ import cat from "./assets/cat.png";
 import "./steps.css";
 import "./yip.css";
 import box_fourimg from "./assets/box_fourimg.png";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";   
+import Footer from "@/modules/Common/Footer/Footer";
 
 const YIP2023 = () => {
   const applyButton = () => {
@@ -35,6 +37,7 @@ const YIP2023 = () => {
   };
   return (
     <>
+      <HomeNav />
       <div className={styles.main_container}>
         <div className={styles.first_view_container}>
           <div className={styles.first_view}>
@@ -356,6 +359,9 @@ const YIP2023 = () => {
           </div>
         </div>
       </div>
+      <Footer navigate={function (path: string): void {
+        throw new Error("Function not implemented.");
+      } } />
     </>
   );
 };

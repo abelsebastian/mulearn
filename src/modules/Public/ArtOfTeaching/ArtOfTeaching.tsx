@@ -13,12 +13,11 @@ import MentorCard from "./components/MentorCard/MentorCard";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-// import { Pagination, Navigation } from "swiper"
+import HomeNav from "@/modules/Common/HomeNav/HomeNav.js";
+import Footer from "@/modules/Common/Footer/Footer.js";
 
 
 
@@ -115,6 +114,7 @@ const ArtOfTeaching = () => {
   };
   return (
     <>
+      <HomeNav />
       <div className={styles.main_container}>
         <div className={styles.first_view_container}>
           <div className={styles.first_view}>
@@ -161,7 +161,7 @@ const ArtOfTeaching = () => {
                    width: '300px',
                    textAlign: 'center',
                    fontWeight: 'bold',
-                   
+                   marginTop: '1rem',
                   }}
                   >
                  Register Now
@@ -482,6 +482,7 @@ const ArtOfTeaching = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
