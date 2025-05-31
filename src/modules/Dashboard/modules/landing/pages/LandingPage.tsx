@@ -10,6 +10,8 @@ import MulearnBrand from "../../../assets/MulearnBrand";
 import RolesSection from "../components/RolesSection";
 import CountUp from "react-countup";
 import { Helmet } from "react-helmet";
+import Footer from "../../../../Common/Footer/Footer";
+import HomeNav from "../../../../Common/HomeNav/HomeNav";
 
 // Images for the special events cards
 import top100coders from "../../SpecialEvents/assets/top-100.webp";
@@ -19,6 +21,18 @@ import SpecialEventCardLanding from "../components/SpecialEventCardLanding/Speci
 import illustration from "../assets/illustration.webp"
 import FeatureGrid from "./components/FeatureGrid";
 
+// Define the SpecialEvent type
+interface SpecialEvent {
+  id: number;
+  title: string;
+  description: string;
+  date?: string;
+  participants?: number;
+  recurrence?: string;
+  link: string;
+  image: string;
+  isLive: boolean;
+}
 
 /**
  * @typedef {Object} Data
@@ -128,117 +142,127 @@ const MuLiveCounter = () => {
     socket.addEventListener("error", (event) => {
       console.error("WebSocket error: ", event);
     });
+
+    // Cleanup function to close WebSocket connection
+    return () => {
+      socket.close();
+    };
   }, []);
+
+  if (!counts) {
+    return <div>Loading statistics...</div>;
+  }
 
   return (
     <div style={{}}>
-      {counts && (
-        <div className={styles.countcontainer}>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={counts.members} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Members</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={counts.learning_circle_count} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Learning Circles</p>
-          </div>
-          {counts &&
-            counts.org_type_counts
-              //@ts-ignore
-              .sort((a, b) => b.org_count - a.org_count)
-              //@ts-ignore
-              .map((orgTypeCount) => (
-                <div key={orgTypeCount.org_type} className={styles.count}>
-                  <p className={styles.cvc_heading}>
-                    <CountUp
-                      end={
-                        orgTypeCount.org_type === "Company"
-                          ? 213
-                          : orgTypeCount.org_type === "Community"
-                            ? 30
-                            : orgTypeCount.org_count
-                      }
-                      duration={5}
-                    />
-                    +
-                  </p>
-                  <p className={styles.cvc_text}>
-                    {orgTypeCount.org_type.endsWith("y")
-                      ? orgTypeCount.org_type.slice(0, -1) + "ies"
-                      : orgTypeCount.org_type + "s"}
-                  </p>
-                </div>
-              ))}
+      <div className={styles.countcontainer}>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={counts.members} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Members</p>
+        </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={counts.learning_circle_count} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Learning Circles</p>
+        </div>
+        {counts &&
+          counts.org_type_counts &&
+          counts.org_type_counts
+            .sort((a: any, b: any) => b.org_count - a.org_count)
+            .map((orgTypeCount: any) => (
+              <div key={orgTypeCount.org_type} className={styles.count}>
+                <p className={styles.cvc_heading}>
+                  <CountUp
+                    end={
+                      orgTypeCount.org_type === "Company"
+                        ? 213
+                        : orgTypeCount.org_type === "Community"
+                          ? 30
+                          : orgTypeCount.org_count
+                    }
+                    duration={5}
+                  />
+                  +
+                </p>
+                <p className={styles.cvc_text}>
+                  {orgTypeCount.org_type.endsWith("y")
+                    ? orgTypeCount.org_type.slice(0, -1) + "ies"
+                    : orgTypeCount.org_type + "s"}
+                </p>
+              </div>
+            ))}
 
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={200} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Events</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={counts.ig_count} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Interest Groups</p>
-          </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={200} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Events</p>
+        </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={counts.ig_count} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Interest Groups</p>
+        </div>
 
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={counts.karma_pow_count.karma_count} duration={5} />
-            </p>
-            <p className={styles.cvc_text}>Total Karma Mined</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={counts.karma_pow_count.pow_count} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Number of Proof of Works </p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={2000} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Number of Internships</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={1000} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Jobs</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={100} duration={5} />+
-            </p>
-            <p className={styles.cvc_text}>Products</p>
-          </div>
-          <div className={styles.count}>
-            <p className={styles.cvc_heading}>
-              <CountUp end={1} duration={5} />
-              Cr+
-            </p>
-            <p className={styles.cvc_text}>worth of Gig Works</p>
-          </div>
+        {counts.karma_pow_count && (
+          <>
+            <div className={styles.count}>
+              <p className={styles.cvc_heading}>
+                <CountUp end={counts.karma_pow_count.karma_count} duration={5} />
+              </p>
+              <p className={styles.cvc_text}>Total Karma Mined</p>
+            </div>
+            <div className={styles.count}>
+              <p className={styles.cvc_heading}>
+                <CountUp end={counts.karma_pow_count.pow_count} duration={5} />+
+              </p>
+              <p className={styles.cvc_text}>Number of Proof of Works </p>
+            </div>
+          </>
+        )}
+        
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={2000} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Number of Internships</p>
+        </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={1000} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Jobs</p>
+        </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={100} duration={5} />+
+          </p>
+          <p className={styles.cvc_text}>Products</p>
+        </div>
+        <div className={styles.count}>
+          <p className={styles.cvc_heading}>
+            <CountUp end={1} duration={5} />
+            Cr+
+          </p>
+          <p className={styles.cvc_text}>worth of Gig Works</p>
+        </div>
 
-          {counts.enablers_mentors_count
-            //@ts-ignore
-            .sort((a, b) => b.role_count - a.role_count)
-            //@ts-ignore
-            .map((roleCount) => (
-              <div className={styles.count}>
+        {counts.enablers_mentors_count &&
+          counts.enablers_mentors_count
+            .sort((a: any, b: any) => b.role_count - a.role_count)
+            .map((roleCount: any) => (
+              <div key={roleCount.role__title} className={styles.count}>
                 <p className={styles.cvc_heading}>
                   <CountUp end={roleCount.role_count} duration={5} />+
                 </p>
                 <p className={styles.cvc_text}>{roleCount.role__title}s</p>
               </div>
             ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
@@ -247,23 +271,6 @@ const MuLearnLanding = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const refreshToken = localStorage.getItem("refreshToken");
-
-  function NavLinks() {
-    return (
-      <>
-        <li className="cursor-pointer" onClick={() => navigate("/")}>Home</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/search?activetab=mentors")}>Mentorship</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/mujourney")}>Learning Paths</li>
-        <li className="cursor-pointer" onClick={() => navigate("/dashboard/learningcircle")}>Learning Circles</li>
-        <li className="cursor-pointer" onClick={() => window.open("https://www.youtube.com/watch?v=qEILjuB7oPk&feature=youtu.be", "_blank")}>
-          Why μLearn
-        </li>
-        <li className="cursor-pointer" onClick={() => window.open("https://mulearn.org", "_blank")}>
-          Visit the Old Site
-        </li>
-      </>
-    );
-  }
 
   return (
     <>
@@ -288,90 +295,17 @@ const MuLearnLanding = () => {
         variants={containerVariants}
       >
         {/* Navbar */}
-        <div className={styles.landingPaddingContainer}>
-          <motion.nav
-            className={styles.navbar}
-            variants={fadeInUp}
-            viewport={{ once: true, amount: 0.5 }}
-          >
-            <div className={styles.logo}>
-              <MulearnBrand />
-            </div>
-            <ul className={styles.navLinks}>
-              <NavLinks />
-            </ul>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div className={styles.navButtons}>
-                {refreshToken ? (
-                  <button
-                    className={`${styles.loginBtn} ${styles.logInDesktop}`}
-                    onClick={() => navigate("/dashboard/home")}
-                  >
-                    Dashboard
-                  </button>
-                ) : (
-                  <button
-                    className={`${styles.loginBtn} ${styles.logInDesktop}`}
-                    onClick={() => navigate("/login")}
-                  >
-                    Login
-                  </button>
-                )}
-              </div>
-              {isMenuOpen && (
-                <motion.div
-                  className={`${styles.mobileNavLinks} ${isMenuOpen ? styles.sh : ""}`}
-                  initial={{ x: "100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "100%" }}
-                >
-                  <button
-                    className={styles.closeBtn}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    ×
-                  </button>
-                  <ul>
-                    <NavLinks />
-                  </ul>
-                  <div className={styles.navButtons}>
-                    {refreshToken ? (
-                      <button
-                        className={styles.loginBtn}
-                        onClick={() => navigate("/dashboard/home")}
-                      >
-                        Dashboard
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.loginBtn}
-                        onClick={() => navigate("/login")}
-                      >
-                        Login
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-              <div
-                className={styles.hamburger}
-                onClick={() => setIsMenuOpen(true)}
-              >
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </div>
-          </motion.nav>
-        </div>
-
+        <HomeNav />
+        
         {/* Hero Section */}
         <motion.header
           className={styles.heroSection}
           variants={fadeInUp}
           viewport={{ once: true, amount: 0.3 }}
         >
-          <div className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerCustom}`}>
+          <div
+            className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerCustom}`}
+          >
             <div className={styles.heroLeft}>
               <motion.h1
                 custom={1}
@@ -380,8 +314,7 @@ const MuLearnLanding = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                Your Ultimate Gateway to{" "}
-                <span className={styles.highlight}>Peer-Led Growth</span>
+                Your Ultimate Gateway to <span className={styles.highlight}>Peer-Led Growth</span>
               </motion.h1>
               <motion.span
                 className="dot"
@@ -391,8 +324,9 @@ const MuLearnLanding = () => {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                {" "}
+                {""} 
               </motion.span>
+              
               <motion.h6
                 custom={3}
                 variants={textVariant}
@@ -434,7 +368,9 @@ const MuLearnLanding = () => {
               </motion.div>
             </div>
           </div>
-          <div className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerTextCenter}`}>
+          <div
+            className={`${styles.landingPaddingContainer} ${styles.landingPaddingContainerTextCenter}`}
+          >
             <div className={styles.mulearnTopPad}><h1>What <span>µLearn</span> offers</h1></div>
             <h6 className={styles.heroDescription}>
               µLearn offers a wide range of features and opportunities that help you learn, grow, and upskill yourself
@@ -446,46 +382,6 @@ const MuLearnLanding = () => {
           </div>
         </motion.header>
 
-        {/* Structured Learning Paths Section */}
-        {/* <motion.section
-        className={styles.topBottomGrid}
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <motion.div className={styles.roadMaps} variants={fadeInUp}>
-          <h1>
-            Structured learning paths, <span className={styles.highlight} style={{ fontWeight: "800" }}>Crafted by experts</span>
-          </h1>
-          <p style={{ textAlign: "center" }}>
-            Expert-approved, structured learning paths designed to help you master key skills efficiently and advance in your career with guidance from industry professionals.
-          </p>
-        </motion.div>
-        <motion.div
-          className={styles.hackathonBox}
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {LearningPathList.slice(0, 6).map((lp, i) => (
-            <LearningPathCard key={i} learningPath={lp} />
-          ))}
-        </motion.div>
-        <motion.button
-          className={styles.loginBtn}
-          style={{ marginTop: "2rem", borderRadius: "10px" }}
-          onClick={() => navigate("/dashboard/learning-paths")}
-          variants={fadeInUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          Explore Learning Paths
-        </button>
-      </motion.section> */}
-
         {/* Story Section */}
         <div className={`${styles.landingPaddingContainer} ${styles.mulearnTopPad}`}>
           <motion.section
@@ -495,26 +391,35 @@ const MuLearnLanding = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
           >
-            <motion.div className={styles.storyTitle} variants={fadeInUp}>
-              <h1>
-                Understand μLearn with a <span className={styles.highlight}>Story</span>
-              </h1>
-              <h6>
-                Meet Aami, an eager learner hungry for growth! Join her voyage through the captivating µVerse, where she seizes opportunities, builds learning circles, and immerses herself in events, emerging industry-ready with newfound skills and confidence.
-              </h6>
-            </motion.div>
-            <motion.div
-              className={styles.iframeContainer}
-              variants={fadeInUp}
-            >
-              <iframe
-                src="https://www.youtube.com/embed/M9serw-CLU0"
-                title="YouTube video on M9serw-CLU0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              ></iframe>
-            </motion.div>
+            <div className={styles.storyTitle}>
+              <motion.div
+                variants={fadeInUp}
+              >
+                <h1>
+                  Understand μLearn with a <span className={styles.highlight}>Story</span>
+                </h1>
+                <h6>
+                  Meet Aami, an eager learner hungry for growth! Join her voyage through the captivating µVerse, where she seizes opportunities, builds learning circles, and immerses herself in events, emerging industry-ready with newfound skills and confidence.
+                </h6>
+              </motion.div>
+            </div>
+            <div className={styles.iframeContainer}>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 50 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+                }}
+              >
+                <iframe
+                  src="https://www.youtube.com/embed/M9serw-CLU0"
+                  title="YouTube video on M9serw-CLU0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+              </motion.div>
+            </div>
           </motion.section>
         </div>
+        
         {/* Special Events Section */}
         <div className={styles.landingPaddingContainer}>
           <motion.section
@@ -524,7 +429,10 @@ const MuLearnLanding = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.div className={styles.specialEvents} variants={fadeInUp}>
+            <motion.div
+              className={styles.specialEvents}
+              variants={fadeInUp}
+            >
               <h1>Special Events</h1>
               <h6>Discover exclusive events designed to inspire innovation, enhance skills, and foster meaningful connections across technology, management, and creativity.</h6>
               <div className={styles.specialEventsCards}>
@@ -538,6 +446,7 @@ const MuLearnLanding = () => {
             </motion.div>
           </motion.section>
         </div>
+        
         {/* Comparison Table Section */}
         <div className={styles.landingPaddingContainer}>
           <motion.section
@@ -550,44 +459,49 @@ const MuLearnLanding = () => {
             <motion.div className={styles.camparison} variants={fadeInUp}>
               <h1>μLearn is here to solve all your learning problems</h1>
               <table className={styles.comparisonTable}>
-                <tr>
-                  <th>Problems with Existing Systems</th>
-                  <th>How μLearn Works</th>
-                </tr>
-                <tr>
-                  <td>Fragmented Resources</td>
-                  <td>
-                    Structured <span className={styles.highlight}>Roadmaps</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Lack Of Right Advice</td>
-                  <td>
-                    <span className={styles.highlight}>Mentorship</span> from industry veterans
-                  </td>
-                </tr>
-                <tr>
-                  <td>Lack of Access to Opportunities</td>
-                  <td>
-                    <span className={styles.highlight}>Opportunities</span> from the best in every industry
-                  </td>
-                </tr>
-                <tr>
-                  <td>Limited Exposure</td>
-                  <td>
-                    <span className={styles.highlight}>Exposure</span> to global leaders and thinkers
-                  </td>
-                </tr>
-                <tr>
-                  <td>Lack of motivation to learn</td>
-                  <td>
-                    <span className={styles.highlight}>Gamified</span> platform working based on Karma points
-                  </td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Problems with Existing Systems</th>
+                    <th>How μLearn Works</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fragmented Resources</td>
+                    <td>
+                      Structured <span className={styles.highlight}>Roadmaps</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lack Of Right Advice</td>
+                    <td>
+                      <span className={styles.highlight}>Mentorship</span> from industry veterans
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lack of Access to Opportunities</td>
+                    <td>
+                      <span className={styles.highlight}>Opportunities</span> from the best in every industry
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Limited Exposure</td>
+                    <td>
+                      <span className={styles.highlight}>Exposure</span> to global leaders and thinkers
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lack of motivation to learn</td>
+                    <td>
+                      <span className={styles.highlight}>Gamified</span> platform working based on Karma points
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </motion.div>
           </motion.section>
         </div>
+        
         {/* Opportunities Section */}
         <div className={styles.landingPaddingContainer}>
           <motion.section
@@ -675,6 +589,7 @@ const MuLearnLanding = () => {
         <div className={styles.landingPaddingContainer}>
           <RolesSection />
         </div>
+        
         {/* Impact Section */}
         <div className={styles.landingPaddingContainer}>
           <motion.section
@@ -693,16 +608,11 @@ const MuLearnLanding = () => {
               </h6>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              {/* {data.map((d, i) => (
-              <motion.div className={styles.dataCard} key={i} variants={fadeInUp}>
-                <h1>{d.value}</h1>
-                <p>{d.label}</p>
-              </motion.div>
-            ))} */}
               <MuLiveCounter />
             </motion.div>
           </motion.section>
         </div>
+        
         <div className={styles.landingPaddingContainer}>
           <motion.section
             className={`${styles.leftRightGrid} ${styles.leftRightGridCustom}`}
@@ -717,10 +627,10 @@ const MuLearnLanding = () => {
                 <span className={styles.highlight}>Community</span>
               </h1>
               <h6 className={styles.communityDescription}>
-                Are you ready to learn, grow, and upskill yourself to the next level? Come, be a part of the community, and let’s start learning in a new, better way. Call your friends as well because things are going to change once you experience it, and it is more effective when done in a group.
+                Are you ready to learn, grow, and upskill yourself to the next level? Come, be a part of the community, and let's start learning in a new, better way. Call your friends as well because things are going to change once you experience it, and it is more effective when done in a group.
               </h6>
               <button>
-                <a href="https://discord.com/invite/gtech-mulearn-771670169691881483" target="_blank">
+                <a href="https://discord.com/invite/gtech-mulearn-771670169691881483" target="_blank" rel="noopener noreferrer">
                   Join The Community
                 </a>
               </button>
@@ -729,53 +639,12 @@ const MuLearnLanding = () => {
               <img src="https://mulearn.org/assets/home/join.webp" alt="Join community" width="350px" />
             </motion.div>
           </motion.section>
-
         </div>
+        
         {/* Footer */}
-        <div className={styles.landingPaddingContainer}>
-          <motion.footer
-            className={styles.footer}
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <div className={styles.footerContainer}>
-              <div className={styles.footerSection}>
-                <h3>Quick Links</h3>
-                <ul>
-                  <li><a href="https://mulearn.org/careers">Career Labs</a></li>
-                  <li><a href="https://gtechmulearn.medium.com/">Blog</a></li>
-                  <li><a className="cursor-pointer" onClick={() => (navigate("dashboard/interestgroups"))}>Interest Groups</a></li>
-                </ul>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Legal</h3>
-                <ul>
-                  <li><a href="https://mulearn.org/termsandconditions">Terms and Conditions</a></li>
-                  <li><a href="https://mulearn.org/privacypolicy">Privacy Policy</a></li>
-                </ul>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Follow Us</h3>
-                <div className={styles.socialIcons}>
-                  <a href="http://www.linkedin.com/company/gtechmulearn/"><FaLinkedin /></a>
-                  <a href="https://www.instagram.com/mulearn.official/"><FaInstagram /></a>
-                  <a href="https://www.youtube.com/c/mulearn"><FaYoutube /></a>
-                  <a href="http://www.facebook.com/gtechmulearn"><FaFacebook /></a>
-                </div>
-              </div>
-              <div className={styles.footerSection}>
-                <h3>Contact</h3>
-                <p>Technopark Trivandrum, Kazhakkoottam,</p>
-                <p>Trivandrum - 695581, Kerala, India</p>
-              </div>
-            </div>
-          </motion.footer>
-        </div>
+        <Footer navigate={navigate} />
       </motion.div>
     </>
-
   );
 };
 
