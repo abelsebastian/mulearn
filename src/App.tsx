@@ -15,6 +15,8 @@ import { Toaster } from "react-hot-toast";
 import MuLoader from "./components/MuComponents/MuLoader/MuLoader";
 import In50Hours from "./modules/Public/In50Hours/In50Hours";
 import LaunchPad from "./modules/Public/Launchpad/Launchpad";
+import Calendar from "./modules/Public/Calendar/Calendar";
+import EventsHome from "./modules/Public/Events/Events";
 
 // Lazy-loaded components
 const ArtofTeaching = lazy(() => import("./modules/Public/ArtOfTeaching/ArtOfTeaching"));
@@ -167,6 +169,8 @@ function App() {
     { path: "/artofteaching", element: <ArtofTeaching /> },
     { path: "/in50hours", element: <In50Hours /> },
     { path: "/launchpad", element: <LaunchPad /> },
+    {path: "/events/calendar", element: <Calendar/>},
+    {path: "/events/weekly", element: <EventsHome/>},
     { path: "*", element: <NotFound /> },
     { path: "404", element: <NotFound /> },
     { path: "kkem", element: <KKEMLanding /> },

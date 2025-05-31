@@ -2,8 +2,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaLinkedin, FaInstagram, FaYoutube, FaFacebook } from "react-icons/fa";
 import styles from "./Footer.module.css";
+import { useNavigate } from "react-router-dom";
 
-const Footer = ({ navigate }: { navigate: (path: string) => void }) => {
+const Footer = () => {
+  const navigate = useNavigate()
   return (
     <motion.footer
       className={styles.footer}

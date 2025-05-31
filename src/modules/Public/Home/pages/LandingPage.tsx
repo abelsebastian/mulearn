@@ -9,8 +9,8 @@ import MulearnBrand from "../../../Dashboard/assets/MulearnBrand";
 import RolesSection from "../components/RolesSection/RolesSection";
 import CountUp from "react-countup";
 import { Helmet } from "react-helmet";
-import Footer from "../../../../Common/Footer/Footer";
-import HomeNav from "../../../../Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
 
 // Images for the special events cards
 import top100coders from "../assets/top-100.webp";
@@ -18,7 +18,7 @@ import launchpad from "../assets/launchpad.webp";
 import trivialideas from "../assets/trivialideas.webp";
 import SpecialEventCardLanding from "../components/SpecialEventCardLanding/SpecialEventCardLanding";
 import illustration from "../assets/illustration.webp"
-import FeatureGrid from "./components/FeatureGrid";
+import FeatureGrid from "../components/FeatureGrid/FeatureGrid";
 
 // Define the SpecialEvent type
 interface SpecialEvent {
@@ -640,7 +640,7 @@ const MuLearnLanding = () => {
         </div>
         
         {/* Footer */}
-        <Footer navigate={navigate} />
+        <Footer />
       </motion.div>
     </>
   );

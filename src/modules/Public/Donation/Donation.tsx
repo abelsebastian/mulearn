@@ -12,6 +12,7 @@ import icfoss from "./assets/icfoss.png";
 import kdu from "./assets/kdu.png";
 import kdisc from "./assets/kdisc.png";
 import heroImg from "./assets/heroImg.jpg";
+import { Button } from "@/components/ui/button";
 
 const Donation = () => {
     const [amount, setAmount] = useState<number>();
@@ -135,10 +136,27 @@ const Donation = () => {
                                     <h4>Events</h4>
                                 </div>
                             </div>
+                            <Button
+                            className={styles.DonateButton}
+                            onClick={() => {
+                                const element = document.querySelector(
+                                    `.${styles.DonationSection}`
+                                );
+                                if (element) {
+                                    element.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "start"
+                                    });
+                                }
+                            }}
+                        >
+                            Donate Now
+                        </Button>
                         </div>
                         <div className={styles.HeroImgContainer}>
                             <img src={heroImg} alt="" />
                         </div>
+                        
                     </div>
                 </div>
 

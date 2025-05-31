@@ -183,9 +183,7 @@ const Launchpad = () => {
         frameBorder="0"
       ></iframe>
       </div>
-      <Footer navigate={function (path: string): void {
-        throw new Error("Function not implemented.");
-      } } />
+      <Footer/>
     </>
   );
 };
