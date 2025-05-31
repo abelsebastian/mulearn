@@ -8,6 +8,7 @@ import Execom from "../components/Teams/Execom";
 import Year2024 from "../components/Teams/Year2024";
 import Year2023 from "../components/Teams/Year2023";
 import Year2022 from "../components/Teams/Year2022";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -44,7 +45,7 @@ const Teams = () => {
         animate="visible"
         variants={containerVariants}
       >
-        <Navbar refreshToken={null} />
+       <HomeNav/>
 
         <div className={styles.first_view_container}>
           <div className={styles.first_view}>

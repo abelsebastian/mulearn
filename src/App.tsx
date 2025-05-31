@@ -17,6 +17,7 @@ import In50Hours from "./modules/Public/In50Hours/In50Hours";
 import LaunchPad from "./modules/Public/Launchpad/Launchpad";
 import Calendar from "./modules/Public/Calendar/Calendar";
 import EventsHome from "./modules/Public/Events/Events";
+import EnablersPage from "./modules/Public/EnablersPage/EnablersPage";
 
 // Lazy-loaded components
 const ArtofTeaching = lazy(() => import("./modules/Public/ArtOfTeaching/ArtOfTeaching"));
@@ -163,6 +164,7 @@ function App() {
   const router = createBrowserRouter([
     { path: "/", element: <MuLearnLanding /> },
     { path: "/manifesto", element: <Manifesto /> },
+    {path: "/enablers", element: <EnablersPage/>},
     { path: "/community-partners", element: <CommunityPartners /> },
     { path: "/company-partners", element: <CompanyPartners /> },
     { path: "/yip", element: <YIP /> },

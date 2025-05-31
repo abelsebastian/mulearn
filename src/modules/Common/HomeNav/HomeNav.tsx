@@ -78,6 +78,9 @@ const HomeNav: React.FC = () => {
       submenu: {
         "KEY PAGES": [
           { label: "MANIFESTO", onClick: () => navigate("/manifesto") },
+          { label: "Team", onClick: () => navigate("/team") },
+          { label: "Enablers", onClick: () => navigate("/enablers") },
+
         ],
         "Partners": [
           { label: "COMMUNITY PARTNERS", onClick: () => navigate("/community-partners") },
