@@ -36,7 +36,7 @@ const imageUrls = [
   { title: "Cloud And Devops", image: "/assets/IG/Cover/6.webp" },
   { title: "Product Management", image: "/assets/IG/Cover/7.webp" },
   { title: "Internet Of Things (IOT) And Robotics", image: "/assets/IG/Cover/8.webp" },
-  {title: "AR/VR", image: "/assets/IG/Cover/10.webp" },
+  {title: "AR VR MR", image: "/assets/IG/Cover/10.webp" },
 ];
 
 
