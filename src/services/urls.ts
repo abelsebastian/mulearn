@@ -206,6 +206,10 @@ export const dashboardRoutes = {
     collegeLevels: "api/v1/dashboard/college/",
     collegeLevlesDelete: "api/v1/dashboard/college/delete/",
 
+    //wadhwani leaderboard
+    "getWadhwaniCollegeLeaderBoard": "api/v1/leaderboard/wadhwani-college/",
+    "getWadhwaniZonalLeaderBoard": "api/v1/leaderboard/wadhwani-zonal/",
+
     //Dyanmic Type
     dtGetRoles: "api/v1/dashboard/dynamic-management/roles/",
     dtGetTypes: "api/v1/dashboard/dynamic-management/types/",
