@@ -4,7 +4,7 @@
   z-index: 1000;
   width: 100%;
   background-color: #ffffff;
-
+  padding: 0rem 1rem;
 }
 
 /* Desktop Navigation */
@@ -22,8 +22,6 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding-right: 2rem;
-
 }
 
 /* Navigation Links */
@@ -36,7 +34,7 @@
   padding: 0;
 }
 
-.navLinks li {
+.navLinks  li {
     color: #4a5568;
     font-weight: 500;
     font-size: 0.95rem;
@@ -48,21 +46,50 @@
     text-align: left; /* Ensure the text and underline are aligned */
 }
 
-.navLinks li:hover {
+.navLinks  li:hover {
   color: #3182ce;
   transform: translateY(-1px);
 }
 
-.navLinks li::after {
+.navLinks  li::after {
   content: '';
   position: absolute;
   width: 0;
   height: 2px;
   bottom: 0;
-  left: 50%;
+  left: 0%;
   background-color: #3182ce;
   transition: all 0.3s ease;
-  transform: translateX(-50%);
+  transform: translateX(-5%);
+}
+
+.navLinks .submenu li {
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    padding: 0.5rem 0;
+    font-weight: bold;
+    text-align: left; /* Ensure the text and underline are aligned */
+}
+
+.navLinks .submenu li:hover {
+  color: #3182ce;
+  transform: translateY(-1px);
+}
+
+.navLinks .submenu li::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0%;
+  background-color: #3182ce;
+  transition: all 0.3s ease;
+  transform: translateX(-5%);
 }
 
 .navLinks li:hover::after {
@@ -77,7 +104,7 @@
 }
 
 .loginBtn {
-  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  background: var(--Primary);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -91,13 +118,12 @@
 
 
 .loginBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
-  background: linear-gradient(135deg, #2c5aa0 0%, #2a4d8d 100%);
+  background: var(--PrimaryLight);
 }
 
 .loginBtn:active {
-  transform: translateY(0);
+  background: var(--PrimaryDark);
+
 }
 
 /* Hamburger Menu */

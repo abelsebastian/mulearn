@@ -4,7 +4,6 @@ import React from "react";
 import styles from "./ArtOfTeaching.module.css";
 import "./ArtOfTeaching.scss";
 // @ts-ignore
-import Faq from "react-faq-component";
 
 import fvimg from "./assets/Teaching.gif";
 import Guidlines from "./assets/Guidlines1.pdf";
@@ -16,8 +15,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import HomeNav from "@/modules/Common/HomeNav/HomeNav.js";
-import Footer from "@/modules/Common/Footer/Footer.js";
+import HomeNav from "@/modules/Common/HomeNav/HomeNav";
+import Footer from "@/modules/Common/Footer/Footer";
 
 
 
@@ -478,7 +477,7 @@ const ArtOfTeaching = () => {
 
         <div className={styles.faq_view_container}>
           <div className={styles.faq_view}>
-            <Faq data={data} styles={fstyles} />
+            {/* <Faq data={data} styles={fstyles} /> */}
           </div>
         </div>
       </div>

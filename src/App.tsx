@@ -15,6 +15,11 @@ import { Toaster } from "react-hot-toast";
 import MuLoader from "./components/MuComponents/MuLoader/MuLoader";
 import In50Hours from "./modules/Public/In50Hours/In50Hours";
 import LaunchPad from "./modules/Public/Launchpad/Launchpad";
+import Calendar from "./modules/Public/Calendar/Calendar";
+import EventsHome from "./modules/Public/Events/Events";
+import EnablersPage from "./modules/Public/EnablersPage/EnablersPage";
+import TermsAndCondition from "./modules/Public/Home/components/TermsandConditions/TermsandConditions";
+import PrivacyPolicy from "./modules/Public/Home/components/PrivacyPolicy/PrivacyPolicy";
 
 // Lazy-loaded components
 const ArtofTeaching = lazy(() => import("./modules/Public/ArtOfTeaching/ArtOfTeaching"));
@@ -161,12 +166,15 @@ function App() {
   const router = createBrowserRouter([
     { path: "/", element: <MuLearnLanding /> },
     { path: "/manifesto", element: <Manifesto /> },
+    {path: "/enablers", element: <EnablersPage/>},
     { path: "/community-partners", element: <CommunityPartners /> },
     { path: "/company-partners", element: <CompanyPartners /> },
     { path: "/yip", element: <YIP /> },
     { path: "/artofteaching", element: <ArtofTeaching /> },
     { path: "/in50hours", element: <In50Hours /> },
     { path: "/launchpad", element: <LaunchPad /> },
+    {path: "/events/calendar", element: <Calendar/>},
+    {path: "/events/weekly", element: <EventsHome/>},
     { path: "*", element: <NotFound /> },
     { path: "404", element: <NotFound /> },
     { path: "kkem", element: <KKEMLanding /> },
@@ -186,6 +194,8 @@ function App() {
     // { path: "/signin", element: <SignIn /> },
     { path: "register/about", element: <Rolepage /> },
     { path: "team", element: <TeamsPage /> },
+    {path: "termsandconditions", element: <TermsAndCondition/>},
+    {path: "privacypolicy", element: <PrivacyPolicy/>},
     {
       path: "/dashboard",
       element: <DashboardRootLayout />,

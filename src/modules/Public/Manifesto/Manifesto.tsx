@@ -57,9 +57,7 @@ export default function Manifesto() {
           </a>
         </div>
       </div>
-      <Footer navigate={function (path: string): void {
-        throw new Error("Function not implemented.");
-      } } />
+      <Footer />
     </>
   );
 }

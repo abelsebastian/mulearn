@@ -6,6 +6,8 @@ import viteCompression from "vite-plugin-compression";
 import Sitemap from 'vite-plugin-sitemap'
 // import eslint from 'vite-plugin-eslint'
 
+
+//@ts-ignore
 import tailwindcss from '@tailwindcss/vite'
 
 const sitemapRoutes = [
@@ -23,9 +25,6 @@ const sitemapRoutes = [
 ]
 
 export default defineConfig({
-    server: {
-        allowedHosts: true,
-    },
     // css: {
     //     postcss: {
     //         plugins: [postcssNesting]

@@ -78,16 +78,19 @@ const HomeNav: React.FC = () => {
       submenu: {
         "KEY PAGES": [
           { label: "MANIFESTO", onClick: () => navigate("/manifesto") },
+          { label: "Team", onClick: () => navigate("/team") },
+          { label: "Enablers", onClick: () => navigate("/enablers") },
+
         ],
         "Partners": [
           { label: "COMMUNITY PARTNERS", onClick: () => navigate("/community-partners") },
           { label: "COMPANY PARTNERS", onClick: () => navigate("/company-partners") }
         ],
-        "MEDIA": [
-          { label: "GALLERY", onClick: () => navigate("/gallery") },
-          { label: "NEWS", onClick: () => navigate("/news") },
-          { label: "BLOGS", onClick: () => navigate("/blogs") }
-        ],
+        // "MEDIA": [
+        //   { label: "GALLERY", onClick: () => navigate("/gallery") },
+        //   { label: "NEWS", onClick: () => navigate("/news") },
+        //   { label: "BLOGS", onClick: () => navigate("/blogs") }
+        // ],
         "EVENTS": [
           { label: "GLOBAL CALENDAR", onClick: () => navigate("/events/calendar") },
           { label: "ANNOUNCEMENTS", onClick: () => navigate("/events/announcements") },
@@ -95,7 +98,7 @@ const HomeNav: React.FC = () => {
         ],
         "Programs": [
           { label: "LAUNCHPAD", onClick: () => navigate("/launchpad") },
-          { label: "MUTATE", onClick: () => navigate("/enablers") },
+          // { label: "MUTATE", onClick: () => navigate("/mutate") },
           { label: "PERMUTE", onClick: () => open("https://permute.mulearn.org/") },
           { label: "TOP100SERIES", onClick: () => open("https://top100coders.com/") },
           { label: "Art of Teaching", onClick: () => navigate("/artofteaching") },

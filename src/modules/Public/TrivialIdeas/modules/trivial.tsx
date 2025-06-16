@@ -17,7 +17,7 @@ import peoples from "../assets/peoples.png"
 import arrow from "../assets/arrow.png"
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import navbar from "@/modules/Common/HomeNav/HomeNav";
 import Footer from "@/modules/Common/Footer/Footer";

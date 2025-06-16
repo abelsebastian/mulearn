@@ -1,6 +1,16 @@
 import React from "react";
 import styles from "./MentorCard.module.css";
 
+interface MentorCardProps {
+  name: string;
+  designation: string;
+  image?: string;
+  linkedIn?: string;
+  interest?: string;
+  source?: string;
+  clink?: string;
+}
+
 const MentorCard = ({
   name,
   designation,
@@ -9,7 +19,7 @@ const MentorCard = ({
   interest,
   source,
   clink,
-}) => {
+}: MentorCardProps) => {
   return (
     <div className={styles.mentor_card_container}>
       <div className={styles.mentor_card}>

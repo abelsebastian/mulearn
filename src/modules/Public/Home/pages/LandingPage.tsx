@@ -640,7 +640,7 @@ const MuLearnLanding = () => {
         </div>
         
         {/* Footer */}
-        <Footer navigate={navigate} />
+        <Footer />
       </motion.div>
     </>
   );
