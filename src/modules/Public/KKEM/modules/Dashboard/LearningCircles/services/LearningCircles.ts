@@ -23,7 +23,6 @@ export const getLCDashboard = (setLcCounts: ResponseType, date?: string) => {
     publicGateway
         .get(googleSheetRoutes.getLcData, {})
         .then(response => {
-            console.log("response", response);
             setLcCounts({
                 lc_count: 2226,
                 total_enrollment: 5276,
@@ -48,7 +47,7 @@ export const getLCReport = (
 ) => {
     setLoading && setLoading(true);
     publicGateway
-        .get(PublicRoutes.getLcReport, {
+        .get(googleSheetRoutes.getLcReport, {
             params: {
                 perPage: selectedValue,
                 pageIndex: page,
@@ -58,11 +57,11 @@ export const getLCReport = (
             }
         })
         .then(response => {
-            setLcReport(response.data.response.data);
-            if (setTotalPages) {
-                const totalPages = response.data.response.pagination.totalPages;
-                setTotalPages(totalPages);
-            }
+            setLcReport(response.data);
+            // if (setTotalPages) {
+            //     const totalPages = response.data.response.pagination.totalPages;
+            //     setTotalPages(totalPages);
+            // }
         })
         .catch(error => {
             console.error(error);
